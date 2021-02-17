@@ -1,6 +1,7 @@
 var firebaseConfig = {
     apiKey: "AIzaSyBNBlPV5qBRTtnpz-5URhrHEMpjRxW1HnU",
     authDomain: "shopified-11a20.firebaseapp.com",
+    databaseURL: "https://shopified-11a20-default-rtdb.firebaseio.com/",
     projectId: "shopified-11a20",
     storageBucket: "shopified-11a20.appspot.com",
     messagingSenderId: "490634575459",
@@ -12,8 +13,14 @@ var firebaseConfig = {
 window.onload = function () {
     firebase.initializeApp(firebaseConfig);
     firebase.analytics();
-    if (!window.location.href.includes("index")) {
+    var database = firebase.database();
+    if (window.location.href.includes("index")) {
         // console.log(sessionStorage.getItem("uid"));
+        if (sessionStorage.getItem("uid") != null) {
+            window.location.replace("dashboard.html");
+        }
+    }
+    else {
         if (sessionStorage.getItem("uid") == null) {
             window.location.replace("index.html");
         }
@@ -63,19 +70,30 @@ function signUp() {
         no_prob = false;
     }
     if (no_prob) {
-        sha512("Password").then((hash) => sendToFirebase(email, hash));
+        sha512(password).then((hash) => sendToFirebase(email, hash, name, c_name));
     }
 }
 
-function sendToFirebase(email, password) {
+function sendToFirebase(email, password, name, company_name) {
     console.log(email, password);
     firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
             // Signed in 
             var user = userCredential.user;
-            console.log(user);
-            sessionStorage.setItem('uid', user.uid);
-            window.location.replace("dashboard.html");
+            // console.log(user);
+            let data = {
+                "name": name,
+                "company_name": company_name,
+                "email": email
+            }
+            firebase.database().ref().child("Users").child(user.uid).set(data).then(function onSuccess(res) {
+                sessionStorage.setItem('uid', user.uid);
+                window.location.replace("dashboard.html");
+            }).catch(function onError(err) {
+                // do sth, e.g. console.error(err);
+            });
+            // sessionStorage.setItem('uid', user.uid);
+            // window.location.replace("dashboard.html");
         })
         .catch((error) => {
             var errorCode = error.code;
@@ -86,18 +104,36 @@ function sendToFirebase(email, password) {
 }
 
 function signInFirebase(email, password) {
+    console.log("signInFirebase");
     firebase.auth().signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
             // Signed in
             var user = userCredential.user;
+            sessionStorage.setItem('uid', user.uid);
+            window.location.replace("dashboard.html");
             // ...
         })
         .catch((error) => {
             var errorCode = error.code;
             var errorMessage = error.message;
+            console.log(errorCode, errorMessage);
         });
 }
 
 function signIn() {
-
+    console.log("signIn");
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+    let no_prob = true;
+    if (email == "") {
+        document.getElementById("email").style.border = "1px solid red";
+        no_prob = false;
+    }
+    if (password == "") {
+        document.getElementById("password").style.border = "1px solid red";
+        no_prob = false;
+    }
+    if (no_prob) {
+        sha512(password).then((hash) => signInFirebase(email, hash));
+    }
 }
