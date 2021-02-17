@@ -7,7 +7,11 @@ import "firebase/firestore";
 
 // global variables
 
-const NULL_OBJECT = -1;
+window.codes = {
+    NULL_OBJECT: -10,
+    UPDATE_SUCCESS: 1,
+    UPDATE_FAILIURE: -1
+}
 
 // config token for firebase access
 let firebaseConfig = {
@@ -28,7 +32,7 @@ firebase.initializeApp(firebaseConfig);
 
 function signupUserWithEmail(user) {
     if (!user) {
-        throw `User Signup Error! Error code: ${NULL_OBJECT}`;
+        throw `User Signup Error! Error code: ${window.codes.NULL_OBJECT}`;
         return
     }
     // [START auth_signup_password]
@@ -50,7 +54,7 @@ function signupUserWithEmail(user) {
 
 function signupSellerWithEmail(seller) {
     if (!seller) {
-        throw `Seller Signup Error! Error code: ${NULL_OBJECT}`;
+        throw `Seller Signup Error! Error code: ${window.codes.NULL_OBJECT}`;
         return
     }
     // [START auth_signup_password]
@@ -73,7 +77,7 @@ function signupSellerWithEmail(seller) {
 
 function signInUserWithEmail(user) {
     if (!user) {
-        throw `User Signin Error! Error code: ${NULL_OBJECT}`;
+        throw `User Signin Error! Error code: ${window.codes.NULL_OBJECT}`;
     }
         // [START auth_signin_password]
     firebase.auth().signInWithEmailAndPassword(user.email, user.password)
@@ -85,13 +89,15 @@ function signInUserWithEmail(user) {
     .catch((error) => {
         let errorCode = error.code;
         let errorMessage = error.message;
+        throw `Firebase Signin Error! Error code: ${errorCode}\nError Message: ${errorMessage}`;
+        return
     });
     // [END auth_signin_password]
 }
 
 function signinSellerWithEmail(seller) {
     if (!seller) {
-        throw `Seller Signin Error! Error code: ${NULL_OBJECT}`;
+        throw `Seller Signin Error! Error code: ${window.codes.NULL_OBJECT}`;
     }
         // [START auth_signin_password]
     firebase.auth().signInWithEmailAndPassword(seller.email, seller.password)
@@ -103,6 +109,8 @@ function signinSellerWithEmail(seller) {
     .catch((error) => {
         let errorCode = error.code;
         let errorMessage = error.message;
+        throw `Firebase Signin Error! Error code: ${errorCode}\nError Message: ${errorMessage}`;
+        return
     });
     // [END auth_signin_password]
 }
@@ -123,6 +131,30 @@ function sendPasswordReset(email) {
 
   }
 
+
+//   Update Functions
+
+function updateDBPassword(password) {
+    let user = firebase.auth().currentUser;
+    
+    user.updatePassword(password).then(function() {
+      return window.codes.UPDATE_SUCCESS;
+    }).catch(function(error) {
+      throw `Password updation Error! Error code: ${error.errorCode}\nError Message: ${error.errorMessage}`;
+      return window.codes.UPDATE_FAILIURE;
+    });
+}
+
+function updateDBEmail(email) {
+    let user = firebase.auth().currentUser;
+
+    user.updateEmail(email).then(function() {
+      return window.codes.UPDATE_SUCCESS;
+    }).catch(function(error) {
+      throw `Email updation failiure! Error code: ${error.errorCode}\nError Message: ${error.errorMessage}`;
+      return window.codes.UPDATE_FAILIURE;
+    });
+}
 
 // Helper Methods
 

@@ -1,20 +1,38 @@
 // Model classes for objects
+import './firebaseHandlers';
+
 class User {
     constructor(name, age, email, password) {
         this.name = name;
         this.age = age;
         this.email = email;
         this.password = password;
+        // this.image = '';
     }
 
     updateName(name) {
         this.name = name;
         // implement method to save the object to firebase
     }
-
+    // method to save password to firebase
     updatePassword(password) {
-        this.password = password;
-        // implement method to save object to firebase
+        if(updateDBPassword(password) == window.codes.UPDATE_SUCCESS) {
+            this.password = password;
+            return window.codes.UPDATE_SUCCESS;
+        }
+        else {
+            return window.codes.UPDATE_FAILIURE;
+        }
+    }
+
+    updateEmail(email) {
+        if(updateDBEmail(email) == window.codes.UPDATE_SUCCESS) {
+            this.email = email;
+            return window.codes.UPDATE_SUCCESS;
+        }
+        else {
+            return window.codes.UPDATE_FAILIURE;
+        }
     }
 }
 
@@ -30,7 +48,23 @@ class Seller {
         this.company = company;
     }
     updatePassword(password) {
-        this.password = password;
+        if(updateDBPassword(password) == window.codes.UPDATE_SUCCESS) {
+            this.password = password;
+            return window.codes.UPDATE_SUCCESS;
+        }
+        else {
+            return window.codes.UPDATE_FAILIURE;
+        }
+    }
+
+    updateEmail(email) {
+        if(updateDBEmail(email) == window.codes.UPDATE_SUCCESS) {
+            this.email = email;
+            return window.codes.UPDATE_SUCCESS;
+        }
+        else {
+            return window.codes.UPDATE_FAILIURE;
+        }
     }
 
     addProduct() {
