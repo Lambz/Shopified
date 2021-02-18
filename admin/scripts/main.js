@@ -86,7 +86,7 @@ function sendToFirebase(email, password, name, company_name) {
                 "company_name": company_name,
                 "email": email
             }
-            firebase.database().ref().child("Users").child(user.uid).set(data).then(function onSuccess(res) {
+            firebase.database().ref().child("Sellers").child(user.uid).set(data).then(function onSuccess(res) {
                 sessionStorage.setItem('uid', user.uid);
                 window.location.replace("dashboard.html");
             }).catch(function onError(err) {
@@ -136,4 +136,10 @@ function signIn() {
     if (no_prob) {
         sha512(password).then((hash) => signInFirebase(email, hash));
     }
+}
+
+function signOut()
+{
+    sessionStorage.removeItem("uid");
+    window.location.replace("index.html");
 }
