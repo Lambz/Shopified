@@ -25,6 +25,11 @@ window.onload = function () {
             window.location.replace("index.html");
         }
     }
+
+    if(window.location.href.includes("addProduct"))
+    {
+        loadCategories();
+    }
 }
 
 function registerHereClicked() {
@@ -142,4 +147,44 @@ function signOut()
 {
     sessionStorage.removeItem("uid");
     window.location.replace("index.html");
+}
+
+function loadCategories()
+{
+    let categories = document.getElementById("categories");
+    let subCategories = document.getElementById("subCategories");
+    categories.addEventListener("change", function()
+    {
+        subCategories.innerHTML = "";
+        firebase.database().ref().child("Categories").child(categories.value).on('value', (s) => 
+        {
+            s.val().forEach((subCategory) => 
+            {
+                subCategories.innerHTML += `<option value="${subCategory}">${subCategory}</option>`;
+            });
+        });
+    });
+    // subCategories.addEventListener("change", function(){
+
+    // });
+    firebase.database().ref().child("Categories").on('value', (snapshot) => {
+        // const data = snapshot.val();
+        // updateStarCount(postElement, data);
+        // console.log(Object.keys(snapshot.val())[0]);
+        // console.log(snapshot.val());
+        // categories.innerHTML += `<option value="${Object.keys(snapshot.val())[0]}">${Object.keys(snapshot.val())[0]}</option>`;
+        snapshot.forEach(function(childSnapshot) {
+            // console.log(childSnapshot.key);
+            categories.innerHTML += `<option value="${childSnapshot.key}">${childSnapshot.key}</option>`;
+        });
+        // firebase.database().child("Categories").child(Object.keys(snapshot.val())[0]).on('value', (s) => 
+        // {
+        //     console.log(s.val());
+        // });
+        // console.log(snapshot.val()[Object.keys(snapshot.val())[0]]);
+        snapshot.val()[Object.keys(snapshot.val())[0]].forEach((subCategory) => 
+        {
+            subCategories.innerHTML += `<option value="${subCategory}">${subCategory}</option>`;
+        });
+    });      
 }
