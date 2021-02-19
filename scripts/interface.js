@@ -1,6 +1,9 @@
 // Interface functions implemented for front-end scripts
 
-import './firebaseHandlers';
+import { codes, firebaseConfig, initializeDB, signupWithEmail, signInWithEmail, sendPasswordReset,
+    createUserObjectInDB, createSellerObjectInDB, getUserDetails, getSellerDetails, updateDBPassword,
+    updateDBEmail, insertProductInDB, insertCategoryOrSubcategoryInDB, fetchCategoriesAndSubcategoriesFromDB,
+    fetchProductsForSubCategoryFromDB } from './firebaseHandlers';
 
 // 
 // MARK: Authentication Methods
@@ -18,23 +21,23 @@ function signUp(user, isUser) {
     else 
         functionToCall = createSellerObjectInDB;
     try {
-        let credentials = signupWithEmail();
+        let credentials = firebase.signupWithEmail();
         if (credentials) {
             sessionStorage.setItem("uid") = credentials;
             sessionStorage.setItem("user") = user;
             try {
-                return functionToCall(user);
+                return firebase.functionToCall(user);
             }
             catch (error) {
-                return window.codes.INSERTION_FAILIURE;
+                return codes.INSERTION_FAILIURE;
             }
         }
         else {
-            return window.codes.NULL_VALUE
+            return codes.NULL_VALUE
         }
     }
     catch (error) {
-        return window.codes.NULL_OBJECT;
+        return codes.NULL_OBJECT;
     }
 }
 
@@ -58,21 +61,21 @@ function signIn(email, password, isUser) {
                 let user = functionToCall(email);
                 if (user) {
                     sessionStorage.setItem("user") = user;
-                    return window.codes.FETCH_SUCCESS;
+                    return codes.FETCH_SUCCESS;
                 }
                 else                
-                    return window.codes.FETCH_FAILURE;
+                    return codes.FETCH_FAILURE;
             }
             catch (error) {
-                return window.codes.NULL_OBJECT;
+                return codes.NULL_OBJECT;
             }  
         }
         else {
-            return window.codes.NULL_VALUE;
+            return codes.NULL_VALUE;
         }
     }
     catch (error) {
-        return window.codes.NULL_OBJECT;
+        return codes.NULL_OBJECT;
     }
 }
 
@@ -88,8 +91,8 @@ function signIn(email, password, isUser) {
 
 function fetchAllProducts() {
     let categoryData = fetchCategoriesAndSubcategoriesFromDB();
-    if (categoryData == window.codes.FETCH_FAILURE || window.codes.NOT_FOUND) {
-        return window.codes.FETCH_FAILURE;
+    if (categoryData == codes.FETCH_FAILURE || codes.NOT_FOUND) {
+        return codes.FETCH_FAILURE;
     }
     console.log(categoryData);
 }
@@ -98,18 +101,18 @@ function fetchAllProducts() {
 function insertProduct(product, isNewCategoryOrSubcategory, ... arguments) {
     if (isNewCategoryOrSubcategory) {
         try {
-            if (insertCategoryOrSubcategoryInDB(arguments[0]) == window.codes.INSERTION_FAILIURE)
-                return window.codes.INSERTION_FAILIURE;
+            if (insertCategoryOrSubcategoryInDB(arguments[0]) == codes.INSERTION_FAILIURE)
+                return codes.INSERTION_FAILIURE;
         }
         catch(error) {
-            return window.codes.INSERTION_FAILIURE;
+            return codes.INSERTION_FAILIURE;
         }
     }
     try {
         return insertProductInDB(product);
     }
     catch(error) {
-        return window.codes.INSERTION_FAILIURE;
+        return codes.INSERTION_FAILIURE;
     }
 }
 
@@ -119,5 +122,8 @@ function deleteProduct(productid) {
 
 }
 
-module.exports = { add };
+let user = new Seller("Name", "Company", "Email", "Password");
+initializeDB();
+console.log(signUp(user, false));
+console.log(sessionStorage.getItem("user"));
 

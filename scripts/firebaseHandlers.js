@@ -1,17 +1,20 @@
 // Firebase App (the core Firebase SDK)
-import firebase from "firebase/app";
+let firebase = require("firebase/app");
 
 //Firebase services
-import "firebase/auth";
-import "firebase/firestore";
+require("firebase/auth");
+require("firebase/firestore");
+
+// imports
+import { User, Seller, Product, Category } from './models';
 
 // global variables
 
-window.codes = {
+let codes = {
     NULL_VALUE: -5,
     NULL_OBJECT: -10,
     INSERTION_SUCCESS: 3,
-    INSERTION_FAILIURE: -3;
+    INSERTION_FAILIURE: -3,
     UPDATE_SUCCESS: 1,
     UPDATE_FAILIURE: -1,
     NOT_FOUND: 404,
@@ -32,7 +35,10 @@ let firebaseConfig = {
 };
 
 // Global initialization for firebase
-firebase.initializeApp(firebaseConfig);
+function initializeDB() {
+    firebase.initializeApp(firebaseConfig);
+}
+
 
 // 
 // MARK: User Account Functions for User and Seller
@@ -42,7 +48,7 @@ firebase.initializeApp(firebaseConfig);
 
 function signupWithEmail(user) {
     if (!user) {
-        throw new Error(`Signup Error! Error code: ${window.codes.NULL_OBJECT}`);
+        throw new Error(`Signup Error! Error code: ${codes.NULL_OBJECT}`);
         return
     }
     // [START auth_signup_password]
@@ -65,7 +71,7 @@ function signupWithEmail(user) {
 
 function signInWithEmail(email, password) {
     if (!email || !password) {
-        throw new Error(`Signin Error! Error code: ${window.codes.NULL_VALUE}`);
+        throw new Error(`Signin Error! Error code: ${codes.NULL_VALUE}`);
     }
         // [START auth_signin_password]
     firebase.auth().signInWithEmailAndPassword(email, password)
@@ -103,31 +109,31 @@ function sendPasswordReset(email) {
 
 function createUserObjectInDB(user) {
     if (!user) {
-        throw new Error(`User Insertion Error! Error code: ${window.codes.NULL_OBJECT}`);
+        throw new Error(`User Insertion Error! Error code: ${codes.NULL_OBJECT}`);
     }
     db.collection('users').doc(user.email).set(user)
     .then(() => {
         console.log("User Added!");
-        return window.codes.INSERTION_SUCCESS;
+        return codes.INSERTION_SUCCESS;
     })
     .catch((error) => {
         console.log(`User insertion error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
-        return window.codes.INSERTION_FAILIURE;
+        return codes.INSERTION_FAILIURE;
     });
 }
 
 function createSellerObjectInDB(user) {
     if (!user) {
-        throw new Error(`Seller Insertion Error! Error code: ${window.codes.NULL_OBJECT}`);
+        throw new Error(`Seller Insertion Error! Error code: ${codes.NULL_OBJECT}`);
     }
     db.collection('sellers').doc(user.email).set(user)
     .then(() => {
         console.log("Seller Added!");
-        return window.codes.INSERTION_SUCCESS;
+        return codes.INSERTION_SUCCESS;
     })
     .catch((error) => {
         console.log(`Seller insertion error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
-        return window.codes.INSERTION_FAILIURE;
+        return codes.INSERTION_FAILIURE;
     });
 }
 
@@ -135,7 +141,7 @@ function createSellerObjectInDB(user) {
 
 function getUserDetails(email) {
     if (!email) {
-        throw new Error(`User Email Null! Error code: ${window.codes.NULL_VALUE}`);
+        throw new Error(`User Email Null! Error code: ${codes.NULL_VALUE}`);
         return;
     }
     
@@ -144,7 +150,7 @@ function getUserDetails(email) {
         if (doc.exists) {
             return doc.data();
         } else {
-            return window.codes.NOT_FOUND;
+            return codes.NOT_FOUND;
         }
     })
     .catch ((error) => {
@@ -155,7 +161,7 @@ function getUserDetails(email) {
 
 function getSellerDetails(email) {
     if (!email) {
-        throw new Error(`Seller Email Null! Error code: ${window.codes.NULL_VALUE}`);
+        throw new Error(`Seller Email Null! Error code: ${codes.NULL_VALUE}`);
         return;
     }
     
@@ -164,7 +170,7 @@ function getSellerDetails(email) {
         if (doc.exists) {
             return doc.data();
         } else {
-            return window.codes.NOT_FOUND;
+            return codes.NOT_FOUND;
         }
     })
     .catch ((error) => {
@@ -179,10 +185,10 @@ function updateDBPassword(password) {
     let user = firebase.auth().currentUser;
     
     user.updatePassword(password).then(function() {
-      return window.codes.UPDATE_SUCCESS;
+      return codes.UPDATE_SUCCESS;
     }).catch(function(error) {
       throw new Error(`Password updation Error! Error code: ${error.errorCode}\nError Message: ${error.errorMessage}`);
-      return window.codes.UPDATE_FAILIURE;
+      return codes.UPDATE_FAILIURE;
     });
 }
 
@@ -190,10 +196,10 @@ function updateDBEmail(email) {
     let user = firebase.auth().currentUser;
 
     user.updateEmail(email).then(function() {
-      return window.codes.UPDATE_SUCCESS;
+      return codes.UPDATE_SUCCESS;
     }).catch(function(error) {
       throw new Error(`Email updation failiure! Error code: ${error.errorCode}\nError Message: ${error.errorMessage}`);
-      return window.codes.UPDATE_FAILIURE;
+      return codes.UPDATE_FAILIURE;
     });
 }
 
@@ -205,7 +211,7 @@ function updateDBEmail(email) {
 
 function insertProductInDB(product) {
     if (!product) {
-        throw new Error(`Product insertion error! Error code: ${window.codes.NULL_OBJECT}`);
+        throw new Error(`Product insertion error! Error code: ${codes.NULL_OBJECT}`);
         return;
     }
     let category = product.category;
@@ -213,26 +219,26 @@ function insertProductInDB(product) {
     db.collection('products').doc(category).doc(subcategory).doc(product.id).set(product)
     .then(() => {
         console.log("Product Added!");
-        return window.codes.INSERTION_SUCCESS;
+        return codes.INSERTION_SUCCESS;
     })
     .catch((error) => {
         console.log(`Product insertion error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
-        return window.codes.INSERTION_FAILIURE;
+        return codes.INSERTION_FAILIURE;
     });
 }
 
 function insertCategoryOrSubcategoryInDB(category) {
     if (!category) {
-        throw new Error(`Category Insertion Error! Error code: ${window.codes.NULL_OBJECT}`);
+        throw new Error(`Category Insertion Error! Error code: ${codes.NULL_OBJECT}`);
     }
     db.collection('categories').doc(category.name).set(category.subcategories)
     .then(() => {
         console.log("Category Added!");
-        return window.codes.INSERTION_SUCCESS;
+        return codes.INSERTION_SUCCESS;
     })
     .catch((error) => {
         console.log(`Category insertion error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
-        return window.codes.INSERTION_FAILIURE;
+        return codes.INSERTION_FAILIURE;
     });
 }
 
@@ -245,12 +251,12 @@ function fetchCategoriesAndSubcategoriesFromDB() {
             return doc.data();
         }
         else {
-            return window.codes.NOT_FOUND;
+            return codes.NOT_FOUND;
         }
     })
     .catch((error) => {
         console.log(`Category fetch error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
-        return window.codes.FETCH_FAILURE;
+        return codes.FETCH_FAILURE;
     })
 }
 
@@ -260,13 +266,15 @@ function fetchProductsForSubCategoryFromDB(category, subcategory) {
         if(doc.exists)
             return doc.data();
         else
-            return window.codes.NOT_FOUND;
+            return codes.NOT_FOUND;
     })
     .catch((error) => {
         console.log(`Product fetch error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
-        return window.codes.FETCH_FAILURE;
+        return codes.FETCH_FAILURE;
     })
 }
 
-
-module.exports = { add };
+export { codes, firebaseConfig, initializeDB, signupWithEmail, signInWithEmail, sendPasswordReset,
+    createUserObjectInDB, createSellerObjectInDB, getUserDetails, getSellerDetails, updateDBPassword,
+    updateDBEmail, insertProductInDB, insertCategoryOrSubcategoryInDB, fetchCategoriesAndSubcategoriesFromDB,
+    fetchProductsForSubCategoryFromDB }

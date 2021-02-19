@@ -1,4 +1,5 @@
 // Model classes for objects
+import { codes, updateDBEmail, updateDBPassword } from './firebaseHandlers';
 
 class User {
     constructor(name, age, email, password) {
@@ -14,25 +15,25 @@ class User {
    
     updatePassword(password) {
         try {
-            if(updateDBPassword(password) == window.codes.UPDATE_SUCCESS) {
+            if(updateDBPassword(password) == codes.UPDATE_SUCCESS) {
                 this.password = password;
-                return window.codes.UPDATE_SUCCESS;
+                return codes.UPDATE_SUCCESS;
             }
         }
         catch(error) {
-            return window.codes.UPDATE_FAILIURE;
+            return codes.UPDATE_FAILIURE;
         }
     }
 
     updateEmail(email) {
         try {
-            if(updateDBEmail(email) == window.codes.UPDATE_SUCCESS) {
+            if(updateDBEmail(email) == codes.UPDATE_SUCCESS) {
                 this.email = email;
-                return window.codes.UPDATE_SUCCESS;
+                return codes.UPDATE_SUCCESS;
             }
         }
         catch(error) {
-            return window.codes.UPDATE_FAILIURE;
+            return codes.UPDATE_FAILIURE;
         }
     }
 }
@@ -51,25 +52,25 @@ class Seller {
     
     updatePassword(password) {
         try {
-            if(updateDBPassword(password) == window.codes.UPDATE_SUCCESS) {
+            if(updateDBPassword(password) == codes.UPDATE_SUCCESS) {
                 this.password = password;
-                return window.codes.UPDATE_SUCCESS;
+                return codes.UPDATE_SUCCESS;
             }
         }
         catch(error) {
-            return window.codes.UPDATE_FAILIURE;
+            return codes.UPDATE_FAILIURE;
         }
     }
 
     updateEmail(email) {
         try {
-            if(updateDBEmail(email) == window.codes.UPDATE_SUCCESS) {
+            if(updateDBEmail(email) == codes.UPDATE_SUCCESS) {
                 this.email = email;
-                return window.codes.UPDATE_SUCCESS;
+                return codes.UPDATE_SUCCESS;
             }
         }
         catch(error) {
-            return window.codes.UPDATE_FAILIURE;
+            return codes.UPDATE_FAILIURE;
         }
     }
 }
@@ -108,5 +109,7 @@ class Category {
         this.subcategories.push(subCategory);
     }
 }
+
+export { User, Seller, Product, Category }
 
 

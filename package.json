@@ -18,5 +18,6 @@
   "homepage": "https://github.com/Lambz/Shopified#readme",
   "dependencies": {
     "firebase": "^8.2.7"
-  }
+  },
+  "type": "module"
 }
