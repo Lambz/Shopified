@@ -7,6 +7,9 @@ import './firebaseHandlers';
 // 
 
 // Signup functions for User and Seller
+// args:
+// - user: user object
+// - isUser: boolean for checking if user or seller signing up
 
 function signUp(user, isUser) {
     let functionToCall;
@@ -36,6 +39,10 @@ function signUp(user, isUser) {
 }
 
 // Signin function for user and seller
+// args:
+// - email: user email
+// - password: user password
+// -isUser: boolean for checking if user or seller signing in
 
 function signIn(email, password, isUser) {
     let functionToCall;
@@ -74,11 +81,22 @@ function signIn(email, password, isUser) {
 // 
 
 // Function to insert product
+// args:
+// - product: product object
+// - isNewCategoryOrSubcategory: boolean to check weather new category
+// ...arguments is for category object if new category or subcategory (only one argument supported)
 
-// ...arguments is for category object (only one argument supported)
+function fetchAllProducts() {
+    let categoryData = fetchCategoriesAndSubcategoriesFromDB();
+    if (categoryData == window.codes.FETCH_FAILURE || window.codes.NOT_FOUND) {
+        return window.codes.FETCH_FAILURE;
+    }
+    console.log(categoryData);
+}
 
-function insertProduct(product, isNewCategory, isNewSubcategory, ... arguments) {
-    if (isNewCategory || isNewSubcategory) {
+
+function insertProduct(product, isNewCategoryOrSubcategory, ... arguments) {
+    if (isNewCategoryOrSubcategory) {
         try {
             if (insertCategoryOrSubcategoryInDB(arguments[0]) == window.codes.INSERTION_FAILIURE)
                 return window.codes.INSERTION_FAILIURE;
@@ -94,6 +112,8 @@ function insertProduct(product, isNewCategory, isNewSubcategory, ... arguments) 
         return window.codes.INSERTION_FAILIURE;
     }
 }
+
+// Function to delete a product
 
 function deleteProduct(productid) {
 

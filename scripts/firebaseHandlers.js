@@ -198,8 +198,10 @@ function updateDBEmail(email) {
 }
 
 // 
-// MARK: DB transactions functions
+// MARK: DB CRUD transactions functions
 // 
+
+// Insertion functions
 
 function insertProductInDB(product) {
     if (!product) {
@@ -234,6 +236,37 @@ function insertCategoryOrSubcategoryInDB(category) {
     });
 }
 
+// Fetch functions
+
+function fetchCategoriesAndSubcategoriesFromDB() {
+    let refernece = db.collection('categories');
+    refernece.get().then((doc) => {
+        if (doc.exists) {
+            return doc.data();
+        }
+        else {
+            return window.codes.NOT_FOUND;
+        }
+    })
+    .catch((error) => {
+        console.log(`Category fetch error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
+        return window.codes.FETCH_FAILURE;
+    })
+}
+
+function fetchProductsForSubCategoryFromDB(category, subcategory) {
+    let refernece = db.collection('products').doc(category).doc(subcategory);
+    refernece.get().then((doc) => {
+        if(doc.exists)
+            return doc.data();
+        else
+            return window.codes.NOT_FOUND;
+    })
+    .catch((error) => {
+        console.log(`Product fetch error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
+        return window.codes.FETCH_FAILURE;
+    })
+}
 
 
 module.exports = { add };
