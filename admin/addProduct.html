@@ -8,24 +8,22 @@
     <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" />
     <style>
-        *
-        {
+        * {
             margin: 0;
             padding: 0;
         }
 
-        body
-        {
+        body {
             background-color: rgb(241, 244, 249);
         }
     </style>
-    <title>Dashboard</title>
+    <title>Products</title>
 </head>
 
 <body>
     <header class="header">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Shopified</a>
+            <a class="navbar-brand" href="#">Navbar</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -33,11 +31,11 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                    </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="products.html">Products</a>
+                        <a class="nav-link" href="dashboard.html">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Products<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -61,24 +59,28 @@
                 </form>
             </div>
         </nav>
-        <section id="dashboard">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-4 mt-4">
-                        <div class="card text-center">
-                            <!-- <img src="media/online_seller.jpg" class="card-img-top"/> -->
-                            <div class="card-body">
-                                <p class="card-text">Graph</p>
-                                <!-- <a href="#"></a> -->
-                            </div>
-                        </div>
+        <div class="container mt-5">
+            <div class="jumbotron">
+                <div class="card">
+                    <div class="card-header container-fluid">
+                        Add Product
+                    </div>
+                    <div class="card-body">
+                        <label for="categories">Category:</label>
+                        <select class="custom-select custom-select-lg mb-3" id="categories">
+
+                        </select>
+                        <label for="subCategories">Sub-Category:</label>
+                        <select class="custom-select custom-select-sm" id="subCategories">
+
+                        </select>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
     </header>
 
-
+    <script src="scripts/main.js"></script>
     <script src="../scripts/Utilties.js"></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="js/bootstrap.js"></script> -->
@@ -87,7 +89,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
-    <script src="scripts/main.js"></script>
 </body>
 
 </html>

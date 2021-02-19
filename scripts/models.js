@@ -48,6 +48,7 @@ class Seller {
     updateCompany(company) {
         this.company = company;
     }
+    
     updatePassword(password) {
         try {
             if(updateDBPassword(password) == window.codes.UPDATE_SUCCESS) {
