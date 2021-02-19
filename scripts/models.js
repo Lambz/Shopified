@@ -1,5 +1,4 @@
 // Model classes for objects
-import './firebaseHandlers';
 
 class User {
     constructor(name, age, email, password) {
@@ -7,30 +6,32 @@ class User {
         this.age = age;
         this.email = email;
         this.password = password;
-        // this.image = '';
     }
 
     updateName(name) {
         this.name = name;
-        // implement method to save the object to firebase
     }
-    // method to save password to firebase
+   
     updatePassword(password) {
-        if(updateDBPassword(password) == window.codes.UPDATE_SUCCESS) {
-            this.password = password;
-            return window.codes.UPDATE_SUCCESS;
+        try {
+            if(updateDBPassword(password) == window.codes.UPDATE_SUCCESS) {
+                this.password = password;
+                return window.codes.UPDATE_SUCCESS;
+            }
         }
-        else {
+        catch(error) {
             return window.codes.UPDATE_FAILIURE;
         }
     }
 
     updateEmail(email) {
-        if(updateDBEmail(email) == window.codes.UPDATE_SUCCESS) {
-            this.email = email;
-            return window.codes.UPDATE_SUCCESS;
+        try {
+            if(updateDBEmail(email) == window.codes.UPDATE_SUCCESS) {
+                this.email = email;
+                return window.codes.UPDATE_SUCCESS;
+            }
         }
-        else {
+        catch(error) {
             return window.codes.UPDATE_FAILIURE;
         }
     }
@@ -48,58 +49,63 @@ class Seller {
         this.company = company;
     }
     updatePassword(password) {
-        if(updateDBPassword(password) == window.codes.UPDATE_SUCCESS) {
-            this.password = password;
-            return window.codes.UPDATE_SUCCESS;
+        try {
+            if(updateDBPassword(password) == window.codes.UPDATE_SUCCESS) {
+                this.password = password;
+                return window.codes.UPDATE_SUCCESS;
+            }
         }
-        else {
+        catch(error) {
             return window.codes.UPDATE_FAILIURE;
         }
     }
 
     updateEmail(email) {
-        if(updateDBEmail(email) == window.codes.UPDATE_SUCCESS) {
-            this.email = email;
-            return window.codes.UPDATE_SUCCESS;
+        try {
+            if(updateDBEmail(email) == window.codes.UPDATE_SUCCESS) {
+                this.email = email;
+                return window.codes.UPDATE_SUCCESS;
+            }
         }
-        else {
+        catch(error) {
             return window.codes.UPDATE_FAILIURE;
         }
-    }
-
-    addProduct() {
-
-    }
-
-    getProducts() {
-
-    }
-
-    removeProducts() {
-
     }
 }
 
 class Product {
-    constructor(name, id, category, price, seller, estimatedTime) {
+    constructor(name, id, category, subcategory, price, seller, seller_id, estimatedTime, images, quantity, description) {
         this.name = name;
         this.id = id;
         this.category = category;
+        this.subcategory = subcategory;
         this.price = price;
         this.seller = seller;
+        this.seller_id = seller_id;
         this.estimatedTime = estimatedTime;
+        this.images = images;
+        this.quantity = quantity;
+        this.description = description;
     }
 
     updatePrice(price) {
         this.price = price;
-        // code to update object
+    }
+
+    setQuantity(quantity) {
+        this.quantity = quantity;
     }
 }
 
 class Category {
-    constructor(name, id) {
+    constructor(name, subcategories) {
         this.name = name;
-        this.id = id;
+        this.subcategories = subcategories;
+    }
+    
+    addSubcategory(subCategory) {
+        this.subcategories.push(subCategory);
     }
 }
+
 
