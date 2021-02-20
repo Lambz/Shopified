@@ -1,40 +1,33 @@
 // Interface functions implemented for front-end scripts
 
-import { codes, firebaseConfig, initializeDB, signupWithEmail, signInWithEmail, sendPasswordReset,
-    createUserObjectInDB, createSellerObjectInDB, getUserDetails, getSellerDetails, updateDBPassword,
-    updateDBEmail, insertProductInDB, insertCategoryOrSubcategoryInDB, fetchCategoriesAndSubcategoriesFromDB,
-    fetchProductsForSubCategoryFromDB } from './firebaseHandlers';
+// import { codes, firebaseConfig, initializeDB, signupWithEmail, signInWithEmail, sendPasswordReset,
+//     createUserObjectInDB, createSellerObjectInDB, getUserDetails, getSellerDetails, updateDBPassword,
+//     updateDBEmail, insertProductInDB, insertCategoryOrSubcategoryInDB, fetchCategoriesAndSubcategoriesFromDB,
+//     fetchProductsForSubCategoryFromDB } from './firebaseHandlers.js';
+
+// import { User, Product, Seller, Category } from './models.js';
 
 // 
 // MARK: Authentication Methods
 // 
 
 // Signup functions for User and Seller
-// args:
+// 1. args:
 // - user: user object
 // - isUser: boolean for checking if user or seller signing up
+// - uiCallback: to call once user has signed up and Object created (or error), to update UI
+// 2. returns:
+// 3. throws:
+// - No
 
-function signUp(user, isUser) {
+function signUp(user, isUser, uiCallback) {
     let functionToCall;
     if (isUser)
         functionToCall = createUserObjectInDB;
     else 
         functionToCall = createSellerObjectInDB;
     try {
-        let credentials = firebase.signupWithEmail();
-        if (credentials) {
-            sessionStorage.setItem("uid") = credentials;
-            sessionStorage.setItem("user") = user;
-            try {
-                return firebase.functionToCall(user);
-            }
-            catch (error) {
-                return codes.INSERTION_FAILIURE;
-            }
-        }
-        else {
-            return codes.NULL_VALUE
-        }
+        return signupWithEmail(user, functionToCall, uiCallback);
     }
     catch (error) {
         return codes.NULL_OBJECT;
@@ -42,52 +35,45 @@ function signUp(user, isUser) {
 }
 
 // Signin function for user and seller
-// args:
+// 1. args:
 // - email: user email
 // - password: user password
-// -isUser: boolean for checking if user or seller signing in
+// - isUser: boolean for checking if user or seller signing in
+// - uiCallback: to update UI once sign-in done and user details fetched (or error)
+// 2. returns:
+// 3. throws
+// - No
 
-function signIn(email, password, isUser) {
+function signIn(email, password, isUser, uiCallback) {
     let functionToCall;
     if (isUser)
         functionToCall = getUserDetails;
     else 
         functionToCall = getSellerDetails;
     try {
-        let credentials =  signInWithEmail(email, password);
-        if (credentials) {
-            sessionStorage.setItem("uid") = credentials;
-            try {
-                let user = functionToCall(email);
-                if (user) {
-                    sessionStorage.setItem("user") = user;
-                    return codes.FETCH_SUCCESS;
-                }
-                else                
-                    return codes.FETCH_FAILURE;
-            }
-            catch (error) {
-                return codes.NULL_OBJECT;
-            }  
-        }
-        else {
-            return codes.NULL_VALUE;
-        }
+        return signInWithEmail(email, password, functionToCall, uiCallback);
     }
     catch (error) {
-        return codes.NULL_OBJECT;
+        return codes.LOGIN_FAILIURE;
     }
+}
+
+// Signout function for users
+// 1. args:
+// - uiCallback: to update UI after logged out or error in logging out
+// 2. returns
+// - LOGIN_SUCCESS: for successful logout
+// - LOGIN_FAILURE: for logout errors
+
+function signOut(uiCallback) {
+    return signOutUserFromFirebase(uiCallback);
 }
 
 // 
 // MARK: CRUD operations for products and categories
 // 
 
-// Function to insert product
-// args:
-// - product: product object
-// - isNewCategoryOrSubcategory: boolean to check weather new category
-// ...arguments is for category object if new category or subcategory (only one argument supported)
+
 
 function fetchAllProducts() {
     let categoryData = fetchCategoriesAndSubcategoriesFromDB();
@@ -97,11 +83,16 @@ function fetchAllProducts() {
     console.log(categoryData);
 }
 
+// Function to insert product
+// args:
+// - product: product object
+// - isNewCategoryOrSubcategory: boolean to check weather new category
+// ...arguments is for category object if new category or subcategory (only one argument supported)
 
-function insertProduct(product, isNewCategoryOrSubcategory, ... arguments) {
+function insertProduct(product, isNewCategoryOrSubcategory, ... args) {
     if (isNewCategoryOrSubcategory) {
         try {
-            if (insertCategoryOrSubcategoryInDB(arguments[0]) == codes.INSERTION_FAILIURE)
+            if (insertCategoryOrSubcategoryInDB(args[0]) == codes.INSERTION_FAILIURE)
                 return codes.INSERTION_FAILIURE;
         }
         catch(error) {
@@ -122,8 +113,11 @@ function deleteProduct(productid) {
 
 }
 
-let user = new Seller("Name", "Company", "Email", "Password");
+let user = new Seller("Name", "Company", "SomeEmail@NameCompanyMail.com", "Password");
 initializeDB();
-console.log(signUp(user, false));
-console.log(sessionStorage.getItem("user"));
+signIn(user.email, user.password, false, () => {
+    document.getElementById("text").style.display = "block";
+} );
+
+
 

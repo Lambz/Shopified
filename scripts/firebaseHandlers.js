@@ -1,16 +1,16 @@
-// Firebase App (the core Firebase SDK)
-let firebase = require("firebase/app");
+// // Firebase App (the core Firebase SDK)
+// import firebase from "firebase/app";
 
-//Firebase services
-require("firebase/auth");
-require("firebase/firestore");
+// //Firebase services
+// import "firebase/auth";
+// import "firebase/firestore";
 
-// imports
-import { User, Seller, Product, Category } from './models';
+// // imports
+// import { User, Seller, Product, Category } from './models.js';
 
 // global variables
 
-let codes = {
+var codes = {
     NULL_VALUE: -5,
     NULL_OBJECT: -10,
     INSERTION_SUCCESS: 3,
@@ -19,11 +19,15 @@ let codes = {
     UPDATE_FAILIURE: -1,
     NOT_FOUND: 404,
     FETCH_FAILURE: -300,
-    FETCH_SUCCESS: 300
+    FETCH_SUCCESS: 300,
+    LOGIN_SUCCESS: 400,
+    LOGIN_FAILIURE: -400,
+    LOGOUT_SUCCESS: 102,
+    LOGOUT_FAILIURE: -102
 }
 
 // config token for firebase access
-let firebaseConfig = {
+var firebaseConfig = {
     apiKey: "AIzaSyBNBlPV5qBRTtnpz-5URhrHEMpjRxW1HnU",
     authDomain: "shopified-11a20.firebaseapp.com",
     databaseURL: "https://shopified-11a20-default-rtdb.firebaseio.com/",
@@ -34,9 +38,15 @@ let firebaseConfig = {
     measurementId: "G-80PJX71W15"
 };
 
+var app = null;
+var db = null;
+
 // Global initialization for firebase
 function initializeDB() {
-    firebase.initializeApp(firebaseConfig);
+    app = firebase.initializeApp(firebaseConfig);
+    db = firebase.firestore(app);
+    console.log("DB initialized!");
+
 }
 
 
@@ -46,7 +56,7 @@ function initializeDB() {
 
 // Signup function
 
-function signupWithEmail(user) {
+function signupWithEmail(user, callback, uiCallback) {
     if (!user) {
         throw new Error(`Signup Error! Error code: ${codes.NULL_OBJECT}`);
         return
@@ -55,21 +65,22 @@ function signupWithEmail(user) {
     firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
     .then((userCredential) => {
         // Signed in 
-        let loggedUser = userCredential.user;
-        return loggedUser;
+        let loggedUser = userCredential.user.uid;
+        sessionStorage.setItem("uid", loggedUser);
+        sessionStorage.setItem("user", user);
+        return callback(user, uiCallback);
     })
     .catch((error) => {
         let errorCode = error.code;
         let errorMessage = error.message;
         throw new Error(`Firebase Signup Error! Error code: ${errorCode}\n Error Message: ${errorMessage}`);
-        return null;
     });
     // [END auth_signup_password]
 }
 
 // Sign-in Function
 
-function signInWithEmail(email, password) {
+function signInWithEmail(email, password, callback, uiCallback) {
     if (!email || !password) {
         throw new Error(`Signin Error! Error code: ${codes.NULL_VALUE}`);
     }
@@ -77,16 +88,29 @@ function signInWithEmail(email, password) {
     firebase.auth().signInWithEmailAndPassword(email, password)
     .then((userCredential) => {
         // Signed in
-        let loggedUser = userCredential.user;
-        return loggedUser;
+        let loggedUser = userCredential.user.uid;
+        sessionStorage.setItem("uid", loggedUser);
+        return callback(uiCallback);
     })
     .catch((error) => {
-        let errorCode = error.code;
-        let errorMessage = error.message;
-        throw new Error(`Firebase Signin Error! Error code: ${errorCode}\nError Message: ${errorMessage}`);
-        return null;
+        throw new Error(`Firebase Signin Error! Error code: ${error.code}\nError Message: ${error.message}`);
     });
     // [END auth_signin_password]
+}
+
+// Sign out function
+
+function signOutUserFromFirebase(uiCallback) {
+    firebase.auth().signOut()
+    .then(() => {
+        console.log("Logged out!");
+        sessionStorage.setItem("uid", null);
+        // UIcallback implementation
+        return codes.LOGOUT_SUCCESS;
+    })
+    .catch((error) => {
+        return codes.LOGOUT_FAILIURE;
+    });
 }
 
 // Password Reset Function
@@ -111,7 +135,7 @@ function createUserObjectInDB(user) {
     if (!user) {
         throw new Error(`User Insertion Error! Error code: ${codes.NULL_OBJECT}`);
     }
-    db.collection('users').doc(user.email).set(user)
+    db.collection('users').doc(sessionStorage.getItem("uid")).withConverter(userConverter).set(user)
     .then(() => {
         console.log("User Added!");
         return codes.INSERTION_SUCCESS;
@@ -124,9 +148,11 @@ function createUserObjectInDB(user) {
 
 function createSellerObjectInDB(user) {
     if (!user) {
+        console.log("user");
         throw new Error(`Seller Insertion Error! Error code: ${codes.NULL_OBJECT}`);
     }
-    db.collection('sellers').doc(user.email).set(user)
+
+    db.collection('sellers').doc(sessionStorage.getItem("uid")).withConverter(sellerConverter).set(user)
     .then(() => {
         console.log("Seller Added!");
         return codes.INSERTION_SUCCESS;
@@ -139,15 +165,17 @@ function createSellerObjectInDB(user) {
 
 // User Query functions
 
-function getUserDetails(email) {
-    if (!email) {
-        throw new Error(`User Email Null! Error code: ${codes.NULL_VALUE}`);
-        return;
+function getUserDetails(uiCallback) {
+    if (!sessionStorage.getItem("uid")) {
+        throw new Error(`User Credentials Null! Error code: ${codes.NULL_VALUE}`);
     }
     
-    let userDocument = db.collection('users').doc(email);
-    userDocument.get().then((doc) => {
+    let userDocument = db.collection('users').doc(sessionStorage.getItem("uid"));
+    userDocument.withConverter(userConverter).get()
+    .then((doc) => {
         if (doc.exists) {
+            // uiCallback
+
             return doc.data();
         } else {
             return codes.NOT_FOUND;
@@ -155,19 +183,23 @@ function getUserDetails(email) {
     })
     .catch ((error) => {
         console.log(`Details fetching error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
-        return null;
+        return codes.FETCH_FAILURE;
     });
 }
 
-function getSellerDetails(email) {
-    if (!email) {
+function getSellerDetails(uiCallback) {
+    if (!sessionStorage.getItem("uid")) {
         throw new Error(`Seller Email Null! Error code: ${codes.NULL_VALUE}`);
-        return;
     }
     
-    let userDocument = db.collection('sellers').doc(email);
-    userDocument.get().then((doc) => {
+    let userDocument = db.collection('sellers').doc(sessionStorage.getItem("uid"));
+    userDocument.withConverter(sellerConverter).get()
+    .then((doc) => {
         if (doc.exists) {
+            console.log(doc.data());
+            // uiCallback
+            uiCallback();
+
             return doc.data();
         } else {
             return codes.NOT_FOUND;
@@ -175,7 +207,7 @@ function getSellerDetails(email) {
     })
     .catch ((error) => {
         console.log(`Details fetching error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
-        return null;
+        return codes.FETCH_FAILURE;
     });
 }
 
@@ -274,7 +306,7 @@ function fetchProductsForSubCategoryFromDB(category, subcategory) {
     })
 }
 
-export { codes, firebaseConfig, initializeDB, signupWithEmail, signInWithEmail, sendPasswordReset,
-    createUserObjectInDB, createSellerObjectInDB, getUserDetails, getSellerDetails, updateDBPassword,
-    updateDBEmail, insertProductInDB, insertCategoryOrSubcategoryInDB, fetchCategoriesAndSubcategoriesFromDB,
-    fetchProductsForSubCategoryFromDB }
+// export { codes, firebaseConfig, initializeDB, signupWithEmail, signInWithEmail, sendPasswordReset,
+//     createUserObjectInDB, createSellerObjectInDB, getUserDetails, getSellerDetails, updateDBPassword,
+//     updateDBEmail, insertProductInDB, insertCategoryOrSubcategoryInDB, fetchCategoriesAndSubcategoriesFromDB,
+//     fetchProductsForSubCategoryFromDB }

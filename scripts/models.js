@@ -1,5 +1,5 @@
 // Model classes for objects
-import { codes, updateDBEmail, updateDBPassword } from './firebaseHandlers';
+// import { codes, updateDBEmail, updateDBPassword } from './firebaseHandlers.js';
 
 class User {
     constructor(name, age, email, password) {
@@ -38,6 +38,21 @@ class User {
     }
 }
 
+var userConverter = {
+    toFirestore: function(user) {
+        return {
+            name: user.name,
+            age: user.age,
+            email: user.email,
+            password: user.password
+            };
+    },
+    fromFirestore: function(snapshot, options){
+        const data = snapshot.data(options);
+        return new User(data.name, data.age, data.email, data.password);
+    }
+};
+
 class Seller {
     constructor(name, company, email, password) {
         this.name = name;
@@ -75,6 +90,21 @@ class Seller {
     }
 }
 
+var sellerConverter = {
+    toFirestore: function(user) {
+        return {
+            name: user.name,
+            company: user.company,
+            email: user.email,
+            password: user.password
+            };
+    },
+    fromFirestore: function(snapshot, options){
+        const data = snapshot.data(options);
+        return new Seller(data.name, data.company, data.email, data.password);
+    }
+};
+
 class Product {
     constructor(name, id, category, subcategory, price, seller, seller_id, estimatedTime, images, quantity, description) {
         this.name = name;
@@ -110,6 +140,6 @@ class Category {
     }
 }
 
-export { User, Seller, Product, Category }
+// export { User, Seller, Product, Category }
 
 
