@@ -95,10 +95,7 @@ function sendToFirebase(email, password, name, company_name) {
                 sessionStorage.setItem('uid', user.uid);
                 window.location.replace("dashboard.html");
             }).catch(function onError(err) {
-                // do sth, e.g. console.error(err);
             });
-            // sessionStorage.setItem('uid', user.uid);
-            // window.location.replace("dashboard.html");
         })
         .catch((error) => {
             var errorCode = error.code;
@@ -164,24 +161,10 @@ function loadCategories()
             });
         });
     });
-    // subCategories.addEventListener("change", function(){
-
-    // });
     firebase.database().ref().child("Categories").on('value', (snapshot) => {
-        // const data = snapshot.val();
-        // updateStarCount(postElement, data);
-        // console.log(Object.keys(snapshot.val())[0]);
-        // console.log(snapshot.val());
-        // categories.innerHTML += `<option value="${Object.keys(snapshot.val())[0]}">${Object.keys(snapshot.val())[0]}</option>`;
         snapshot.forEach(function(childSnapshot) {
-            // console.log(childSnapshot.key);
             categories.innerHTML += `<option value="${childSnapshot.key}">${childSnapshot.key}</option>`;
         });
-        // firebase.database().child("Categories").child(Object.keys(snapshot.val())[0]).on('value', (s) => 
-        // {
-        //     console.log(s.val());
-        // });
-        // console.log(snapshot.val()[Object.keys(snapshot.val())[0]]);
         snapshot.val()[Object.keys(snapshot.val())[0]].forEach((subCategory) => 
         {
             subCategories.innerHTML += `<option value="${subCategory}">${subCategory}</option>`;

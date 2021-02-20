@@ -16,6 +16,77 @@
         body {
             background-color: rgb(241, 244, 249);
         }
+
+        .overlay
+        {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%,-50%);
+            width: 100%;
+            height: 100%;
+            background-color: rgba(92, 95, 236, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .buy-btn
+        {
+            border: none;
+            display: flex;
+            width: 60px;
+            height: 60px;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            /* background: white url(media/trash.png);
+            background-position: 8px 8px;
+            background-repeat: no-repeat; */
+            color: #252525;
+            font-weight: 700;
+            letter-spacing: 1px;
+            border-radius: 20px;
+            box-shadow: 2px 2px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .buy-btn:hover
+        {
+            color: white;
+            background-color: #f15fa3;
+            transition: all ease 0.3;
+        }
+
+        .buy-btn:hover .trash-btn
+        {
+            filter: brightness(0) invert(1);
+            cursor: pointer;
+        }
+
+        .overlay
+        {
+            visibility: hidden;
+        }
+
+        .product-image:hover .overlay
+        {
+            visibility: visible ;
+            animation: fade 0.5s;
+        }
+
+        @keyframes fade {
+
+            0%
+            {
+                opacity: 0;
+            }
+
+            100%
+            {
+                opacity: 1;
+            }
+            
+        }
     </style>
     <title>Products</title>
 </head>
@@ -59,26 +130,88 @@
                 </form>
             </div>
         </nav>
-        <div class="container mt-5">
-            <div class="jumbotron">
-                <div class="card">
-                    <div class="card-header container-fluid">
-                        Add Product
+    </header>
+    <div class="container mt-2">
+        <div class="jumbotron">
+            <div class="card">
+                <div class="card-header container-fluid">
+                    <!-- Products -->
+                    <div class="row">
+                        <div class="col-md-10">
+                            <h4 class="w-75 p-1">Add Products</h4>
+                        </div>
+                        <div class="col-md-2 p-1 float-right">
+                            <button onclick="selectImages()" class="btn btn-primary">Add Product</button>
+                            <input id='file-input' type='file' style="display: none;"
+                                accept="image/x-png,image/gif,image/jpeg" multiple />
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <label for="categories">Category:</label>
-                        <select class="custom-select custom-select-lg mb-3" id="categories">
-
-                        </select>
-                        <label for="subCategories">Sub-Category:</label>
-                        <select class="custom-select custom-select-sm" id="subCategories">
-
-                        </select>
+                </div>
+                <div class="card-body">
+                    <div id="carouselExampleControls" class="carousel slide mb-3" data-ride="carousel">
+                        <div id="coursel-inner" class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="row">
+                                    <div class="col-3 product-image">
+                                        <img class="d-block w-100" src="media/product_placeholder.gif"
+                                            alt="Product Placeholder">
+                                        <!-- <div class="overlay">
+                                            <button onclick="removeImage(0)" class="buy-btn">Test</button>
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselExampleControls" role="button"
+                            data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleControls" role="button"
+                            data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
                     </div>
+                    <label for="pName">Product Name:</label>
+                    <input type="text" name="pName" id="pName" class="form-control mb-3"
+                        placeholder="Name of the Product" />
+                    <label for="categories">Category:</label>
+                    <select class="custom-select custom-select-sm mb-3" name="categories" id="categories">
+
+                    </select>
+                    <label for="subCategories">Sub-Category:</label>
+                    <select class="custom-select custom-select-sm mb-3" name="subCategories" id="subCategories">
+
+                    </select>
+                    <label for="pPrice">Price:</label>
+                    <!-- <input type="number" name="pPrice" id="pPrice" class="form-control mb-3" placeholder="Price"/> -->
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">$</span>
+                        </div>
+                        <input type="number" id="pPrice" name="pPrice" placeholder="0" class="form-control"
+                            aria-label="Amount">
+                    </div>
+                    <label for="pQuantity">Quanitity:</label>
+                    <input type="number" name="pQuantity" id="pQuantity" class="form-control mb-3"
+                        placeholder="1000" />
+                    <label for="pDescription">Description: </label>
+                    <textarea id="pDescription" name="pDescription" class="form-control mb-3"
+                        aria-label="With textarea"></textarea>
+                    <label for="pTime">Estimated Shipping Time:</label>
+                    <div class="input-group mb-3">
+                        <input type="number" id="pTime" name="pTime" class="form-control" placeholder="1"
+                            aria-label="1" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="basic-addon2">Day</span>
+                        </div>
+                    </div>
+                    <button type="button" onclick="addProduct()" class="btn btn-primary btn-lg btn-block">Add Product</button>
                 </div>
             </div>
         </div>
-    </header>
+    </div>
 
     <script src="scripts/main.js"></script>
     <script src="../scripts/Utilties.js"></script>
@@ -89,6 +222,115 @@
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+    <script>
+        let images = [];
+        function selectImages() {
+            let fileInput = document.getElementById("file-input");
+            fileInput.click();
+            let listener = fileInput.addEventListener('change', fileEventListener, true);
+
+            function fileEventListener(evnt) {
+                for (var i = 0; i < fileInput.files.length; i++) {
+                    // fileList.push(fileInput.files[i]);
+                    // console.log(fileInput.files.length);
+                    images.push(fileInput.files[i]);
+                    // console.log(images);
+                }
+                fileInput.removeEventListener('change', fileEventListener, true);
+                // renderFileList();s
+                updateCarousel();
+            }
+        }
+
+        function updateCarousel() {
+            // console.log(images.length);
+            let slides = Math.ceil(images.length / 4);
+            let courselInner = document.getElementById("coursel-inner");
+            let inner = "";
+            // console.log(URL.createObjectURL(images[0]));
+            // console.log(images);
+            for (let i = 0; i < slides; i++) {
+                if (i == 0) {
+                    inner += `<div class="carousel-item active"><div class="row">`;
+                }
+                else {
+                    inner += `<div class="carousel-item"><div class="row">`;
+                }
+                for (let j = i * 4; j < (i + 1) * 4 && j < images.length; j++) {
+                    // console.log(`i:${i} j:${j}`)
+                    inner += `<div class="col-3 product-image"><img class="d-block w-100" src="${URL.createObjectURL(images[j])}" alt="Product Image"><div class="overlay"><button onclick="removeImage(${j})" class="buy-btn"><img src="media/trash.png" class="trash-btn" style="width:40px; height:40px" /></button></div></div>`
+                }
+                inner += "</div></div>";
+            }
+            console.log(inner);
+            courselInner.innerHTML = inner;
+            // console.log(slides);
+        }
+
+        function removeImage(index)
+        {
+            images.splice(index,1);
+            updateCarousel();
+        }
+
+        function addProduct()
+        {
+            let nameInput = document.getElementById("pName");
+            let categoriesInput = document.getElementById("categories");
+            let subCategoriesInput = document.getElementById("subCategories");
+            let priceInput = document.getElementById("pPrice");
+            let quanitityInput = document.getElementById("pQuantity");
+            let descriptionInput = document.getElementById("pDescription");
+            let timeInput = document.getElementById("pTime");
+            let noProb = true;
+            let name = nameInput.value;
+            let category = categoriesInput.value;
+            let subCategory = subCategoriesInput.value;
+            let price = priceInput.value;
+            let quantity = quanitityInput.value;
+            let description = descriptionInput.value;
+            let time = timeInput.value;
+            if(name == "")
+            {
+                nameInput.style.border = "1px solid red";
+                noProb = false;
+            }
+            if(category == "")
+            {
+                categoriesInput.style.border = "1px solid red";
+                noProb = false;
+            }
+            if(subCategory == "")
+            {
+                subCategoriesInput.style.border = "1px solid red";
+                noProb = false;
+            }
+            if(price == "")
+            {
+                priceInput.style.border = "1px solid red";
+                noProb = false;
+            }
+            if(quantity == "")
+            {
+                quanitityInput.style.border = "1px solid red";
+                noProb = false;
+            }
+            if(description == "")
+            {
+                descriptionInput.style.border = "1px solid red";
+                noProb = false;
+            }
+            if(time == "")
+            {
+                timeInput.style.border = "1px solid red";
+                noProb = false;
+            }
+            if(noProb)
+            {
+                //TODO: Add Product Functionality
+            }
+        }
+    </script>
 </body>
 
 </html>
