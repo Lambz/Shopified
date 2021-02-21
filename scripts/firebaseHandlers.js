@@ -241,14 +241,14 @@ function updateDBEmail(email) {
 
 // Insertion functions
 
-function insertProductInDB(product) {
+function insertProductInDB(product, uiCallback) {
     if (!product) {
         throw new Error(`Product insertion error! Error code: ${codes.NULL_OBJECT}`);
         return;
     }
     let category = product.category;
     let subcategory = product.subcateogry;
-    db.collection('products').doc(category).doc(subcategory).doc(product.id).set(product)
+    db.collection('products').doc(category).doc(subcategory).doc(product.id).withConverter(productConverter).set(product)
     .then(() => {
         console.log("Product Added!");
         return codes.INSERTION_SUCCESS;
@@ -259,11 +259,11 @@ function insertProductInDB(product) {
     });
 }
 
-function insertCategoryOrSubcategoryInDB(category) {
+function insertCategoryOrSubcategoryInDB(category, callback) {
     if (!category) {
         throw new Error(`Category Insertion Error! Error code: ${codes.NULL_OBJECT}`);
     }
-    db.collection('categories').doc(category.name).set(category.subcategories)
+    db.collection('categories').doc(category.name).withConverter(categoryConverter).set(category)
     .then(() => {
         console.log("Category Added!");
         return codes.INSERTION_SUCCESS;
@@ -276,15 +276,19 @@ function insertCategoryOrSubcategoryInDB(category) {
 
 // Fetch functions
 
-function fetchCategoriesAndSubcategoriesFromDB() {
+function fetchCategoriesAndSubcategoriesFromDB(uiCallback) {
     let refernece = db.collection('categories');
-    refernece.get().then((doc) => {
-        if (doc.exists) {
-            return doc.data();
-        }
-        else {
-            return codes.NOT_FOUND;
-        }
+    let resultArray = [];
+    refernece.withConverter(categoryConverter).get().then((querySnapshot) => {
+        querySnapshot.forEach(doc => {
+            if (doc.exists) {
+                resultArray.push(doc.data());
+            }
+            else {
+                return codes.NOT_FOUND;
+            }
+        })
+        uiCallback(resultArray);
     })
     .catch((error) => {
         console.log(`Category fetch error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);

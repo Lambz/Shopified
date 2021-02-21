@@ -86,24 +86,29 @@ function fetchAllProducts() {
 // Function to insert product
 // args:
 // - product: product object
-// - isNewCategoryOrSubcategory: boolean to check weather new category
-// ...arguments is for category object if new category or subcategory (only one argument supported)
+// 
+// 
 
-function insertProduct(product, isNewCategoryOrSubcategory, ... args) {
-    if (isNewCategoryOrSubcategory) {
+function insertProduct(product, category, uiCallback) {
+//  insert images
+    let i = 0;
+    let storageRef = [];
+    // for (i = 0, i < product.images.length, i++)
+    // storageRef.push(firebase.storage().ref(`products/${product.id}`).child(`${product.id}-${i}`));
+
+// insert category/subcategory
+    try {
+        insertCategoryOrSubcategoryInDB(category, callback);
+        // insert product
         try {
-            if (insertCategoryOrSubcategoryInDB(args[0]) == codes.INSERTION_FAILIURE)
-                return codes.INSERTION_FAILIURE;
+            return insertProductInDB(product, uiCallback);
         }
         catch(error) {
             return codes.INSERTION_FAILIURE;
         }
     }
-    try {
-        return insertProductInDB(product);
-    }
     catch(error) {
-        return codes.INSERTION_FAILIURE;
+
     }
 }
 
@@ -114,10 +119,16 @@ function deleteProduct(productid) {
 }
 
 let user = new Seller("Name", "Company", "SomeEmail@NameCompanyMail.com", "Password");
+let category = new Category("some other category", ["sub2"]);
 initializeDB();
 signIn(user.email, user.password, false, () => {
     document.getElementById("text").style.display = "block";
+    insertCategoryOrSubcategoryInDB(category);
 } );
+
+
+
+
 
 
 
