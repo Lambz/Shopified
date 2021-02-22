@@ -88,7 +88,8 @@ function signInWithEmail(email, password, callback, uiCallback) {
         // Signed in
         let loggedUser = userCredential.user.uid;
         sessionStorage.setItem("uid", loggedUser);
-        return callback(uiCallback);
+        // return callback(uiCallback);
+        callback();
     })
     .catch((error) => {
         throw new Error(`Firebase Signin Error! Error code: ${error.code}\nError Message: ${error.message}`);
@@ -99,10 +100,10 @@ function signInWithEmail(email, password, callback, uiCallback) {
 // Sign out function
 
 function signOutUserFromFirebase(uiCallback) {
+    sessionStorage.setItem("uid", null);
     firebase.auth().signOut()
     .then(() => {
         console.log("Logged out!");
-        sessionStorage.setItem("uid", null);
         uiCallback();
         return codes.LOGOUT_SUCCESS;
     })
@@ -216,15 +217,17 @@ function getSellerDetailsFromDB(uiCallback) {
 
 //  User details Update Functions
 
-function updateDBPassword(password) {
+function updateDBPassword(password, callback) {
     let user = firebase.auth().currentUser;
-    
+    console.log(user);
     user.updatePassword(password).then(function() {
+        callback();
       return codes.UPDATE_SUCCESS;
-    }).catch(function(error) {
-      throw new Error(`Password updation Error! Error code: ${error.errorCode}\nError Message: ${error.errorMessage}`);
-      return codes.UPDATE_FAILIURE;
-    });
+    })
+    // .catch(function(error) {
+    //   throw new Error(`Password updation Error! Error code: ${error.errorCode}\nError Message: ${error.errorMessage}`);
+    //   return codes.UPDATE_FAILIURE;
+    // });
 }
 
 function updateDBEmail(email) {

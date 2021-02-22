@@ -46,17 +46,20 @@ function signUp(user, isUser, uiCallback) {
 // - No
 
 function signIn(email, password, isUser, uiCallback) {
-    let functionToCall;
-    if (isUser)
-        functionToCall = getUserDetails;
-    else 
-        functionToCall = getSellerDetails;
-    try {
-        return signInWithEmail(email, password, functionToCall, uiCallback);
-    }
-    catch (error) {
-        return codes.LOGIN_FAILIURE;
-    }
+    // let functionToCall;
+    // if (isUser)
+    //     functionToCall = getUserDetails;
+    // else 
+    //     functionToCall = getSellerDetails;
+    // try {
+    //     return signInWithEmail(email, password, functionToCall, uiCallback);
+    // }
+    // catch (error) {
+    //     return codes.LOGIN_FAILIURE;
+    // }
+    signInWithEmail(email,password,() => {
+        getUserDetails(isUser,uiCallback);
+    });
 }
 
 
@@ -70,6 +73,23 @@ function updateUser(isUser, user, uiCallback)
     {
         createSellerObjectInDB(user,uiCallback);
     }
+}
+
+function updatePassword(isUser, user, newPassword, uiCallback)
+{
+    let functionToCall;
+    if(isUser)
+    {
+        functionToCall = createUserObjectInDB;
+    }
+    else
+    {
+        functionToCall = createSellerObjectInDB;
+    }
+    updateDBPassword(newPassword,() => {
+        user.password = newPassword;
+        functionToCall(user,uiCallback);
+    });
 }
 
 // Signout function for users
