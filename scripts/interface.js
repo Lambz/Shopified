@@ -59,6 +59,19 @@ function signIn(email, password, isUser, uiCallback) {
     }
 }
 
+
+function updateUser(isUser, user, uiCallback)
+{
+    if(isUser)
+    {
+        createUserObjectInDB(user,uiCallback);
+    }
+    else
+    {
+        createSellerObjectInDB(user,uiCallback);
+    }
+}
+
 // Signout function for users
 // 1. args:
 // - isUser: boolean, check weather the user or seller logging out

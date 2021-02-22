@@ -163,10 +163,10 @@
                     <label for="companyNameInput">Company Name:</label>
                     <input type="text" name="companyNameInput" id="companyNameInput" class="form-control mb-3"
                         placeholder="Company Name" />
-                    <label for="addressInput">Company Address: </label>
+                    <!-- <label for="addressInput">Company Address: </label>
                     <textarea id="addressInput" name="addressInput" class="form-control mb-3"
-                        aria-label="With textarea"></textarea>
-                    <button type="button" class="btn btn-primary btn-lg btn-block mb-3">Save</button>
+                        aria-label="With textarea"></textarea> -->
+                    <button type="button" onclick="save()" class="btn btn-primary btn-lg btn-block mb-3">Save</button>
                     <div class="row">
                         <div class="col">
                             <button type="button" class="btn btn-primary btn-lg btn-block">Change Password</button>
@@ -180,14 +180,62 @@
         </div>
     </div>
 
-    <script src="scripts/main.js"></script>
+    <!-- <script src="scripts/main.js"></script> -->
     <script src="../scripts/Utilties.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.8/firebase-storage.js"></script>
+    <!-- <script src="scripts/main.js"></script> -->
+    <script src="../scripts/models.js"></script>
+    <script src="../scripts/firebaseHandlers.js"></script>
+    <script src="../scripts/interface.js"></script>
     <script>
+        const nameInput = document.getElementById("nameInput");
+        const companyNameInput = document.getElementById("companyNameInput");
+        let seller;
+        
+        window.onload = function()
+        {
+            getUserDetails(false, function (s){
+                seller = s;
+                nameInput.value = seller.name;
+                companyNameInput.value = seller.company;
+            });
+        }
+
+        function save()
+        {
+            let name = nameInput.value;
+            let cName = companyNameInput.value;
+            let no_prob = true;
+            if (name == "") {
+                nameInput.style.border = "1px solid red";
+                no_prob = false;
+            }
+            if (cName == "") {
+                companyNameInput.style.border = "1px solid red";
+                no_prob = false;
+            }
+            if(no_prob)
+            {
+                seller.name = name;
+                seller.company = cName;
+                updateUser(false,seller,(code) => {
+                    if(code == codes.INSERTION_SUCCESS)
+                    {
+                        window.location.replace("dashboard.html");
+                    }
+                    else
+                    {
+                        //TODO: Update failure
+                    }
+                });
+            }
+        }
     </script>
 </body>
 
