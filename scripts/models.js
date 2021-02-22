@@ -1,40 +1,25 @@
 // Model classes for objects
 // import { codes, updateDBEmail, updateDBPassword } from './firebaseHandlers.js';
 
+// global vars
+
+const OrderStatus = Object.freeze({
+    "PENDING": 0,
+    "PROCESSING": 1,
+    "ON_WAY": 2,
+    "DELEIVERED": 3,
+    "CANCELLED": 4
+});
+
+// classes and converters
+
 class User {
     constructor(name, age, email, password) {
         this.name = name;
         this.age = age;
         this.email = email;
         this.password = password;
-    }
-
-    updateName(name) {
-        this.name = name;
-    }
-   
-    updatePassword(password) {
-        try {
-            if(updateDBPassword(password) == codes.UPDATE_SUCCESS) {
-                this.password = password;
-                return codes.UPDATE_SUCCESS;
-            }
-        }
-        catch(error) {
-            return codes.UPDATE_FAILIURE;
-        }
-    }
-
-    updateEmail(email) {
-        try {
-            if(updateDBEmail(email) == codes.UPDATE_SUCCESS) {
-                this.email = email;
-                return codes.UPDATE_SUCCESS;
-            }
-        }
-        catch(error) {
-            return codes.UPDATE_FAILIURE;
-        }
+        this.orders = [];
     }
 }
 
@@ -44,12 +29,13 @@ var userConverter = {
             name: user.name,
             age: user.age,
             email: user.email,
-            password: user.password
+            password: user.password,
+            orders: user.orders
             };
     },
     fromFirestore: function(snapshot, options){
         const data = snapshot.data(options);
-        return new User(data.name, data.age, data.email, data.password);
+        return new User(data.name, data.age, data.email, data.password, data.orders);
     }
 };
 
@@ -59,34 +45,7 @@ class Seller {
         this.company = company;
         this.email = email;
         this.password = password;
-    }
-
-    updateCompany(company) {
-        this.company = company;
-    }
-    
-    updatePassword(password) {
-        try {
-            if(updateDBPassword(password) == codes.UPDATE_SUCCESS) {
-                this.password = password;
-                return codes.UPDATE_SUCCESS;
-            }
-        }
-        catch(error) {
-            return codes.UPDATE_FAILIURE;
-        }
-    }
-
-    updateEmail(email) {
-        try {
-            if(updateDBEmail(email) == codes.UPDATE_SUCCESS) {
-                this.email = email;
-                return codes.UPDATE_SUCCESS;
-            }
-        }
-        catch(error) {
-            return codes.UPDATE_FAILIURE;
-        }
+        this.products = [];
     }
 }
 
@@ -96,12 +55,13 @@ var sellerConverter = {
             name: user.name,
             company: user.company,
             email: user.email,
-            password: user.password
+            password: user.password,
+            products: user.products
             };
     },
     fromFirestore: function(snapshot, options){
         const data = snapshot.data(options);
-        return new Seller(data.name, data.company, data.email, data.password);
+        return new Seller(data.name, data.company, data.email, data.password, data.products);
     }
 };
 
@@ -119,14 +79,6 @@ class Product {
         this.quantity = quantity;
         this.description = description;
     }
-
-    updatePrice(price) {
-        this.price = price;
-    }
-
-    setQuantity(quantity) {
-        this.quantity = quantity;
-    }
 }
 
 var productConverter = {
@@ -142,7 +94,7 @@ var productConverter = {
             estimatedTime: product.estimatedTime,
             images: product.images,
             quantity: product.quantity,
-            description: product.description,
+            description: product.description
             };
     },
     fromFirestore: function(snapshot, options){
@@ -155,10 +107,6 @@ class Category {
     constructor(name, subcategories) {
         this.name = name;
         this.subcategories = subcategories;
-    }
-    
-    addSubcategory(subCategory) {
-        this.subcategories.push(subCategory);
     }
 }
 
@@ -174,6 +122,16 @@ var categoryConverter = {
         return new Category(data.name, data.subcategories);
     }
 };
+
+
+class Order {
+    constructor(products) {
+        this.products = products;
+        this.status = OrderStatus.PENDING;
+    }
+}
+
+
 
 // export { User, Seller, Product, Category }
 

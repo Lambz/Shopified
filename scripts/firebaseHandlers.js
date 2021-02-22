@@ -10,7 +10,7 @@
 
 // global variables
 
-var codes = {
+var codes = Object.freeze({
     NULL_VALUE: -5,
     NULL_OBJECT: -10,
     INSERTION_SUCCESS: 3,
@@ -24,7 +24,7 @@ var codes = {
     LOGIN_FAILIURE: -400,
     LOGOUT_SUCCESS: 102,
     LOGOUT_FAILIURE: -102
-}
+});
 
 // config token for firebase access
 var firebaseConfig = {
@@ -46,7 +46,6 @@ function initializeDB() {
     app = firebase.initializeApp(firebaseConfig);
     db = firebase.firestore(app);
     console.log("DB initialized!");
-
 }
 
 
@@ -131,22 +130,24 @@ function sendPasswordReset(email) {
 
 // User Data Insertion Functions
 
-function createUserObjectInDB(user) {
+function createUserObjectInDB(user, uiCallback) {
     if (!user) {
         throw new Error(`User Insertion Error! Error code: ${codes.NULL_OBJECT}`);
     }
     db.collection('users').doc(sessionStorage.getItem("uid")).withConverter(userConverter).set(user)
     .then(() => {
         console.log("User Added!");
+        uiCallback(codes.INSERTION_SUCCESS);
         return codes.INSERTION_SUCCESS;
     })
     .catch((error) => {
         console.log(`User insertion error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
+        uiCallback(ccodes.INSERTION_FAILIURE);
         return codes.INSERTION_FAILIURE;
     });
 }
 
-function createSellerObjectInDB(user) {
+function createSellerObjectInDB(user, uiCallback) {
     if (!user) {
         console.log("user");
         throw new Error(`Seller Insertion Error! Error code: ${codes.NULL_OBJECT}`);
@@ -155,10 +156,12 @@ function createSellerObjectInDB(user) {
     db.collection('sellers').doc(sessionStorage.getItem("uid")).withConverter(sellerConverter).set(user)
     .then(() => {
         console.log("Seller Added!");
+        uiCallback(codes.INSERTION_SUCCESS);
         return codes.INSERTION_SUCCESS;
     })
     .catch((error) => {
         console.log(`Seller insertion error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
+        uiCallback(ccodes.INSERTION_FAILIURE);
         return codes.INSERTION_FAILIURE;
     });
 }
@@ -241,16 +244,18 @@ function updateDBEmail(email) {
 
 // Insertion functions
 
-function insertProductInDB(product, uiCallback) {
+function insertProductInDB(product, seller, uiCallback) {
     if (!product) {
         throw new Error(`Product insertion error! Error code: ${codes.NULL_OBJECT}`);
         return;
     }
     let category = product.category;
     let subcategory = product.subcateogry;
-    db.collection('products').doc(category).doc(subcategory).doc(product.id).withConverter(productConverter).set(product)
+    db.collection(`products/${category}/${subcategory}`).doc(product.id).withConverter(productConverter).set(product)
     .then(() => {
         console.log("Product Added!");
+        seller.products.push(product);
+        createSellerObjectInDB(seller, uiCallback);
         return codes.INSERTION_SUCCESS;
     })
     .catch((error) => {
@@ -259,7 +264,7 @@ function insertProductInDB(product, uiCallback) {
     });
 }
 
-function insertCategoryOrSubcategoryInDB(category, callback) {
+function insertCategoryOrSubcategoryInDB(category) {
     if (!category) {
         throw new Error(`Category Insertion Error! Error code: ${codes.NULL_OBJECT}`);
     }
@@ -277,9 +282,9 @@ function insertCategoryOrSubcategoryInDB(category, callback) {
 // Fetch functions
 
 function fetchCategoriesAndSubcategoriesFromDB(uiCallback) {
-    let refernece = db.collection('categories');
+    let reference = db.collection('categories');
     let resultArray = [];
-    refernece.withConverter(categoryConverter).get().then((querySnapshot) => {
+    reference.withConverter(categoryConverter).get().then((querySnapshot) => {
         querySnapshot.forEach(doc => {
             if (doc.exists) {
                 resultArray.push(doc.data());
@@ -292,13 +297,14 @@ function fetchCategoriesAndSubcategoriesFromDB(uiCallback) {
     })
     .catch((error) => {
         console.log(`Category fetch error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
+        uiCallback(codes.FETCH_FAILURE);
         return codes.FETCH_FAILURE;
     })
 }
 
-function fetchProductsForSubCategoryFromDB(category, subcategory) {
-    let refernece = db.collection('products').doc(category).doc(subcategory);
-    refernece.get().then((doc) => {
+function fetchProductsForSubCategoryFromDB(category, subcategory, uiCallback) {
+    let reference = db.collection('products').doc(category).doc(subcategory);
+    reference.get().then((doc) => {
         if(doc.exists)
             return doc.data();
         else
@@ -309,6 +315,20 @@ function fetchProductsForSubCategoryFromDB(category, subcategory) {
         return codes.FETCH_FAILURE;
     })
 }
+
+function fetchCategoryDataFromDB(category, callback) {
+    let reference = db.collection('categories').doc(category);
+    reference.withConverter(categoryConverter).get()
+    .then((doc) => {
+        callback(doc.data());
+        return codes.FETCH_SUCCESS;
+    })
+    .catch((error) => {
+        console.log(`Category fetch error! Error code: ${error.code}\nError Message: ${error.message}`);
+        return codes.FETCH_FAILURE;
+    })
+}
+
 
 // export { codes, firebaseConfig, initializeDB, signupWithEmail, signInWithEmail, sendPasswordReset,
 //     createUserObjectInDB, createSellerObjectInDB, getUserDetails, getSellerDetails, updateDBPassword,
