@@ -66,7 +66,6 @@ function signupWithEmail(user, callback, uiCallback) {
         // Signed in 
         let loggedUser = userCredential.user.uid;
         sessionStorage.setItem("uid", loggedUser);
-        sessionStorage.setItem("user", user);
         return callback(user, uiCallback);
     })
     .catch((error) => {
@@ -105,6 +104,7 @@ function signOutUserFromFirebase(uiCallback) {
         console.log("Logged out!");
         sessionStorage.setItem("uid", null);
         // UIcallback implementation
+        uiCallback();
         return codes.LOGOUT_SUCCESS;
     })
     .catch((error) => {

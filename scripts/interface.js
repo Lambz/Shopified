@@ -171,19 +171,18 @@ function deleteProduct(productid) {
 
 
 let user = new Seller("Name", "Company", "SomeEmail@NameCompanyMail.com", "Password");
-user.products = [new Product("name", "001", "some", "sub1", "100", user.name, sessionStorage.getItem("uid"), 2, [], 100, "Description")];
 // let category = new Category("some other category", ["sub2"]);
 initializeDB();
 console.log(user);
 db.collection('sellers').doc(sessionStorage.getItem("uid")).withConverter(sellerConverter).set(user)
     .then(() => {
         console.log("Seller Added!");
-        uiCallback(codes.INSERTION_SUCCESS);
+        // uiCallback(codes.INSERTION_SUCCESS);
         // return codes.INSERTION_SUCCESS;
     })
     .catch((error) => {
         console.log(`Seller insertion error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
-        uiCallback(ccodes.INSERTION_FAILIURE);
+        // uiCallback(ccodes.INSERTION_FAILIURE);
         // return codes.INSERTION_FAILIURE;
     });
 
