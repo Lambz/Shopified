@@ -264,6 +264,28 @@ function insertProductInDB(product, seller, uiCallback) {
     // });
 }
 
+// Deletion functions
+
+function deleteProductFromDB(productID, seller, uiCallback) {
+    if (!productID) {
+        throw new Error(`Product insertion error! Error code: ${codes.NULL_OBJECT}`);
+        return;
+    }
+    seller.removeProduct(productID);
+    createSellerObjectInDB(seller,uiCallback);
+    // db.collection(`products`).doc(product.id).withConverter(productConverter).set(product)
+    // .then(() => {
+    //     console.log("Product Added!");
+    //     seller.addProduct(product);
+    //     createSellerObjectInDB(seller, uiCallback);
+    //     return codes.INSERTION_SUCCESS;
+    // })
+    // .catch((error) => {
+    //     console.log(`Product insertion error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
+    //     return codes.INSERTION_FAILIURE;
+    // });
+}
+
 function insertCategoryOrSubcategoryInDB(category) {
     if (!category) {
         throw new Error(`Category Insertion Error! Error code: ${codes.NULL_OBJECT}`);

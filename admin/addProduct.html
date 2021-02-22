@@ -208,7 +208,12 @@
                             <span class="input-group-text" id="basic-addon2">Day</span>
                         </div>
                     </div>
-                    <button type="button" id="addProductBtn" onclick="addProduct(true)" class="btn btn-primary btn-lg btn-block">Add
+                    <button type="button" id="addProductBtn" onclick="addProduct(true)"
+                        class="btn btn-primary btn-lg btn-block">Add
+                        Product</button>
+                    <br />
+                    <button type="button" id="deleteProductBtn" onclick="deleteP()" style="display: none;"
+                        class="btn btn-danger btn-lg btn-block">Delete
                         Product</button>
                 </div>
             </div>
@@ -244,6 +249,7 @@
         const descriptionInput = document.getElementById("pDescription");
         const timeInput = document.getElementById("pTime");
         const addProductBtn = document.getElementById("addProductBtn");
+        const deleteProductBtn = document.getElementById("deleteProductBtn");
         let product = null;
         window.onload = function () {
             fetchAllCategoriesAndSubcategories(categoryCallBack);
@@ -354,14 +360,12 @@
                 }
                 for (let j = i * 4; j < (i + 1) * 4 && j < images.length; j++) {
                     // console.log(`i:${i} j:${j}`)
-                    console.log(typeof(images[j]));
+                    console.log(typeof (images[j]));
                     let src;
-                    if(typeof(images[j]) == "object")
-                    {
+                    if (typeof (images[j]) == "object") {
                         src = URL.createObjectURL(images[j]);
                     }
-                    else
-                    {
+                    else {
                         src = images[j];
                     }
                     inner += `<div class="col-3 product-image"><img class="d-block w-100" src="${src}" alt="Product Image"><div class="overlay"><button onclick="removeImage(${j})" class="buy-btn"><img src="media/trash.png" class="trash-btn" style="width:40px; height:40px" /></button></div></div>`
@@ -421,13 +425,11 @@
                     console.log(seller)
                     let uid = sessionStorage.getItem("uid");
                     let p;
-                    if(newProduct)
-                    {
+                    if (newProduct) {
                         console.log("if");
                         p = new Product(name, generateID(30), category, subCategory, price, seller.company, uid, time, [], quantity, description);
                     }
-                    else
-                    {
+                    else {
                         console.log("else");
                         p = product;
                         p.name = name;
@@ -446,25 +448,21 @@
                         let newImages = [];
                         let oldImages = [];
                         images.forEach((image) => {
-                            if(typeof(image) == "object")
-                            {
+                            if (typeof (image) == "object") {
                                 newImages.push(image);
                             }
-                            else
-                            {
+                            else {
                                 oldImages.push(image);
                             }
                         });
-                        if(newImages.length>0)
-                        {
+                        if (newImages.length > 0) {
                             insertImage(p.id, newImages, function (urls) {
                                 p.images = oldImages.concat(urls);
                                 // console.log(p);
                                 insertProduct(p, seller, false, productResult);
                             });
                         }
-                        else
-                        {
+                        else {
                             p.images = oldImages;
                             insertProduct(p, seller, false, productResult);
                         }
@@ -506,14 +504,27 @@
             quanitityInput.value = product.quantity;
             timeInput.value = product.estimatedTime;
             images = product.images;
-            if(images.length > 0)
-            {
+            if (images.length > 0) {
                 updateCarousel();
             }
             addProductBtn.innerHTML = "Update Product";
-            addProductBtn.setAttribute('onclick',"addProduct(false)");
-        } 
+            addProductBtn.setAttribute('onclick', "addProduct(false)");
+            deleteProductBtn.style.display = "block";
+        }
 
+        function deleteP() {
+            getUserDetails(false, function (seller) {
+                deleteProduct(product.id, seller, (code) => {
+                    if (code == codes.INSERTION_SUCCESS) {
+                        window.location.replace("products.html");
+                    }
+                    else {
+                        //TODO: deletion failure
+                    }
+                });
+            });
+
+        }
     </script>
 </body>
 

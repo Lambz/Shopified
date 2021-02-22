@@ -77,6 +77,29 @@ class Seller {
         }
         this.products.push(saveProduct);
     }
+
+    removeProduct(productID)
+    {
+        if(this.products.length>0)
+        {
+            let index = 0;
+            let foundProduct = false;
+            for(let i=0;i<this.products.length;i++)
+            {
+                // console.log(saveProduct.id, this.products[i].id);
+                if(productID == this.products[i].id)
+                {
+                    index = i;
+                    foundProduct = true;
+                    break;
+                }
+            }
+            if(foundProduct)
+            {
+                this.products.splice(index,1);
+            }
+        }
+    }
     
     static convertToSeller(json)
     {

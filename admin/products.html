@@ -141,25 +141,37 @@
     <script src="../scripts/firebaseHandlers.js"></script>
     <script src="../scripts/interface.js"></script>
     <script>
+
+        let seller;
         window.onload = function()
         {
             getUserDetails(false,sellerDetailsCallback)
         }
 
-        function sellerDetailsCallback(seller)
+        function sellerDetailsCallback(s)
         {
             let tbody = document.getElementById("tbody");
-            let products = seller.products;
+            seller = s;
+            let products = s.products;
             let i=0;
             products.forEach((product) => {
-                tbody.innerHTML += `<tr><td>${product.name}</td><td>${product.category}</td><td>${product.subcategory}</td><td>${product.price}</td><td>${product.quantity}</td><td><button class="btn btn-primary mx-1" onclick="editProduct('${product.id}')">Edit</button><button class="btn btn-danger mx-1" onclick="deleteProduct('${product.id}')">Delete</button></td></tr>`
+                tbody.innerHTML += `<tr><td>${product.name}</td><td>${product.category}</td><td>${product.subcategory}</td><td>${product.price}</td><td>${product.quantity}</td><td><button class="btn btn-primary mx-1" onclick="editProduct('${product.id}')">Edit</button><button class="btn btn-danger mx-1" onclick="deleteP('${product.id}')">Delete</button></td></tr>`
                 i++;
             });
         }
 
-        function deleteProduct(id)
+        function deleteP(id)
         {
-            //TODO: logic to delete product
+            deleteProduct(id,seller,(code) => {
+                if(code == codes.INSERTION_SUCCESS)
+                {
+                    location.reload();
+                }
+                else
+                {
+                    //TODO: deletion failure
+                }
+            });
         }
 
         function editProduct(id)

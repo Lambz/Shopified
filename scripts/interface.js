@@ -144,7 +144,6 @@ function insertProduct(product, seller, updateCategory, uiCallback) {
     catch(error) {
         return codes.INSERTION_FAILIURE;
     }
-    
 }
 
 // fetches current logged in user details
@@ -189,8 +188,8 @@ function getCategoryObjectAndUpdateCategory(categoryName, subcategoryName) {
 
 // Function to delete a product
 
-function deleteProduct(productid) {
-
+function deleteProduct(productID, seller, uiCallback) {
+    deleteProductFromDB(productID,seller,uiCallback);
 }
 
 // Order Functions
