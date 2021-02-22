@@ -78,7 +78,7 @@ function signupWithEmail(user, callback, uiCallback) {
 
 // Sign-in Function
 
-function signInWithEmail(email, password, callback, uiCallback) {
+function signInWithEmail(email, password, callback) {
     if (!email || !password) {
         throw new Error(`Signin Error! Error code: ${codes.NULL_VALUE}`);
     }
