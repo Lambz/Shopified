@@ -208,7 +208,7 @@
                             <span class="input-group-text" id="basic-addon2">Day</span>
                         </div>
                     </div>
-                    <button type="button" onclick="addProduct()" class="btn btn-primary btn-lg btn-block">Add
+                    <button type="button" id="addProductBtn" onclick="addProduct(true)" class="btn btn-primary btn-lg btn-block">Add
                         Product</button>
                 </div>
             </div>
@@ -243,6 +243,7 @@
         const quanitityInput = document.getElementById("pQuantity");
         const descriptionInput = document.getElementById("pDescription");
         const timeInput = document.getElementById("pTime");
+        const addProductBtn = document.getElementById("addProductBtn");
         let product = null;
         window.onload = function () {
             fetchAllCategoriesAndSubcategories(categoryCallBack);
@@ -377,7 +378,8 @@
             updateCarousel();
         }
 
-        function addProduct() {
+        function addProduct(newProduct = false) {
+            console.log(newProduct);
             let noProb = true;
             let name = nameInput.value;
             let category = categoriesInput.value;
@@ -418,25 +420,45 @@
                 getUserDetails(false, function (seller) {
                     console.log(seller)
                     let uid = sessionStorage.getItem("uid");
-                    let product = new Product(name, generateID(30), category, subCategory, price, seller.company, uid, time, [], quantity, description);
-                    console.log(product);
+                    let p;
+                    if(newProduct)
+                    {
+                        console.log("if");
+                        p = new Product(name, generateID(30), category, subCategory, price, seller.company, uid, time, [], quantity, description);
+                    }
+                    else
+                    {
+                        console.log("else");
+                        p = product;
+                        p.name = name;
+                        p.category = category;
+                        p.subcategory = subCategory;
+                        p.price = price;
+                        p.seller = seller.company;
+                        p.seller_id = uid;
+                        p.estimatedTime = time;
+                        p.images = [];
+                        p.quantity = quantity;
+                        p.description = description;
+                    }
+                    console.log(p);
                     if (images.length > 0) {
                         console.log(images);
-                        insertImage(product.id, images, function (urls) {
-                            product.images = urls;
-                            console.log(product);
-                            insertProduct(product, seller, false, productResult);
+                        insertImage(p.id, images, function (urls) {
+                            p.images = urls;
+                            console.log(p);
+                            insertProduct(p, seller, false, productResult);
                         });
                     }
                     else {
-                        insertProduct(product, seller, false, productResult);
+                        insertProduct(p, seller, false, productResult);
                     }
                 });
             }
         }
 
         function productResult() {
-            window.location.replace("products.html");
+            // window.location.replace("products.html");
         }
 
         function getProduct(seller) {
@@ -469,7 +491,9 @@
             {
                 updateCarousel();
             }
-        }
+            addProductBtn.innerHTML = "Update Product";
+            addProductBtn.setAttribute('onclick',"addProduct(false)");
+        } 
 
     </script>
 </body>

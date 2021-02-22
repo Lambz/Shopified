@@ -57,6 +57,25 @@ class Seller {
 
     addProduct(product) {
         let saveProduct = Object.assign({}, product);
+        if(this.products.length>0)
+        {
+            let index = 0;
+            let foundProduct = false;
+            for(let i=0;i<this.products.length;i++)
+            {
+                console.log(saveProduct.id, this.products[i].id);
+                if(saveProduct.id == this.products[i].id)
+                {
+                    index = i;
+                    foundProduct = true;
+                }
+            }
+            if(foundProduct)
+            {
+                console.log(`product found at index ${index}`);
+                this.products.splice(index,1);
+            }
+        }
         this.products.push(saveProduct);
     }
     

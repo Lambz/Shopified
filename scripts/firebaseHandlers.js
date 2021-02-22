@@ -258,10 +258,10 @@ function insertProductInDB(product, seller, uiCallback) {
         createSellerObjectInDB(seller, uiCallback);
         return codes.INSERTION_SUCCESS;
     })
-    .catch((error) => {
-        console.log(`Product insertion error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
-        return codes.INSERTION_FAILIURE;
-    });
+    // .catch((error) => {
+    //     console.log(`Product insertion error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
+    //     return codes.INSERTION_FAILIURE;
+    // });
 }
 
 function insertCategoryOrSubcategoryInDB(category) {
