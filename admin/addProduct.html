@@ -408,12 +408,11 @@
                     if(images.length>0)
                     {
                         console.log(images);
-                        insertImage(product,images,function(urls)
+                        insertImage(product.id,images,function(urls)
                         {
-                            product.images = images;
+                            product.images = urls;
                             console.log(product);
                             insertProduct(product, seller, false, productResult);
-                            console.log("hello");
                         });
                     }
                     else
@@ -421,22 +420,11 @@
                         insertProduct(product, seller, false, productResult);
                     }
                 });
-                // getUserDetails(false, function (seller) {
-                //    console.log(seller);
-                // //    let id = generateID(10);
-                //     let uid = sessionStorage.getItem("uid");
-                //    let product = new Product(name, "1234567890", category, subCategory, price, seller.company, uid, time, [], quantity, description);
-                //    console.log(product);
-                //    console.log(insertImage);
-                //    insertImage(product.id,images,() => {
-                //        console.log("hello");
-                //    });
-                // });
             }
         }
 
         function productResult() {
-            console.log("productResult");
+            window.location.replace("products.html");
         }
     </script>
 </body>

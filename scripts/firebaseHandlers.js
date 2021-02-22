@@ -207,11 +207,11 @@ function getSellerDetailsFromDB(uiCallback) {
         } else {
             return codes.NOT_FOUND;
         }
-    })
-    .catch ((error) => {
-        console.log(`Details fetching error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
-        return codes.FETCH_FAILURE;
     });
+    // .catch ((error) => {
+    //     console.log(`Details fetching error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
+    //     return codes.FETCH_FAILURE;
+    // });
 }
 
 //  User details Update Functions
@@ -339,10 +339,13 @@ function fetchCategoryDataFromDB(category, callback) {
 // insert image
 
 function insertImageInDB(product_id, index, fileData, callback) {
+    // console.log("insertImageInDB");
     var storageRef = firebase.storage().ref().child(`${product_id}-${index}.jpg`);
     storageRef.put(fileData)
     .then((snapshot) => {
-        callback();
+        // console.log(snapshot);
+        snapshot.ref.getDownloadURL().then((url) => callback(url));
+        // callback(snapshot.errorCode.);
     })
 }
 

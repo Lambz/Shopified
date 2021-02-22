@@ -113,8 +113,11 @@ function insertImage(product, images, uiCallback) {
     //  insert images
     var downloadedUrls = [];
     for (let i=0; i < images.length; i++) {
-        insertImageInDB(product, i, image, (url) => {
+        // console.log(i);
+        // console.log(insertImageInDB);
+        insertImageInDB(product, i, images[i], (url) => {
             downloadedUrls.push(url);
+            console.log(url);
             if (downloadedUrls.length == images.length) {
                 uiCallback(downloadedUrls);
             }
