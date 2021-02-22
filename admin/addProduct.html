@@ -17,12 +17,11 @@
             background-color: rgb(241, 244, 249);
         }
 
-        .overlay
-        {
+        .overlay {
             position: absolute;
             left: 50%;
             top: 50%;
-            transform: translate(-50%,-50%);
+            transform: translate(-50%, -50%);
             width: 100%;
             height: 100%;
             background-color: rgba(92, 95, 236, 0.6);
@@ -31,8 +30,7 @@
             align-items: center;
         }
 
-        .buy-btn
-        {
+        .buy-btn {
             border: none;
             display: flex;
             width: 60px;
@@ -50,42 +48,36 @@
             box-shadow: 2px 2px 30px rgba(0, 0, 0, 0.2);
         }
 
-        .buy-btn:hover
-        {
+        .buy-btn:hover {
             color: white;
             background-color: #f15fa3;
             transition: all ease 0.3;
         }
 
-        .buy-btn:hover .trash-btn
-        {
+        .buy-btn:hover .trash-btn {
             filter: brightness(0) invert(1);
             cursor: pointer;
         }
 
-        .overlay
-        {
+        .overlay {
             visibility: hidden;
         }
 
-        .product-image:hover .overlay
-        {
-            visibility: visible ;
+        .product-image:hover .overlay {
+            visibility: visible;
             animation: fade 0.5s;
         }
 
         @keyframes fade {
 
-            0%
-            {
+            0% {
                 opacity: 0;
             }
 
-            100%
-            {
+            100% {
                 opacity: 1;
             }
-            
+
         }
     </style>
     <title>Products</title>
@@ -109,7 +101,8 @@
                         <a class="nav-link" href="analytics.html">Analytics</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="products.html">Products<span class="sr-only">(current)</span></a>
+                        <a class="nav-link active" href="products.html">Products<span
+                                class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="orders.html">Orders</a>
@@ -203,35 +196,116 @@
                             aria-label="Amount">
                     </div>
                     <label for="pQuantity">Quanitity:</label>
-                    <input type="number" name="pQuantity" id="pQuantity" class="form-control mb-3"
-                        placeholder="1000" />
+                    <input type="number" name="pQuantity" id="pQuantity" class="form-control mb-3" placeholder="1000" />
                     <label for="pDescription">Description: </label>
                     <textarea id="pDescription" name="pDescription" class="form-control mb-3"
                         aria-label="With textarea"></textarea>
                     <label for="pTime">Estimated Shipping Time:</label>
                     <div class="input-group mb-3">
-                        <input type="number" id="pTime" name="pTime" class="form-control" placeholder="1"
-                            aria-label="1" aria-describedby="basic-addon2">
+                        <input type="number" id="pTime" name="pTime" class="form-control" placeholder="1" aria-label="1"
+                            aria-describedby="basic-addon2">
                         <div class="input-group-append">
                             <span class="input-group-text" id="basic-addon2">Day</span>
                         </div>
                     </div>
-                    <button type="button" onclick="addProduct()" class="btn btn-primary btn-lg btn-block">Add Product</button>
+                    <button type="button" onclick="addProduct()" class="btn btn-primary btn-lg btn-block">Add
+                        Product</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="scripts/main.js"></script>
-    <script src="../scripts/Utilties.js"></script>
+    <!-- <script src="scripts/main.js"></script> -->
+    <!-- <script src="../scripts/Utilties.js"></script> -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="js/bootstrap.js"></script> -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"></script>
+    <script src="../scripts/Utilties.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-firestore.js"></script>	
+    <script src="https://www.gstatic.com/firebasejs/8.2.8/firebase-storage.js"></script>
+    <!-- <script src="scripts/main.js"></script> -->
+    <script src="../scripts/models.js"></script>
+    <script src="../scripts/firebaseHandlers.js"></script>
+    <script src="../scripts/interface.js"></script>
     <script>
+
+        window.onload = function () {
+            fetchAllCategoriesAndSubcategories(categoryCallBack);
+        }
+
+        function categoryCallBack(result) {
+            // console.log(result);
+            let categories = document.getElementById("categories");
+            let subCategories = document.getElementById("subCategories");
+            categories.addEventListener("change", function () {
+                if (categories.value != "New Category") {
+                    subCategories.innerHTML = "";
+                    result.forEach((category) => {
+                        if (category.name == categories.value) {
+                            category.subcategories.forEach((subCategory) => {
+                                subCategories.innerHTML += `<option value="${subCategory}">${subCategory}</option>`;
+                            });
+                        }
+                    });
+                    let opt = document.createElement("option");
+                    opt.value = "New Sub-Category";
+                    opt.text = "New Sub-Category";
+                    subCategories.add(opt);
+                }
+                else {
+                    let categoryVal = prompt("Please enter new category name", "");
+                    if (categoryVal != null && categoryVal != "") {
+                        let opt = document.createElement("option");
+                        opt.value = categoryVal;
+                        opt.text = categoryVal;
+                        categories.add(opt);
+                        let subCategoryVal = prompt("Please enter new sub category name", "");
+                        if (subCategoryVal == null || subCategoryVal == "") {
+                            categories.remove(categories.length - 1);
+                            categories.selectedIndex = 0;
+                        }
+                        else {
+                            subCategories.innerHTML = "";
+                            let opt = document.createElement("option");
+                            opt.value = subCategoryVal;
+                            opt.text = subCategoryVal;
+                            subCategories.add(opt);
+                            categories.value = categoryVal;
+                            opt = document.createElement("option");
+                            opt.value = "New Sub-Category";
+                            opt.text = "New Sub-Category";
+                            subCategories.add(opt);
+                        }
+                    }
+                    else {
+                        categories.selectedIndex = 0;
+                    }
+
+                }
+
+            });
+            if (result != null && result.length > 0) {
+                result.forEach((category) => {
+                    // categories.innerHTML += `<option value="${category.name}">${category.name}</option>`;
+                    var opt = document.createElement("option");
+                    opt.value = category.name;
+                    opt.text = category.name;
+                    categories.add(opt);
+                });
+                result[0].subcategories.forEach((subCategory) => {
+                    subCategories.innerHTML += `<option value="${subCategory}">${subCategory}</option>`;
+                });
+                let opt = document.createElement("option");
+                opt.value = "New Category";
+                opt.text = "New Category";
+                categories.add(opt);
+            }
+        }
+
         let images = [];
         function selectImages() {
             let fileInput = document.getElementById("file-input");
@@ -271,19 +345,17 @@
                 }
                 inner += "</div></div>";
             }
-            console.log(inner);
+            // console.log(inner);
             courselInner.innerHTML = inner;
             // console.log(slides);
         }
 
-        function removeImage(index)
-        {
-            images.splice(index,1);
+        function removeImage(index) {
+            images.splice(index, 1);
             updateCarousel();
         }
 
-        function addProduct()
-        {
+        function addProduct() {
             let nameInput = document.getElementById("pName");
             let categoriesInput = document.getElementById("categories");
             let subCategoriesInput = document.getElementById("subCategories");
@@ -299,45 +371,72 @@
             let quantity = quanitityInput.value;
             let description = descriptionInput.value;
             let time = timeInput.value;
-            if(name == "")
-            {
+            if (name == "") {
                 nameInput.style.border = "1px solid red";
                 noProb = false;
             }
-            if(category == "")
-            {
+            if (category == "") {
                 categoriesInput.style.border = "1px solid red";
                 noProb = false;
             }
-            if(subCategory == "")
-            {
+            if (subCategory == "") {
                 subCategoriesInput.style.border = "1px solid red";
                 noProb = false;
             }
-            if(price == "")
-            {
+            if (price == "") {
                 priceInput.style.border = "1px solid red";
                 noProb = false;
             }
-            if(quantity == "")
-            {
+            if (quantity == "") {
                 quanitityInput.style.border = "1px solid red";
                 noProb = false;
             }
-            if(description == "")
-            {
+            if (description == "") {
                 descriptionInput.style.border = "1px solid red";
                 noProb = false;
             }
-            if(time == "")
-            {
+            if (time == "") {
                 timeInput.style.border = "1px solid red";
                 noProb = false;
             }
-            if(noProb)
-            {
-                //TODO: Add Product Functionality
+            if (noProb) {
+                getUserDetails(false,function (seller) {
+                    console.log(seller)
+                    let uid = sessionStorage.getItem("uid");
+                    let product = new Product(name, generateID(30), category, subCategory, price, seller.company, uid, time, [], quantity, description);
+                    console.log(product);
+                    if(images.length>0)
+                    {
+                        console.log(images);
+                        insertImage(product,images,function(urls)
+                        {
+                            product.images = images;
+                            console.log(product);
+                            insertProduct(product, seller, false, productResult);
+                            console.log("hello");
+                        });
+                    }
+                    else
+                    {
+                        insertProduct(product, seller, false, productResult);
+                    }
+                });
+                // getUserDetails(false, function (seller) {
+                //    console.log(seller);
+                // //    let id = generateID(10);
+                //     let uid = sessionStorage.getItem("uid");
+                //    let product = new Product(name, "1234567890", category, subCategory, price, seller.company, uid, time, [], quantity, description);
+                //    console.log(product);
+                //    console.log(insertImage);
+                //    insertImage(product.id,images,() => {
+                //        console.log("hello");
+                //    });
+                // });
             }
+        }
+
+        function productResult() {
+            console.log("productResult");
         }
     </script>
 </body>

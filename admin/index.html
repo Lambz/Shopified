@@ -85,12 +85,13 @@
                         </div>
                         <div class="form-row">
                             <div class="col-lg-7">
-                                <input type="password" id="password" class="form-control my-3 p-2" placeholder="*******">
+                                <input type="password" id="password" class="form-control my-3 p-2"
+                                    placeholder="*******">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="col-lg-7">
-                                <button type="button" onclick="signIn()" class="btn1 mt-3 mb-5">Login</button>
+                                <button type="button" onclick="signInClicked()" class="btn1 mt-3 mb-5">Login</button>
                             </div>
                         </div>
                         <!-- forgot password maybe -->
@@ -109,27 +110,31 @@
                         </div>
                         <div class="form-row">
                             <div class="col-lg-7">
-                                <input id="company_name_input" type="text" class="form-control my-3 p-2" placeholder="Company Name">
+                                <input id="company_name_input" type="text" class="form-control my-3 p-2"
+                                    placeholder="Company Name">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="col-lg-7">
-                                <input type="email" id="sign_up_email_input" class="form-control my-3 p-2" placeholder="Email">
+                                <input type="email" id="sign_up_email_input" class="form-control my-3 p-2"
+                                    placeholder="Email">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="col-lg-7">
-                                <input type="password" id="sign_up_password_input" class="form-control my-3 p-2" placeholder="Password">
+                                <input type="password" id="sign_up_password_input" class="form-control my-3 p-2"
+                                    placeholder="Password">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="col-lg-7">
-                                <input type="password" id="retype_input" class="form-control my-3 p-2" placeholder="Re-type password">
+                                <input type="password" id="retype_input" class="form-control my-3 p-2"
+                                    placeholder="Re-type password">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="col-lg-7">
-                                <button type="button" onclick="signUp()" class="btn1 mt-2 mb-3">Sign Up</button>
+                                <button type="button" onclick="signUpClicked()" class="btn1 mt-2 mb-3">Sign Up</button>
                             </div>
                         </div>
                         <!-- forgot password maybe -->
@@ -145,10 +150,110 @@
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-firestore.js"></script>
+    <!-- <script src="scripts/main.js"></script> -->
+    <script src="../scripts/models.js"></script>
+    <script src="../scripts/firebaseHandlers.js"></script>
+    <script src="../scripts/interface.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
         crossorigin="anonymous"></script>
-    <script src="scripts/main.js"></script>
+    <script>
+
+        window.onload = function()
+        {
+            let uid = sessionStorage.getItem("uid");
+            let seller = sessionStorage.getItem("user");
+            // TODO: Auto Login 
+        };
+
+        function registerHereClicked() {
+            document.getElementById("sign_in_div").style.display = "none";
+            document.getElementById("sign_up_div").style.display = "block";
+        }
+
+        function signInHereClicked() {
+            document.getElementById("sign_in_div").style.display = "block";
+            document.getElementById("sign_up_div").style.display = "none";
+        }
+
+        function signUpClicked() {
+            console.log("signUp");
+            let name = document.getElementById("name_input").value;
+            let c_name = document.getElementById("company_name_input").value;
+            let email = document.getElementById("sign_up_email_input").value;
+            let password = document.getElementById("sign_up_password_input").value;
+            let r_password = document.getElementById("retype_input").value;
+            let no_prob = true;
+            if (name == "") {
+                document.getElementById("name_input").style.border = "1px solid red";
+                no_prob = false;
+            }
+            if (c_name == "") {
+                document.getElementById("company_name_input").style.border = "1px solid red";
+                no_prob = false;
+            }
+            if (email == "") {
+                document.getElementById("sign_up_email_input").style.border = "1px solid red";
+                no_prob = false;
+            }
+            if (password == "") {
+                document.getElementById("sign_up_password_input").style.border = "1px solid red";
+                no_prob = false;
+            }
+            if (r_password == "") {
+                document.getElementById("retype_input").style.border = "1px solid red";
+                no_prob = false;
+            }
+            if (password != r_password) {
+                document.getElementById("sign_up_password_input").style.border = "1px solid red";
+                document.getElementById("retype_input").style.border = "1px solid red";
+                no_prob = false;
+            }
+            if (no_prob) {
+                // sha512(password).then((hash) => sendToFirebase(email, hash, name, c_name));
+                sha512(password).then((hash) => 
+                {
+                    // console.log(hash);
+                    let seller = new Seller(name, c_name, email, hash);
+                    // console.log(JSON.stringify(seller));
+                    // console.log(seller);
+                    signUp(seller,false,signUpSuccessful);
+                });
+                // let seller = new Seller(name, c_name, email, password);
+                // console.log(seller);
+                // signUp(seller, false, signUpSuccessful);
+            }
+        }
+
+        function signUpSuccessful() {
+            window.location.replace("dashboard.html");
+        }
+
+        function signInClicked() {
+            console.log("signIn");
+            let email = document.getElementById("email").value;
+            let password = document.getElementById("password").value;
+            let no_prob = true;
+            if (email == "") {
+                document.getElementById("email").style.border = "1px solid red";
+                no_prob = false;
+            }
+            if (password == "") {
+                document.getElementById("password").style.border = "1px solid red";
+                no_prob = false;
+            }
+            if (no_prob) {
+                // sha512(password).then((hash) => signInFirebase(email, hash));
+                sha512(password).then((hash) => signIn(email,hash,false,signInSuccessful));
+            }
+        }
+
+        function signInSuccessful()
+        {
+            window.location.replace("dashboard.html");
+        }
+    </script>
 </body>
 
 </html>
