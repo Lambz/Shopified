@@ -14,9 +14,9 @@ const OrderStatus = Object.freeze({
 // classes and converters
 
 class User {
-    constructor(name, age, email, password) {
+    constructor(name, address, email, password) {
         this.name = name;
-        this.age = age;
+        this.address = address;
         this.email = email;
         this.password = password;
         this.orders = [];
@@ -33,7 +33,7 @@ var userConverter = {
     toFirestore: function(user) {
         return {
             name: user.name,
-            age: user.age,
+            address: user.address,
             email: user.email,
             password: user.password,
             orders: user.orders
@@ -41,7 +41,7 @@ var userConverter = {
     },
     fromFirestore: function(snapshot, options){
         const data = snapshot.data(options);
-        return new User(data.name, data.age, data.email, data.password, data.orders);
+        return new User(data.name, data.address, data.email, data.password, data.orders);
     }
 };
 
