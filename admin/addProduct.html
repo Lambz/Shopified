@@ -233,14 +233,19 @@
     <script src="../scripts/interface.js"></script>
     <script>
 
+        const id = new URL(window.location.href).searchParams.get("id");
+        const categories = document.getElementById("categories");
+        const subCategories = document.getElementById("subCategories");
         window.onload = function () {
             fetchAllCategoriesAndSubcategories(categoryCallBack);
+            if(id != null)
+            {
+
+            }
         }
 
         function categoryCallBack(result) {
             // console.log(result);
-            let categories = document.getElementById("categories");
-            let subCategories = document.getElementById("subCategories");
             categories.addEventListener("change", function () {
                 if (categories.value != "New Category") {
                     subCategories.innerHTML = "";
