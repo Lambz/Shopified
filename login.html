@@ -49,7 +49,15 @@
               </div> -->
 					<div class="input-field">
 						<i class="fas fa-envelope"></i>
+						<input id="signUpNameInput" type="text" placeholder="Name" />
+					</div>
+					<div class="input-field">
+						<i class="fas fa-envelope"></i>
 						<input id="signUpEmailInput" type="email" placeholder="Email" />
+					</div>
+					<div class="input-field">
+						<i class="fas fa-envelope"></i>
+						<textarea id="signUpAddressInput" type="text" placeholder="Address"></textarea>
 					</div>
 					<div class="input-field">
 						<i class="fas fa-lock"></i>
@@ -128,6 +136,8 @@
 		const signUpRetypePasswordInput = document.getElementById("signUpRetypePasswordInput");
 		const loginEmailInput = document.getElementById("loginEmailInput");
 		const loginPasswordInput = document.getElementById("loginPasswordInput");
+		const signUpAddressInput = document.getElementById("signUpAddressInput");
+		const signUpNameInput = document.getElementById("signUpNameInput");
 
 		sign_up_btn.addEventListener("click", () => {
 			container.classList.add("sign-up-mode");
@@ -166,9 +176,17 @@
 
 		function signUp()
 		{
+			let name = signUpNameInput.value;
 			let email = signUpEmailInput.value;
 			let password = signUpPasswordInput.value;
 			let retypePassword = signUpRetypePasswordInput.value;
+			let address = signUpAddressInput.value;
+			let no_prob = true;
+			if(name == "")
+			{
+				signUpNameInput.style.border = "1px solid red";
+				noProb = false;
+			}
 			if(email == "")
 			{
 				signUpEmailInput.style.border = "1px solid red";
@@ -183,6 +201,24 @@
 			{
 				signUpRetypePasswordInput.style.border = "1px solid red";
 				noProb = false;
+			}
+			if(address == "")
+			{
+				signUpAddressInput.style.border = "1px solid red";
+				noProb = false;
+			}
+			if(password != retypePassword)
+			{
+				signUpPasswordInput.style.border = "1px solid red";
+				signUpRetypePasswordInput.style.border = "1px solid red";
+				noProb = false;
+			}
+			if(no_prob)
+			{
+				sha512(password).then((hash) => {
+					let user = new User(name,address,email,hash);
+					signUp(user,true,result);
+				});
 			}
 		}
 	</script>
