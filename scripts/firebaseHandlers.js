@@ -103,7 +103,6 @@ function signOutUserFromFirebase(uiCallback) {
     .then(() => {
         console.log("Logged out!");
         sessionStorage.setItem("uid", null);
-        // UIcallback implementation
         uiCallback();
         return codes.LOGOUT_SUCCESS;
     })
@@ -152,7 +151,7 @@ function createSellerObjectInDB(user, uiCallback) {
         console.log("user");
         throw new Error(`Seller Insertion Error! Error code: ${codes.NULL_OBJECT}`);
     }
-
+    console.log("here at function");
     db.collection('sellers').doc(sessionStorage.getItem("uid")).withConverter(sellerConverter).set(user)
     .then(() => {
         console.log("Seller Added!");
@@ -168,7 +167,7 @@ function createSellerObjectInDB(user, uiCallback) {
 
 // User Query functions
 
-function getUserDetails(uiCallback) {
+function getUserDetailsFromDB(uiCallback) {
     if (!sessionStorage.getItem("uid")) {
         throw new Error(`User Credentials Null! Error code: ${codes.NULL_VALUE}`);
     }
@@ -190,7 +189,7 @@ function getUserDetails(uiCallback) {
     });
 }
 
-function getSellerDetails(uiCallback) {
+function getSellerDetailsFromDB(uiCallback) {
     if (!sessionStorage.getItem("uid")) {
         throw new Error(`Seller Email Null! Error code: ${codes.NULL_VALUE}`);
     }
@@ -251,10 +250,10 @@ function insertProductInDB(product, seller, uiCallback) {
     }
     let category = product.category;
     let subcategory = product.subcateogry;
-    db.collection(`products/${category}/${subcategory}`).doc(product.id).withConverter(productConverter).set(product)
+    db.collection(`products`).doc(product.id).withConverter(productConverter).set(product)
     .then(() => {
         console.log("Product Added!");
-        seller.products.push(product);
+        seller.addProduct(product);
         createSellerObjectInDB(seller, uiCallback);
         return codes.INSERTION_SUCCESS;
     })
@@ -281,6 +280,7 @@ function insertCategoryOrSubcategoryInDB(category) {
 
 // Fetch functions
 
+// fetches all categories and subcategories
 function fetchCategoriesAndSubcategoriesFromDB(uiCallback) {
     let reference = db.collection('categories');
     let resultArray = [];
@@ -302,6 +302,7 @@ function fetchCategoriesAndSubcategoriesFromDB(uiCallback) {
     })
 }
 
+// fetches all product for a subcategory
 function fetchProductsForSubCategoryFromDB(category, subcategory, uiCallback) {
     let reference = db.collection('products').doc(category).doc(subcategory);
     reference.get().then((doc) => {
@@ -316,6 +317,7 @@ function fetchProductsForSubCategoryFromDB(category, subcategory, uiCallback) {
     })
 }
 
+// fetches category object for category name
 function fetchCategoryDataFromDB(category, callback) {
     let reference = db.collection('categories').doc(category);
     reference.withConverter(categoryConverter).get()
@@ -329,6 +331,27 @@ function fetchCategoryDataFromDB(category, callback) {
     })
 }
 
+
+
+// Storage functions
+
+// insert image
+
+function insertImageInDB(product_id, index, fileData, callback) {
+    var storageRef = firebase.storage().ref().child(`${product_id}-${index}.jpg`);
+    storageRef.put(fileData)
+    .then((snapshot) => {
+        callback();
+    })
+}
+
+function fetchImageFromDB(product_id, callback) {
+    var storageRef = firebase.storage().ref().child(`${product_id}.jpg`);
+    storageRef.getDownloadURL()
+    .then((url) => {
+        callback(url);
+    })
+}
 
 // export { codes, firebaseConfig, initializeDB, signupWithEmail, signInWithEmail, sendPasswordReset,
 //     createUserObjectInDB, createSellerObjectInDB, getUserDetails, getSellerDetails, updateDBPassword,

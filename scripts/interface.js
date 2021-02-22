@@ -61,6 +61,7 @@ function signIn(email, password, isUser, uiCallback) {
 
 // Signout function for users
 // 1. args:
+// - isUser: boolean, check weather the user or seller logging out
 // - uiCallback: to update UI after logged out or error in logging out
 // 2. returns
 // - LOGIN_SUCCESS: for successful logout
@@ -101,14 +102,25 @@ function fetchSalesDataForSeller() {
 
 // Insertion Functions
 
+// function to upload images
+// args:
+// - product: product id for image
+// - image: BLOB data for images
+// - uiCallback: for updating ui, could be non-ui updating too
 
-function insertImage(image, uiCallback) {
-//  insert images
-let i = 0;
-let storageRef = [];
-// for (i = 0, i < product.images.length, i++)
-// storageRef.push(firebase.storage().ref(`products/${product.id}`).child(`${product.id}-${i}`));
 
+function insertImage(product, images, uiCallback) {
+    //  insert images
+    var downloadedUrls = [];
+    for (let i=0; i < images.length; i++) {
+        insertImageInDB(product, i, image, (url) => {
+            downloadedUrls.push(url);
+            if (downloadedUrls.length == images.length) {
+                uiCallback(downloadedUrls);
+            }
+        });
+    }
+    
 }
 
 // Function to insert product
@@ -121,7 +133,7 @@ let storageRef = [];
 
 function insertProduct(product, seller, updateCategory, uiCallback) {
     if (updateCategory) {
-        getCategoryObjectAndUpdateCategory(product.category);
+        getCategoryObjectAndUpdateCategory(product.category, product.subcategory);
     }
     try {
         return insertProductInDB(product, seller, uiCallback);
@@ -130,6 +142,21 @@ function insertProduct(product, seller, updateCategory, uiCallback) {
         return codes.INSERTION_FAILIURE;
     }
     
+}
+
+// fetches current logged in user details
+// 1. args:
+// - isUser: boolean, specifies weather user or seller logged in
+// - uiCallback: for ui updation after fetching details
+// 
+
+function getUserDetails(isUser, uiCallback) {
+    if (isUser) {
+        return getUserDetailsFromDB(uiCallback);
+    }
+    else {
+        return getSellerDetailsFromDB(uiCallback);
+    }
 }
 
 // Helper function for insert product to update category if new category or subcategory added
@@ -171,27 +198,21 @@ function deleteProduct(productid) {
 
 
 let user = new Seller("Name", "Company", "SomeEmail@NameCompanyMail.com", "Password");
-// let category = new Category("some other category", ["sub2"]);
-initializeDB();
-console.log(user);
-db.collection('sellers').doc(sessionStorage.getItem("uid")).withConverter(sellerConverter).set(user)
-    .then(() => {
-        console.log("Seller Added!");
-        // uiCallback(codes.INSERTION_SUCCESS);
-        // return codes.INSERTION_SUCCESS;
-    })
-    .catch((error) => {
-        console.log(`Seller insertion error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
-        // uiCallback(ccodes.INSERTION_FAILIURE);
-        // return codes.INSERTION_FAILIURE;
-    });
+// // let category = new Category("some other category", ["sub2"]);
+initializeDB(); 
+// // console.log(user);
+// // signUp(user, false, () => {});
+// signIn(user.email, user.password, false, ()=> {
 
-// signUp(user, false, () => {});
+// });
+// let product = new Product("name", "001010", "new category", "sub2728782", "100", user.name, sessionStorage.getItem("uid"), 2, [], 100, "Description");
+// // getCategoryObjectAndUpdateCategory(product.category, product.subcategory);
+// user.addProduct(product);
+// console.log(user);
+// // createSellerObjectInDB(user, ()=>{});
 
-// let product = new Product("name", "001", "some category", "sub1", "100", user.name, sessionStorage.getItem("uid"), 2, [], 100, "Description");
-// getCategoryObjectAndUpdateCategory(product.category, "another");
 // insertProduct(product, user, true, () => {});
-
+// console.log(getUserDetails(false, () => {}));
 
 
 

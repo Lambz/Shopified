@@ -21,6 +21,12 @@ class User {
         this.password = password;
         this.orders = [];
     }
+
+    addOrder(order) {
+        let saveOrder = Object.assign({}, order);
+        console.log(saveOrder);
+        this.products.push(saveOrder);
+    }
 }
 
 var userConverter = {
@@ -46,6 +52,12 @@ class Seller {
         this.email = email;
         this.password = password;
         this.products = [];
+    }
+
+    addProduct(product) {
+        let saveProduct = Object.assign({}, product);
+        console.log(saveProduct);
+        this.products.push(saveProduct);
     }
 }
 
