@@ -443,12 +443,31 @@
                     }
                     console.log(p);
                     if (images.length > 0) {
-                        console.log(images);
-                        insertImage(p.id, images, function (urls) {
-                            p.images = urls;
-                            console.log(p);
-                            insertProduct(p, seller, false, productResult);
+                        let newImages = [];
+                        let oldImages = [];
+                        images.forEach((image) => {
+                            if(typeof(image) == "object")
+                            {
+                                newImages.push(image);
+                            }
+                            else
+                            {
+                                oldImages.push(image);
+                            }
                         });
+                        if(newImages.length>0)
+                        {
+                            insertImage(p.id, newImages, function (urls) {
+                                p.images = oldImages.concat(urls);
+                                // console.log(p);
+                                insertProduct(p, seller, false, productResult);
+                            });
+                        }
+                        else
+                        {
+                            p.images = oldImages;
+                            insertProduct(p, seller, false, productResult);
+                        }
                     }
                     else {
                         insertProduct(p, seller, false, productResult);
@@ -458,7 +477,7 @@
         }
 
         function productResult() {
-            // window.location.replace("products.html");
+            window.location.replace("products.html");
         }
 
         function getProduct(seller) {

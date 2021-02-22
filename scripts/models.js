@@ -72,7 +72,6 @@ class Seller {
             }
             if(foundProduct)
             {
-                console.log(`product found at index ${index}`);
                 this.products.splice(index,1);
             }
         }

@@ -340,7 +340,7 @@ function fetchCategoryDataFromDB(category, callback) {
 
 function insertImageInDB(product_id, index, fileData, callback) {
     // console.log("insertImageInDB");
-    var storageRef = firebase.storage().ref().child(`${product_id}-${index}.jpg`);
+    var storageRef = firebase.storage().ref().child(`${generateID(30)}.jpg`);
     storageRef.put(fileData)
     .then((snapshot) => {
         // console.log(snapshot);
