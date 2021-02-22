@@ -46,18 +46,28 @@ var userConverter = {
 };
 
 class Seller {
-    constructor(name, company, email, password) {
+
+    constructor(name, company, email, password, products = []) {
         this.name = name;
         this.company = company;
         this.email = email;
         this.password = password;
-        this.products = [];
+        this.products = products;
     }
 
     addProduct(product) {
         let saveProduct = Object.assign({}, product);
-        console.log(saveProduct);
         this.products.push(saveProduct);
+    }
+    
+    static convertToSeller(json)
+    {
+        let products = [];
+        let productsJSON = json.products;
+        productsJSON.forEach((product) => {
+            products.push(Object.assign({}, product));
+        });
+        return new Seller(json.name,json.company,json.email,json.password,products);
     }
 }
 
@@ -90,6 +100,11 @@ class Product {
         this.images = images;
         this.quantity = quantity;
         this.description = description;
+    }
+
+    static convertToProduct(json)
+    {
+        return new Product(json.name,json.id,json.category,json.subcategory,json.price,json.seller,json.seller_id,json.estimatedTime,json.images,json.quantity,json.description);
     }
 }
 

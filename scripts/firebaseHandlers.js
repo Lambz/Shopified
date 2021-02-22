@@ -195,13 +195,14 @@ function getSellerDetailsFromDB(uiCallback) {
     }
     
     let userDocument = db.collection('sellers').doc(sessionStorage.getItem("uid"));
-    userDocument.withConverter(sellerConverter).get()
+    userDocument.get()
     .then((doc) => {
         if (doc.exists) {
-            console.log(doc.data());
-            // uiCallback
-            uiCallback(doc.data());
-
+            // console.log(doc.data());
+            // console.log(Seller.convertToSeller(doc.data()));
+            // // uiCallback
+            // uiCallback(doc.data());
+            uiCallback(Seller.convertToSeller(doc.data()));
             return doc.data();
         } else {
             return codes.NOT_FOUND;
