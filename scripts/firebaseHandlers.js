@@ -177,7 +177,7 @@ function getUserDetailsFromDB(uiCallback) {
     .then((doc) => {
         if (doc.exists) {
             // uiCallback
-
+            uiCallback(doc.data())
             return doc.data();
         } else {
             return codes.NOT_FOUND;
@@ -200,7 +200,7 @@ function getSellerDetailsFromDB(uiCallback) {
         if (doc.exists) {
             console.log(doc.data());
             // uiCallback
-            uiCallback();
+            uiCallback(doc.data());
 
             return doc.data();
         } else {
