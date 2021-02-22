@@ -17,7 +17,7 @@
             background-color: rgb(241, 244, 249);
         }
     </style>
-    <title>Products</title>
+    <title>Orders</title>
 </head>
 
 <body>
@@ -38,10 +38,10 @@
                         <a class="nav-link" href="analytics.html">Analytics</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="products.html">Products<span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="products.html">Products</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="orders.html">Orders</a>
+                        <a class="nav-link active" href="orders.html">Orders<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="settings.html">Settings</a>
@@ -75,49 +75,61 @@
                 <div class="card-header container-fluid">
                     <!-- Products -->
                     <div class="row">
-                        <div class="col-md-10">
-                            <h3 class="w-75 p-3">Products</h3>
-                        </div>
-                        <div class="col-md-2 p-3 float-right">
+                        <!-- <div class="col-md-10"> -->
+                        <h4 class="pt-1 px-2">Manage Orders</h4>
+                        <!-- </div> -->
+                        <!-- <div class="col-md-2 p-3 float-right">
                             <a href="addProduct.html" class="btn btn-primary">Add Product</a>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">Manage Products</h5>
-                    <p class="card-text">You can add, edit and delete your products from here</p>
+                    <!-- <h5 class="card-title">Manage Orders</h5> -->
+                    <!-- <p class="card-text">You can add, edit and delete your products from here</p> -->
                     <table class="table table-hover">
                         <thead>
-                          <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">First</th>
-                            <th scope="col">Last</th>
-                            <th scope="col">Handle</th>
-                          </tr>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">First</th>
+                                <th scope="col">Last</th>
+                                <th scope="col">Handle</th>
+                            </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td class="text-right">
-                                <button class="btn btn-primary">Edit</button>
-                                <button class="btn btn-danger">Delete</button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                          </tr>
-                          <tr>
-                            <th scope="row">3</th>
-                            <td colspan="2">Larry the Bird</td>
-                            <td>@twitter</td>
-                          </tr>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Mark</td>
+                                <td>Otto</td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col-10">
+                                            <select class="custom-select custom-select-sm">
+                                                <option>Processing</option>
+                                                <option>Awaiting Shipment</option>
+                                                <option>Shipped</option>
+                                                <option>Complete</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-2">
+                                            <button type="button" class="btn btn-primary btn-sm">Primary</button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Jacob</td>
+                                <td>Thornton</td>
+                                <td>@fat</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>Larry</td>
+                                <td>the Bird</td>
+                                <td>@twitter</td>
+                            </tr>
                         </tbody>
-                      </table>
+                    </table>
                 </div>
             </div>
         </div>
