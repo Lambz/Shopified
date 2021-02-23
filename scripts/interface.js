@@ -256,24 +256,24 @@ function fetchOrdersForSeller(sellerID, startDate, endDate, includeCancelled, ui
 }
 
 
-let user = new Seller("Name", "Company", "SomeEmail@NameCompanyMail.com", "Password");
+// let user = new Seller("Name", "Company", "SomeEmail@NameCompanyMail.com", "Password");
 // // let category = new Category("some other category", ["sub2"]);
 initializeDB(); 
 // // console.log(user);
 // // signUp(user, false, () => {});
 
-signIn(user.email, user.password, false, ()=> {});
-let product = new Product("A", "someId", "new category", "some subcategory", "10", user.name, sessionStorage.getItem("uid"), "2", [], 100, "some");
+// signIn(user.email, user.password, false, ()=> {});
+// let product = new Product("A", "someId", "new category", "some subcategory", "10", user.name, sessionStorage.getItem("uid"), "2", [], 100, "some");
 
-// insertProduct(product, user, false, ()=> {
+// // insertProduct(product, user, false, ()=> {
 
+// // })
+// // deleteProduct("someId", user, () => {});
+// let order = new Order([], user.name, 797797978978, "some address");
+// order.addProduct(product);
+// placeOrder(order, () => {
+//     console.log("added");
 // })
-// deleteProduct("someId", user, () => {});
-let order = new Order([], user.name, 797797978978, "some address");
-order.addProduct(product);
-placeOrder(order, () => {
-    console.log("added");
-})
 
 
 

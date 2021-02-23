@@ -76,7 +76,7 @@
                     <!-- Products -->
                     <div class="row">
                         <!-- <div class="col-md-10"> -->
-                        <h4 class="pt-1 px-2">Manage Orders</h4>
+                        <h4 class="pt-1 px-2">Order Products</h4>
                         <!-- </div> -->
                         <!-- <div class="col-md-2 p-3 float-right">
                             <a href="addProduct.html" class="btn btn-primary">Add Product</a>
@@ -90,11 +90,9 @@
                         <thead>
                             <tr>
                                 <th scope="col">Name</th>
-                                <th scope="col">Phone Number</th>
-                                <th scope="col">Address</th>
-                                <th scope="col">Ordered Date</th>
-                                <th scope="col"># of Products</th>
-                                <th scope="col">Status</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Quantity</th>
                             </tr>
                         </thead>
                         <tbody id="tbody">
@@ -153,8 +151,8 @@
     <script src="../scripts/firebaseHandlers.js"></script>
     <script src="../scripts/interface.js"></script>
     <script>
-        let orders;
         const tbody = document.getElementById("tbody");
+        const id = new URL(window.location.href).searchParams.get("id");
         window.onload = function()
         {
             getUserDetails(false,(seller) => {
@@ -168,44 +166,20 @@
 
         function orderDetails(o)
         {
-            orders = o;
-            // console.log(orders);
-            let i=0;
-            o.forEach((order) => {
-                tbody.innerHTML += `<tr onclick="orderClicked(${i})"><td>${order.customerName}</td><td>${order.customerNo}</td><td>${order.customerAddress}</td><td>${order.orderDate}</td><td>${order.products.length}</td><td><div class="row">
-                                        <div class="col-10">
-                                            <select id="selectStatus_${order.id}" class="custom-select custom-select-sm">
-                                                <option value="0">Pending</option>
-                                                <option value="1">Processing</option>
-                                                <option value="2">On Way</option>
-                                                <option value="3">Delivered</option>
-                                                <option value="4">Cancelled</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-2">
-                                            <button type="button" onclick="changeStatus(${i})" class="btn btn-primary btn-sm">Update Status</button>
-                                        </div>
-                                    </div></td></tr>`;
-                i++;
+            let order = null;
+            o.forEach((o1) => {
+                if(o1.id == id)
+                {
+                    order = o1;
+                }
             });
-        }
-
-        function changeStatus(index)
-        {
-            let order = orders[index];
-            let select = document.getElementById(`selectStatus_${order.id}`);
-            let status = select.value;
-            updateOrderStatus(order,status,statusChanged);
-        }
-
-        function statusChanged()
-        {
-
-        }
-
-        function orderClicked(index)
-        {
-            window.location.replace(`orderDetails.html?id=${orders[index].id}`);
+            if(order == null)
+            {
+                window.location.replace("orders.html");
+            }
+            order.products.forEach((product) => {
+                tbody.innerHTML += `<tr><td>${product.name}</td><td>${product.price}</td><td>${product.description}</td><td>${product.quantity}</td></tr>`;
+            });
         }
     </script>
 </body>
