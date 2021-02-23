@@ -14,7 +14,7 @@ const OrderStatus = Object.freeze({
 // classes and converters
 
 class User {
-    constructor(name, address, email, password) {
+    constructor(name, address, phoneNo, email, password, cart = [], orders = []) {
         this.name = name;
         this.address = address;
         this.email = email;
@@ -70,6 +70,52 @@ class User {
     //     }
     // }
     
+    addProduct(product) {
+        let saveProduct = Object.assign({}, product);
+        if(this.cart.length>0)
+        {
+            let index = 0;
+            let foundProduct = false;
+            for(let i=0;i<this.cart.length;i++)
+            {
+                console.log(saveProduct.id, this.cart[i].id);
+                if(saveProduct.id == this.cart[i].id)
+                {
+                    index = i;
+                    foundProduct = true;
+                }
+            }
+            if(foundProduct)
+            {
+                this.cart.splice(index,1);
+            }
+        }
+        this.cart.push(saveProduct);
+    }
+
+    removeProduct(productID)
+    {
+        if(this.cart.length>0)
+        {
+            let index = 0;
+            let foundProduct = false;
+            for(let i=0;i<this.cart.length;i++)
+            {
+                // console.log(saveProduct.id, this.products[i].id);
+                if(productID == this.cart[i].id)
+                {
+                    index = i;
+                    foundProduct = true;
+                    break;
+                }
+            }
+            if(foundProduct)
+            {
+                this.cart.splice(index,1);
+            }
+        }
+    }
+
     static convertToUser(json)
     {
         let orders = [];
@@ -77,7 +123,13 @@ class User {
         ordersJSON.forEach((order) => {
             orders.push(Object.assign({}, order));
         });
-        return new User(json.name, json.address, json.email, json.password, orders);
+
+        let cart = [];
+        let cartJSON = json.cart;
+        cartJSON.forEach((product) => {
+            cart.push(Object.assign({}, product));
+        })
+        return new User(json.name, json.address, json.phoneNo, json.email, json.password, cart, orders);
     }
 }
 
@@ -88,7 +140,9 @@ var userConverter = {
             address: user.address,
             email: user.email,
             password: user.password,
-            orders: user.orders
+            orders: user.orders,
+            cart: user.cart,
+            phoneNo: user
             };
     },
     fromFirestore: function(snapshot, options){
@@ -245,11 +299,11 @@ var categoryConverter = {
 
 
 class Order {
-    constructor(products) {
-        this.id = generateID(10);
+    constructor(id = generateID(10), products, status = OrderStatus.PENDING, orderDate = Date()) {
+        this.id = id;
         this.products = products;
-        this.status = OrderStatus.PENDING;
-        this.orderDate = Date();
+        this.status = status;
+        this.orderDate = orderDate;
     }
 
     addProduct(product) {
@@ -282,11 +336,7 @@ class Order {
         productsJSON.forEach((product) => {
             products.push(Object.assign({}, product));
         });
-        let order = new Order(products);
-        order.id = json.id;
-        order.date = json.date;
-        order.status = json.status;
-        return order;
+        return new Order(json.id, products, json.status, json.status);
     }
 }
 

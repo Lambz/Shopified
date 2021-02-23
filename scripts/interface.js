@@ -254,7 +254,7 @@ function updateOrderStatus(order, newStatus, uiCallback) {
 
 // Function to return all orders for a seller
 function fetchOrdersForSeller(sellerID, startDate, endDate, includeCancelled, uiCallback) {
-    fetchOrdersForSellerByDateFromDB(startDate, endDate, includeCancelled, (orders) => {
+    fetchOrdersByDateFromDB(startDate, endDate, includeCancelled, (orders) => {
         let orderArray = orders.filter(order => order.seller == sellerID);
         uiCallback(orderArray);
     })
