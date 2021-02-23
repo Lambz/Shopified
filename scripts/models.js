@@ -142,7 +142,7 @@ var userConverter = {
             password: user.password,
             orders: user.orders,
             cart: user.cart,
-            phoneNo: user
+            phoneNo: user.phoneNo
             };
     },
     fromFirestore: function(snapshot, options){
