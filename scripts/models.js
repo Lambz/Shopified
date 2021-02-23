@@ -19,6 +19,8 @@ class User {
         this.address = address;
         this.email = email;
         this.password = password;
+        this.phoneNo = phoneNo;
+        this.cart = [];
         this.orders = [];
     }
 
@@ -243,11 +245,11 @@ var categoryConverter = {
 
 
 class Order {
-    constructor(products, orderDate) {
+    constructor(products) {
         this.id = generateID(10);
         this.products = products;
         this.status = OrderStatus.PENDING;
-        this.orderDate = orderDate;
+        this.orderDate = Date();
     }
 
     addProduct(product) {
@@ -280,12 +282,15 @@ class Order {
         productsJSON.forEach((product) => {
             products.push(Object.assign({}, product));
         });
-        let order = new Order(products, json.orderDate);
+        let order = new Order(products);
         order.id = json.id;
+        order.date = json.date;
         order.status = json.status;
         return order;
     }
 }
+
+
 
 
 

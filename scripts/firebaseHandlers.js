@@ -246,10 +246,7 @@ function updateDBEmail(email) {
 function insertProductInDB(product, seller, uiCallback) {
     if (!product) {
         throw new Error(`Product insertion error! Error code: ${codes.NULL_OBJECT}`);
-        return;
     }
-    let category = product.category;
-    let subcategory = product.subcateogry;
     db.collection(`products`).doc(product.id).withConverter(productConverter).set(product)
     .then(() => {
         console.log("Product Added!");
@@ -267,7 +264,7 @@ function insertProductInDB(product, seller, uiCallback) {
 
 function deleteProductFromDB(productID, seller, uiCallback) {
     if (!productID) {
-        throw new Error(`Product insertion error! Error code: ${codes.NULL_OBJECT}`);
+        throw new Error(`Product deletion error! Error code: ${codes.NULL_OBJECT}`);
     }
     db.collection("products").doc(productID).delete()
     .then(() => {
@@ -292,6 +289,17 @@ function insertCategoryOrSubcategoryInDB(category) {
     .catch((error) => {
         console.log(`Category insertion error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
         return codes.INSERTION_FAILIURE;
+    });
+}
+
+function insertOrderInDB(order, uiCallback) {
+    let reference = db.collection('orders').doc(order.id);
+    reference.set(Object.assign({}, order))
+    .then(() => {
+        uiCallback();
+    })
+    .catch((error) => {
+        console.log(`Order insertion error! Error code: ${error.code}\nError Message: ${error.message}`);
     });
 }
 
@@ -398,6 +406,27 @@ function fetchCategoryDataFromDB(category, callback) {
     .catch((error) => {
         console.log(`Category fetch error! Error code: ${error.code}\nError Message: ${error.message}`);
         return codes.FETCH_FAILURE;
+    })
+}
+
+// fetch sold products for seller
+
+function fetchOrdersForSellerByDateFromDB(sellerID, startDate, endDate, includeCancelled, uiCallback) {
+    
+    let reference = db.collection('orders');
+    let query = reference.where("orderDate", ">=", startDate)
+                .where("orderDate", "<=", endDate);
+                
+    if (!includeCancelled) {
+        query.where("status", "!=", 4);
+    }
+
+    query.get().then((querySnapshot) => {
+        let orderArray = [];
+        querySnapshot.forEach((doc) => {
+            orderArray.push(Order.convertToOrder(doc.data()));
+        })
+        uiCallback(orderArray);
     })
 }
 

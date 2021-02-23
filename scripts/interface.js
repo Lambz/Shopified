@@ -144,7 +144,7 @@ function fetchAllProducts(uiCallback) {
 }
 
 function fetchSalesDataForSeller() {
-
+    
 }
 
 
@@ -241,7 +241,16 @@ function deleteProduct(productID, seller, uiCallback) {
 
 // Order Functions
 
-
+function placeOrder(order, uiCallback) {
+    insertOrderInDB(order, uiCallback);
+}
+// 1. args:
+// - order: order object
+// 
+function updateOrderStatus(order, newStatus, uiCallback) {
+    order.status = newStatus;
+    insertOrderInDB(order, uiCallback);
+}
 
 
 
@@ -251,9 +260,14 @@ let user = new Seller("Name", "Company", "SomeEmail@NameCompanyMail.com", "Passw
 initializeDB(); 
 // // console.log(user);
 // // signUp(user, false, () => {});
-// signIn(user.email, user.password, false, ()=> {
 
+signIn(user.email, user.password, false, ()=> {});
+let product = new Product("A", "someId", "new category", "some subcategory", "10", user.name, sessionStorage.getItem("uid"), "2", [], 100, "some");
 
+// insertProduct(product, user, false, ()=> {
+
+// })
+deleteProduct("someId", user, () => {});
 
 
 
