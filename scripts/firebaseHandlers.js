@@ -411,7 +411,7 @@ function fetchCategoryDataFromDB(category, callback) {
 
 // fetch sold products for seller
 
-function fetchOrdersForSellerByDateFromDB(sellerID, startDate, endDate, includeCancelled, uiCallback) {
+function fetchOrdersForSellerByDateFromDB(startDate, endDate, includeCancelled, callback) {
     
     let reference = db.collection('orders');
     let query = reference.where("orderDate", ">=", startDate)
@@ -426,7 +426,7 @@ function fetchOrdersForSellerByDateFromDB(sellerID, startDate, endDate, includeC
         querySnapshot.forEach((doc) => {
             orderArray.push(Order.convertToOrder(doc.data()));
         })
-        uiCallback(orderArray);
+        callback(orderArray);
     })
 }
 

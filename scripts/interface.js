@@ -144,7 +144,7 @@ function fetchAllProducts(uiCallback) {
 }
 
 function fetchSalesDataForSeller() {
-    
+
 }
 
 
@@ -252,7 +252,13 @@ function updateOrderStatus(order, newStatus, uiCallback) {
     insertOrderInDB(order, uiCallback);
 }
 
-
+// Function to return all orders for a seller
+function fetchOrdersForSeller(sellerID, startDate, endDate, includeCancelled, uiCallback) {
+    fetchOrdersForSellerByDateFromDB(startDate, endDate, includeCancelled, (orders) => {
+        let orderArray = orders.filter(order => order.seller == sellerID);
+        uiCallback(orderArray);
+    })
+}
 
 
 let user = new Seller("Name", "Company", "SomeEmail@NameCompanyMail.com", "Password");
