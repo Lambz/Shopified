@@ -181,6 +181,7 @@ function getUserDetailsFromDB(uiCallback) {
             uiCallback(doc.data())
             return doc.data();
         } else {
+            uiCallback(codes.NOT_FOUND);
             return codes.NOT_FOUND;
         }
     })
@@ -202,6 +203,7 @@ function getSellerDetailsFromDB(uiCallback) {
             uiCallback(Seller.convertToSeller(doc.data()));
             return doc.data();
         } else {
+            uiCallback(codes.NOT_FOUND);
             return codes.NOT_FOUND;
         }
     });
