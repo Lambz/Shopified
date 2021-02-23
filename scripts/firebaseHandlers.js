@@ -298,9 +298,9 @@ function insertOrderInDB(order, uiCallback) {
     .then(() => {
         uiCallback();
     })
-    .catch((error) => {
-        console.log(`Order insertion error! Error code: ${error.code}\nError Message: ${error.message}`);
-    });
+    // .catch((error) => {
+    //     console.log(`Order insertion error! Error code: ${error.code}\nError Message: ${error.message}`);
+    // });
 }
 
 // Fetch functions

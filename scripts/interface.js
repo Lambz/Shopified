@@ -143,11 +143,6 @@ function fetchAllProducts(uiCallback) {
     fetchAllProductsInDB(uiCallback);
 }
 
-function fetchSalesDataForSeller() {
-
-}
-
-
 
 // Insertion Functions
 
@@ -273,7 +268,13 @@ let product = new Product("A", "someId", "new category", "some subcategory", "10
 // insertProduct(product, user, false, ()=> {
 
 // })
-deleteProduct("someId", user, () => {});
+// deleteProduct("someId", user, () => {});
+let order = new Order([], user.name, 797797978978, "some address");
+order.addProduct(product);
+placeOrder(order, () => {
+    console.log("added");
+})
+
 
 
 

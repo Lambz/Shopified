@@ -299,8 +299,11 @@ var categoryConverter = {
 
 
 class Order {
-    constructor(id = generateID(10), products, status = OrderStatus.PENDING, orderDate = Date()) {
+    constructor(products, customerName, customerNo, customerAddress, id = generateID(10), status = OrderStatus.PENDING, orderDate = Date()) {
         this.id = id;
+        this.customerName = customerName;
+        this.customerNo = customerNo;
+        this.customerAddress = customerAddress;
         this.products = products;
         this.status = status;
         this.orderDate = orderDate;
@@ -336,7 +339,7 @@ class Order {
         productsJSON.forEach((product) => {
             products.push(Object.assign({}, product));
         });
-        return new Order(json.id, products, json.status, json.status);
+        return new Order(products, json.customerName, json.customerNo, json.customerAddress, json.id, json.status, json.status);
     }
 }
 
