@@ -252,6 +252,12 @@
         const deleteProductBtn = document.getElementById("deleteProductBtn");
         let product = null;
         window.onload = function () {
+            getUserDetails(false,(seller) => {
+                if(seller == codes.NOT_FOUND)
+                {
+                    window.location.replace("index.html");
+                }
+            });
             fetchAllCategoriesAndSubcategories(categoryCallBack);
         }
 

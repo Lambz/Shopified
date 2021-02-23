@@ -145,6 +145,17 @@
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
     <script src="scripts/main.js"></script>
+    <script>
+        window.onload = function()
+        {
+            getUserDetails(false,(seller) => {
+                if(seller == codes.NOT_FOUND)
+                {
+                    window.location.replace("index.html");
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>

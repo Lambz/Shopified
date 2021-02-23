@@ -162,9 +162,15 @@
 
         window.onload = function()
         {
-            let uid = sessionStorage.getItem("uid");
-            let seller = sessionStorage.getItem("user");
+            // let uid = sessionStorage.getItem("uid");
+            // let seller = sessionStorage.getItem("user");
             // TODO: Auto Login 
+            getUserDetails(false,(seller) => {
+                if(seller != codes.NOT_FOUND)
+                {
+                    window.location.replace("dashboard.html");
+                }
+            });
         };
 
         function registerHereClicked() {

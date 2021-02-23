@@ -201,6 +201,10 @@
         window.onload = function()
         {
             getUserDetails(false, function (s){
+                if(s == codes.NOT_FOUND)
+                {
+                    window.location.replace("index.html");
+                }
                 seller = s;
                 nameInput.value = seller.name;
                 companyNameInput.value = seller.company;

@@ -102,6 +102,17 @@
     <script src="../scripts/firebaseHandlers.js"></script>
     <script src="../scripts/interface.js"></script>
     <script>
+
+        window.onload = function()
+        {
+            getUserDetails(false,(seller) => {
+                if(seller == codes.NOT_FOUND)
+                {
+                    window.location.replace("index.html");
+                }
+            });
+        }
+
         function signOut()
         {
             signOut(signOutSucceful);

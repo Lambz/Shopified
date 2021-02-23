@@ -14,7 +14,7 @@
 	<div class="container">
 		<div class="forms-container">
 			<div class="signin-signup">
-				<form action="#" class="sign-in-form">
+				<form class="sign-in-form" onsubmit="login();return false">
 					<h2 class="title">Sign in</h2>
 					<div class="input-field">
 						<i class="fas fa-user"></i>
@@ -24,7 +24,7 @@
 						<i class="fas fa-lock"></i>
 						<input id="loginPasswordInput" type="password" placeholder="Password" />
 					</div>
-					<button onclick="login()" class="btn">Login</button>
+					<input value="Login" type="submit" class="btn"/>
 					<!-- <p class="social-text">Or Sign in with social platforms</p>
               <div class="social-media">
                 <a href="#" class="social-icon">
@@ -41,7 +41,7 @@
                 </a>
               </div> -->
 				</form>
-				<form action="#" class="sign-up-form">
+				<form class="sign-up-form" onsubmit="sUp();return false">
 					<h2 class="title">Sign up</h2>
 					<!-- <div class="input-field">
                 <i class="fas fa-user"></i>
@@ -60,6 +60,10 @@
 						<textarea id="signUpAddressInput" type="text" placeholder="Address"></textarea>
 					</div>
 					<div class="input-field">
+						<i class="fas fa-phone"></i>
+						<input id="signUpPhoneInput" type="number" min="1000000000" max="9999999999" placeholder="Phone Number"/>
+					</div>
+					<div class="input-field">
 						<i class="fas fa-lock"></i>
 						<input id="signUpPasswordInput" type="password" placeholder="Password" />
 					</div>
@@ -67,7 +71,8 @@
 						<i class="fas fa-lock"></i>
 						<input id="signUpRetypePasswordInput" type="password" placeholder="Re-type Password" />
 					</div>
-					<button class="btn">Sign up</button>
+					<!-- <button onclick="sUp()" class="btn">Sign up</button> -->
+					<input value="Sign Up" type="submit" class="btn"/>
 					<!-- <p class="social-text">Or Sign up with social platforms</p>
               <div class="social-media">
                 <a href="#" class="social-icon">
@@ -138,6 +143,7 @@
 		const loginPasswordInput = document.getElementById("loginPasswordInput");
 		const signUpAddressInput = document.getElementById("signUpAddressInput");
 		const signUpNameInput = document.getElementById("signUpNameInput");
+		const signUpPhoneInput = document.getElementById("signUpPhoneInput");
 
 		sign_up_btn.addEventListener("click", () => {
 			container.classList.add("sign-up-mode");
@@ -148,6 +154,7 @@
 		});
 
 		function login() {
+			console.log("login");
 			let email = loginEmailInput.value;
 			let password = loginPasswordInput.value;
 			let noProb = true;
@@ -163,7 +170,9 @@
 			}
 			if(noProb)
 			{
+				console.log(noProb);
 				sha512(password).then((hash) => {
+					console.log(hash);
 					signIn(email,hash,true,result);
 				});
 			}
@@ -171,16 +180,24 @@
 
 		function result(code)
 		{
-
+			if (code == codes.INSERTION_SUCCESS || codes.LOGIN_SUCCESS) {
+				window.location.replace("index.html");
+			}
+			else {
+				console.log("else");
+				//TODO: deletion failure
+			}
 		}
 
-		function signUp()
+		function sUp()
 		{
+			console.log("signUp");
 			let name = signUpNameInput.value;
 			let email = signUpEmailInput.value;
 			let password = signUpPasswordInput.value;
 			let retypePassword = signUpRetypePasswordInput.value;
 			let address = signUpAddressInput.value;
+			let phone = signUpPhoneInput.value;
 			let no_prob = true;
 			if(name == "")
 			{
@@ -207,6 +224,11 @@
 				signUpAddressInput.style.border = "1px solid red";
 				noProb = false;
 			}
+			if(phone == "")
+			{
+				signUpPhoneInput.style.border = "1px solid red";
+				noProb = false;
+			}
 			if(password != retypePassword)
 			{
 				signUpPasswordInput.style.border = "1px solid red";
@@ -215,8 +237,11 @@
 			}
 			if(no_prob)
 			{
+				// console.log(no_prob);
 				sha512(password).then((hash) => {
-					let user = new User(name,address,email,hash);
+					console.log(hash);
+					let user = new User(name,address,phone,email,hash);
+					// console.log(user);
 					signUp(user,true,result);
 				});
 			}

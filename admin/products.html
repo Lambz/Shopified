@@ -38,7 +38,8 @@
                         <a class="nav-link" href="analytics.html">Analytics</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="products.html">Products<span class="sr-only">(current)</span></a>
+                        <a class="nav-link active" href="products.html">Products<span
+                                class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="orders.html">Orders</a>
@@ -88,17 +89,17 @@
                     <p class="card-text">You can add, edit and delete your products from here</p>
                     <table class="table table-hover">
                         <thead>
-                          <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Category</th>
-                            <th scope="col">Sub Category</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">Quantity Left</th>
-                            <th scope="col"></th>
-                          </tr>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Category</th>
+                                <th scope="col">Sub Category</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Quantity Left</th>
+                                <th scope="col"></th>
+                            </tr>
                         </thead>
                         <tbody id="tbody">
-                          <!-- <tr>
+                            <!-- <tr>
                             <th scope="row">1</th>
                             <td>Mark</td>
                             <td>Otto</td>
@@ -119,7 +120,7 @@
                             <td>@twitter</td>
                           </tr> -->
                         </tbody>
-                      </table>
+                    </table>
                 </div>
             </div>
         </div>
@@ -134,7 +135,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-firestore.js"></script>	
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.8/firebase-storage.js"></script>
     <!-- <script src="scripts/main.js"></script> -->
     <script src="../scripts/models.js"></script>
@@ -143,39 +144,36 @@
     <script>
 
         let seller;
-        window.onload = function()
-        {
-            getUserDetails(false,sellerDetailsCallback)
+        window.onload = function () {
+            getUserDetails(false, sellerDetailsCallback)
         }
 
-        function sellerDetailsCallback(s)
-        {
+        function sellerDetailsCallback(s) {
+            if (s == codes.NOT_FOUND) {
+                window.location.replace("index.html");
+            }
             let tbody = document.getElementById("tbody");
             seller = s;
             let products = s.products;
-            let i=0;
+            let i = 0;
             products.forEach((product) => {
                 tbody.innerHTML += `<tr><td>${product.name}</td><td>${product.category}</td><td>${product.subcategory}</td><td>${product.price}</td><td>${product.quantity}</td><td><button class="btn btn-primary mx-1" onclick="editProduct('${product.id}')">Edit</button><button class="btn btn-danger mx-1" onclick="deleteP('${product.id}')">Delete</button></td></tr>`
                 i++;
             });
         }
 
-        function deleteP(id)
-        {
-            deleteProduct(id,seller,(code) => {
-                if(code == codes.INSERTION_SUCCESS)
-                {
+        function deleteP(id) {
+            deleteProduct(id, seller, (code) => {
+                if (code == codes.INSERTION_SUCCESS) {
                     location.reload();
                 }
-                else
-                {
+                else {
                     //TODO: deletion failure
                 }
             });
         }
 
-        function editProduct(id)
-        {
+        function editProduct(id) {
             console.log(id);
             window.location.replace(`addProduct.html?id=${id}`);
         }
