@@ -77,6 +77,21 @@
     padding: 0 0.4rem;
     position: relative;
   }
+   .input-field textarea{
+    max-width: 100%;
+    width: 90%;
+    background-color: #f0f0f0;
+    margin: 6px 0;
+    height: 50px;
+    border-radius: 50px;
+    border: transparent;
+    display: grid;
+    /* grid-template-columns: 15% 85%; */
+    padding: 0 0.4rem;
+    /* position: relative; */
+
+  }
+
   
   .input-field i {
     text-align: center;
@@ -100,11 +115,12 @@
     color: #aaa;
     font-weight: 500;
   }
+ 
   
-  .social-text {
+  /* .social-text {
     padding: 0.7rem 0;
     font-size: 1rem;
-  }
+  } */
   
   /* .social-media {
     display: flex;
