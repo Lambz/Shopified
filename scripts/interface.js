@@ -46,22 +46,20 @@ function signUp(user, isUser, uiCallback) {
 // - No
 
 function signIn(email, password, isUser, uiCallback) {
-    // let functionToCall;
-    // if (isUser)
-    //     functionToCall = getUserDetails;
-    // else 
-    //     functionToCall = getSellerDetails;
-    // try {
-    //     return signInWithEmail(email, password, functionToCall, uiCallback);
-    // }
-    // catch (error) {
-    //     return codes.LOGIN_FAILIURE;
-    // }
     signInWithEmail(email,password,() => {
         getUserDetails(isUser,uiCallback);
     });
 }
 
+
+// Function to update user data
+// 1. args:
+// - isUser: boolean, checks weather user or seller
+// - user: user/seller object
+// - uiCallback: callback function for updating UI
+// 2. returns:
+// 3. throws
+// - No
 
 function updateUser(isUser, user, uiCallback)
 {
@@ -74,6 +72,9 @@ function updateUser(isUser, user, uiCallback)
         createSellerObjectInDB(user,uiCallback);
     }
 }
+
+
+// Function to update user or seller passoword
 
 function updatePassword(isUser, user, newPassword, uiCallback)
 {
@@ -113,9 +114,9 @@ function signOut(uiCallback) {
 
 
 // Function to fetch all categories and subcategories from DB
-// args:
+// 1. args:
 // - uiCallback: callback for updating UI after data has been fetched
-// throws:
+// 2. throws:
 // No
 // Note: uiCallback is provided with an array if query is successfully executed
 // FETCH_FAILURE if error 
@@ -123,8 +124,23 @@ function fetchAllCategoriesAndSubcategories(uiCallback) {
     fetchCategoriesAndSubcategoriesFromDB(uiCallback);
 }
 
-function fetchAllProductsForSubcategory(category, subcategory, uiCallback) {
-    
+
+// Function to fetch the product by product id
+// 1. args
+function fetchProductById(productID, uiCallback) {
+    fetchProductByIdInDB(productID, uiCallback);
+}
+
+function fetchAllProductsForSubcategory(subcategoryID, uiCallback) {
+    fetchProductsForSubCategoryFromDB(subcategoryID, uiCallback);
+}
+
+function fetchAllProductsForCategory(categoryID, uiCallback) {
+    fetchProductsForCategoryInDB(categoryID, uiCallback);
+}
+
+function fetchAllProducts(uiCallback) {
+    fetchAllProductsInDB(uiCallback);
 }
 
 function fetchSalesDataForSeller() {
@@ -136,7 +152,7 @@ function fetchSalesDataForSeller() {
 // Insertion Functions
 
 // function to upload images
-// args:
+// 1. args:
 // - product: product id for image
 // - image: BLOB data for images
 // - uiCallback: for updating ui, could be non-ui updating too
@@ -146,8 +162,6 @@ function insertImage(product, images, uiCallback) {
     //  insert images
     var downloadedUrls = [];
     for (let i=0; i < images.length; i++) {
-        // console.log(i);
-        // console.log(insertImageInDB);
         insertImageInDB(product, i, images[i], (url) => {
             downloadedUrls.push(url);
             console.log(url);
@@ -161,7 +175,7 @@ function insertImage(product, images, uiCallback) {
 
 // Function to insert product
 // inserts product to product and seller collection
-// args:
+// 1. args:
 // - product: product object
 // - seller: seller object (w/o the new product added)
 // - updateCategory: Boolean, true if new category or subcategory added
@@ -238,16 +252,6 @@ initializeDB();
 // // console.log(user);
 // // signUp(user, false, () => {});
 // signIn(user.email, user.password, false, ()=> {
-
-// });
-// let product = new Product("name", "001010", "new category", "sub2728782", "100", user.name, sessionStorage.getItem("uid"), 2, [], 100, "Description");
-// // getCategoryObjectAndUpdateCategory(product.category, product.subcategory);
-// user.addProduct(product);
-// console.log(user);
-// // createSellerObjectInDB(user, ()=>{});
-
-// insertProduct(product, user, true, () => {});
-// console.log(getUserDetails(false, () => {}));
 
 
 

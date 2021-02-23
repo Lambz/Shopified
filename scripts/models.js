@@ -24,8 +24,58 @@ class User {
 
     addOrder(order) {
         let saveOrder = Object.assign({}, order);
-        console.log(saveOrder);
-        this.products.push(saveOrder);
+        // if(this.orders.length>0)
+        // {
+        //     let index = 0;
+        //     let foundOrder = false;
+        //     for(let i=0;i<this.orders.length;i++)
+        //     {
+        //         console.log(saveOrder.id, this.orders[i].id);
+        //         if(saveOrder.id == this.orders[i].id)
+        //         {
+        //             index = i;
+        //             foundOrder = true;
+        //         }
+        //     }
+        //     if(foundOrder)
+        //     {
+        //         this.orders.splice(index,1);
+        //     }
+        // }
+        this.orders.push(saveOrder);
+    }
+
+    // removeOrder(orderID)
+    // {
+    //     if(this.orders.length>0)
+    //     {
+    //         let index = 0;
+    //         let foundOrder = false;
+    //         for(let i=0;i<this.orders.length;i++)
+    //         {
+    //             // console.log(saveProduct.id, this.products[i].id);
+    //             if(order == this.orders[i].id)
+    //             {
+    //                 index = i;
+    //                 foundOrder = true;
+    //                 break;
+    //             }
+    //         }
+    //         if(foundOrder)
+    //         {
+    //             this.orders.splice(index,1);
+    //         }
+    //     }
+    // }
+    
+    static convertToUser(json)
+    {
+        let orders = [];
+        let ordersJSON = json.orders;
+        ordersJSON.forEach((order) => {
+            orders.push(Object.assign({}, order));
+        });
+        return new User(json.name, json.address, json.email, json.password, orders);
     }
 }
 
@@ -193,9 +243,47 @@ var categoryConverter = {
 
 
 class Order {
-    constructor(products) {
+    constructor(products, orderDate) {
+        this.id = generateID(10);
         this.products = products;
         this.status = OrderStatus.PENDING;
+        this.orderDate = orderDate;
+    }
+
+    addProduct(product) {
+        let saveProduct = Object.assign({}, product);
+        if(this.products.length>0)
+        {
+            let index = 0;
+            let foundProduct = false;
+            for(let i=0;i<this.products.length;i++)
+            {
+                console.log(saveProduct.id, this.products[i].id);
+                if(saveProduct.id == this.products[i].id)
+                {
+                    index = i;
+                    foundProduct = true;
+                }
+            }
+            if(foundProduct)
+            {
+                this.products.splice(index,1);
+            }
+        }
+        this.products.push(saveProduct);
+    }
+    
+    static convertToOrder(json)
+    {
+        let products = [];
+        let productsJSON = json.products;
+        productsJSON.forEach((product) => {
+            products.push(Object.assign({}, product));
+        });
+        let order = new Order(products, json.orderDate);
+        order.id = json.id;
+        order.status = json.status;
+        return order;
     }
 }
 

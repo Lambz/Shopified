@@ -199,10 +199,6 @@ function getSellerDetailsFromDB(uiCallback) {
     userDocument.get()
     .then((doc) => {
         if (doc.exists) {
-            // console.log(doc.data());
-            // console.log(Seller.convertToSeller(doc.data()));
-            // // uiCallback
-            // uiCallback(doc.data());
             uiCallback(Seller.convertToSeller(doc.data()));
             return doc.data();
         } else {
@@ -272,21 +268,16 @@ function insertProductInDB(product, seller, uiCallback) {
 function deleteProductFromDB(productID, seller, uiCallback) {
     if (!productID) {
         throw new Error(`Product insertion error! Error code: ${codes.NULL_OBJECT}`);
-        return;
     }
-    seller.removeProduct(productID);
-    createSellerObjectInDB(seller,uiCallback);
-    // db.collection(`products`).doc(product.id).withConverter(productConverter).set(product)
-    // .then(() => {
-    //     console.log("Product Added!");
-    //     seller.addProduct(product);
-    //     createSellerObjectInDB(seller, uiCallback);
-    //     return codes.INSERTION_SUCCESS;
-    // })
+    db.collection("products").doc(productID).delete()
+    .then(() => {
+        seller.removeProduct(productID);
+        createSellerObjectInDB(seller,uiCallback);
+    })
     // .catch((error) => {
-    //     console.log(`Product insertion error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
-    //     return codes.INSERTION_FAILIURE;
-    // });
+        //     console.log(`Product deletion error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
+        //     return codes.INSERTION_FAILIURE;
+        // });
 }
 
 function insertCategoryOrSubcategoryInDB(category) {
@@ -328,14 +319,67 @@ function fetchCategoriesAndSubcategoriesFromDB(uiCallback) {
     })
 }
 
+// fetches the products by product id
+function fetchProductByIdInDB(productID, uiCallback) {
+    let reference = db.collection('products');
+    let query = reference.where("id", "==", productID);
+    let productsArray = [];
+    query.withConverter(productConverter).get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            productsArray.push(doc.data());
+        })
+        uiCallback(productsArray[0]);
+    })
+    .catch((error) => {
+        console.log(`Product fetch error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
+        return codes.FETCH_FAILURE;
+    })
+}
+
+// fetches all products
+function fetchAllProductsInDB(uiCallback) {
+    let reference = db.collection('products');
+    let productsArray = [];
+    reference.withConverter(productConverter).get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            productsArray.push(doc.data());
+        })
+        uiCallback(productsArray);
+    })
+    .catch((error) => {
+        console.log(`Product fetch error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
+        return codes.FETCH_FAILURE;
+    })
+}
+
+// fetches all products for a category
+function fetchProductsForCategoryInDB(category, uiCallback) {
+    let reference = db.collection('products');
+    let query = reference.where("category", "==", category);
+    let productsArray = [];
+    query.withConverter(productConverter).get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            productsArray.push(doc.data());
+        })
+        uiCallback(productsArray);
+    })
+    .catch((error) => {
+        console.log(`Product fetch error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
+        return codes.FETCH_FAILURE;
+    })
+}
+
+
 // fetches all product for a subcategory
-function fetchProductsForSubCategoryFromDB(category, subcategory, uiCallback) {
-    let reference = db.collection('products').doc(category).doc(subcategory);
-    reference.get().then((doc) => {
-        if(doc.exists)
-            return doc.data();
-        else
-            return codes.NOT_FOUND;
+function fetchProductsForSubCategoryFromDB(subcategory, uiCallback) {
+    let reference = db.collection('products');
+    let query = reference.where("subcategory", "==", subcategory);
+    let productsArray = [];
+    query.withConverter(productConverter).get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            productsArray.push(doc.data());
+        })
+        uiCallback(productsArray);
     })
     .catch((error) => {
         console.log(`Product fetch error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
@@ -363,7 +407,7 @@ function fetchCategoryDataFromDB(category, callback) {
 
 // insert image
 
-function insertImageInDB(product_id, index, fileData, callback) {
+function insertImageInDB(productID, index, fileData, callback) {
     // console.log("insertImageInDB");
     var storageRef = firebase.storage().ref().child(`${generateID(30)}.jpg`);
     storageRef.put(fileData)
@@ -374,8 +418,8 @@ function insertImageInDB(product_id, index, fileData, callback) {
     })
 }
 
-function fetchImageFromDB(product_id, callback) {
-    var storageRef = firebase.storage().ref().child(`${product_id}.jpg`);
+function fetchImageFromDB(productID, callback) {
+    var storageRef = firebase.storage().ref().child(`${productID}.jpg`);
     storageRef.getDownloadURL()
     .then((url) => {
         callback(url);
@@ -386,3 +430,4 @@ function fetchImageFromDB(product_id, callback) {
 //     createUserObjectInDB, createSellerObjectInDB, getUserDetails, getSellerDetails, updateDBPassword,
 //     updateDBEmail, insertProductInDB, insertCategoryOrSubcategoryInDB, fetchCategoriesAndSubcategoriesFromDB,
 //     fetchProductsForSubCategoryFromDB }
+
