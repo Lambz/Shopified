@@ -24,6 +24,12 @@
 		.carousel-control-next-icon {
 			filter: brightness(0%);
 		}
+
+		#links > a
+		{
+			text-decoration: none;
+			color: black;
+		}
 	</style>
 </head>
 
@@ -72,6 +78,7 @@
 	</header>
 
 	<div class="container py-5 my-5">
+		<div class="row" id="links"><a href="index.html">Home</a>&nbsp;>&nbsp;</div>
 		<div class="row ">
 			<div class="col-md-6">
 				<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
@@ -185,6 +192,7 @@
 		const productShippingTimeField = document.getElementById("productShippingTimeField");
 		const productSoldByField = document.getElementById("productSoldByField");
 		const quantityField = document.getElementById("quantityField");
+		const links = document.getElementById("links");
 		let p;
 		let user;
 
@@ -219,6 +227,7 @@
 			productShippingTimeField.innerHTML = `Item will be shipped in ${product.estimatedTime} days`
 			productSoldByField.innerHTML = `Sold by: ${product.seller}`;
 			quantityField.max = product.quantity;
+			links.innerHTML += `<button onclick="categoryClicked('${product.category}')">${product.category}</button>&nbsp;>&nbsp;<button onclick="subCategoryClicked('${product.subcategory}')">${product.subcategory}</button>&nbsp;>&nbsp;${product.name}`;
 		}
 
 		function addToCartClicked() {
@@ -239,11 +248,22 @@
 		function updateResult(code)
 		{
 			//TODO: Added to cart
+			window.location.replace("cart.html");
 		}
 
-		function buyThisClicked()
+		function buyClicked()
 		{
+			//TODO: buyClicked
+		}
 
+		function categoryClicked(id)
+		{
+			//TODO: Category Clicked
+		}
+
+		function subCategoryClicked(id)
+		{
+			//TODO: subCategoryClicked
 		}
 	</script>
 </body>

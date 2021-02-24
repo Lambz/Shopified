@@ -123,7 +123,16 @@
                         </tbody>
                     </table>
                     <div class="text-right" id="totalField">
+                        Sub-Total: 0
+                    </div>
+                    <div class="text-right" id="hstField">
+                        HST (13%): 0
+                    </div>
+                    <div class="text-right" id="tField">
                         Total: 0
+                    </div>
+                    <div class="text-right">
+                        <a href="contactForBuy.html" class="btn btn-primary btn-sm">Buy Now</a>
                     </div>
                 </div>
             </div>
@@ -183,6 +192,8 @@
 	<script>
         const tbody = document.getElementById("tbody");
         const totalField = document.getElementById("totalField");
+        const hstField = document.getElementById("hstField");
+        const tField = document.getElementById("tField");
 		let user;
 		window.onload = function () {
 			getUserDetails(true, (u) => {
@@ -201,7 +212,10 @@
                 tbody.innerHTML += `<tr><td>${product.name}</td><td>${product.seller}</td><td>${product.price}</td><td><input id="${product.id}" type="number" value="${product.quantity}" min="1"/></td><td>${product.price*product.quantity}</td><td><button onclick="updateQuantity('${product.id}')">Update Quanity</button><button onclick="deleteProduct('${product.id}')">Delete</button></td></tr>`
                 total += product.quantity*product.price;
             });
-            totalField.innerHTML = `Total: ${total}`;
+            totalField.innerHTML = `Sub-Total: ${total}`;
+            let hst = total*0.13;
+            hstField.innerHTML = `HST (13%): ${hst}`;
+            tField.innerHTML = `Total: ${total+hst}`;
         }
 
         function updateQuantity(id)
