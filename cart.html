@@ -86,16 +86,16 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">Manage Products</h5>
-                    <p class="card-text">You can add, edit and delete your products from here</p>
+                    <!-- <h5 class="card-title">Manage Products</h5>
+                    <p class="card-text">You can add, edit and delete your products from here</p> -->
                     <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th scope="col">Name</th>
-                                <th scope="col">Category</th>
-                                <th scope="col">Sub Category</th>
+                                <th scope="col">Seller</th>
                                 <th scope="col">Price</th>
-                                <th scope="col">Quantity Left</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Total Price</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
@@ -122,6 +122,9 @@
                           </tr> -->
                         </tbody>
                     </table>
+                    <div class="text-right" id="totalField">
+                        Total: 0
+                    </div>
                 </div>
             </div>
         </div>
@@ -178,28 +181,63 @@
 	<script src="./scripts/firebaseHandlers.js"></script>
 	<script src="./scripts/interface.js"></script>
 	<script>
-		const carouselInner = document.getElementById("carouselInner");
-		const productNameField = document.getElementById("productNameField");
-		const productPriceField = document.getElementById("productPriceField");
-		const productDescriptionField = document.getElementById("productDescriptionField");
-		const productShippingTimeField = document.getElementById("productShippingTimeField");
-		const productSoldByField = document.getElementById("productSoldByField");
-		const quantityField = document.getElementById("quantityField");
-		let p;
+        const tbody = document.getElementById("tbody");
+        const totalField = document.getElementById("totalField");
 		let user;
-
-		const id = new URL(window.location.href).searchParams.get("id");
 		window.onload = function () {
-			if (id == null) {
-				window.location.replace("index.html");
-			}
 			getUserDetails(true, (u) => {
+                console.log(u);
+                // console.log(JSON.stringify(u));
 				user = u;
-			})
-			fetchProductById(id, productResult);
+                populateTable();
+			});
 		}
-
 		
+        function populateTable()
+        {
+            let total = 0;
+            tbody.innerHTML = ""; 
+            user.cart.forEach((product) => {
+                tbody.innerHTML += `<tr><td>${product.name}</td><td>${product.seller}</td><td>${product.price}</td><td><input id="${product.id}" type="number" value="${product.quantity}" min="1"/></td><td>${product.price*product.quantity}</td><td><button onclick="updateQuantity('${product.id}')">Update Quanity</button><button onclick="deleteProduct('${product.id}')">Delete</button></td></tr>`
+                total += product.quantity*product.price;
+            });
+            totalField.innerHTML = `Total: ${total}`;
+        }
+
+        function updateQuantity(id)
+        {
+            console.log(id);
+            let quantity = document.getElementById(id);
+            user.cart.forEach((product) => {
+                if(product.id == id)
+                {
+                    product.quantity = quantity.value;
+                }
+            });
+            updateUser(true, user,updateResult);
+        }
+
+        function updateResult(code )
+        {
+            console.log(code);
+            populateTable();
+        }
+
+        function deleteProduct(id)
+        {
+            let i=0;
+            let index = -1;
+            user.cart.forEach((product) => {
+                if(product.id == id)
+                {
+                    index = i;
+                }
+                i++;
+            });
+            user.cart.splice(index,1);
+            console.log(user.cart);
+            updateUser(true, user,updateResult);
+        }
 	</script>
 </body>
 

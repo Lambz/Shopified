@@ -194,6 +194,7 @@
 				window.location.replace("index.html");
 			}
 			getUserDetails(true, (u) => {
+				console.log(1,u);
 				user = u;
 			})
 			fetchProductById(id, productResult);
@@ -222,13 +223,15 @@
 
 		function addToCartClicked() {
 			let quantity = quantityField.value;
-			if(quantity <= p.quantity)
+			console.log(2,user);
+			if(Number(quantity) <= Number(p.quantity))
 			{
 				p.quantity = quantity;
 				if(user!= null)
 				{
 					user.addProduct(p);
 				}
+				console.log(3,user);
 				updateUser(true, user,updateResult);
 			}
 		}
@@ -240,7 +243,7 @@
 
 		function buyThisClicked()
 		{
-			
+
 		}
 	</script>
 </body>

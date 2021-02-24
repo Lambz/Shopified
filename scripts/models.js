@@ -20,8 +20,8 @@ class User {
         this.email = email;
         this.password = password;
         this.phoneNo = phoneNo;
-        this.cart = [];
-        this.orders = [];
+        this.cart = cart;
+        this.orders = orders;
     }
 
     addOrder(order) {
@@ -90,7 +90,7 @@ class User {
                 this.cart.splice(index,1);
             }
         }
-        this.cart.push(saveProduct);
+        this.cart.push(Object.assign({}, saveProduct));
     }
 
     removeProduct(productID)
@@ -128,13 +128,15 @@ class User {
         let cartJSON = json.cart;
         cartJSON.forEach((product) => {
             cart.push(Object.assign({}, product));
-        })
+        });
+        console.log(cart);
         return new User(json.name, json.address, json.phoneNo, json.email, json.password, cart, orders);
     }
 }
 
 var userConverter = {
     toFirestore: function(user) {
+        console.log(typeof(user.cart[0]));
         return {
             name: user.name,
             address: user.address,

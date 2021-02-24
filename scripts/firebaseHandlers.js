@@ -174,11 +174,12 @@ function getUserDetailsFromDB(uiCallback) {
     }
     
     let userDocument = db.collection('users').doc(sessionStorage.getItem("uid"));
-    userDocument.withConverter(userConverter).get()
+    userDocument.get()
     .then((doc) => {
         if (doc.exists) {
             // uiCallback
-            uiCallback(doc.data())
+            console.log(doc.data());
+            uiCallback(User.convertToUser(doc.data()));
             return doc.data();
         } else {
             uiCallback(codes.NOT_FOUND);
