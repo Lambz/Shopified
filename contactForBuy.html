@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- bootstrap CDN-->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous"> -->
+
+    <!-- Font Awesome CDN-->
+    <script src="https://kit.fontawesome.com/99eb92985b.js" crossorigin="anonymous"></script>
+
+    <!-- owl carousel css file cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" />
+
+    <!-- CSS Stylesheet-->
+    <link rel="stylesheet" href="./CSS/homePage.css" />
+    <style>
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            filter: brightness(0%);
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <!-- header section starts  -->
+
+    <header>
+
+        <div class="header-1">
+
+            <a href="#" class="logo"> <i class="fas fa-shopping-bag"></i> shopping </a>
+
+            <div class="form-container">
+                <form action="">
+                    <input type="search" placeholder="search products" id="search" />
+                    <label for="search" class="fas fa-search"></label>
+                </form>
+            </div>
+
+        </div>
+
+        <div class="header-2">
+
+            <div id="menu" class="fas fa-bars"></div>
+
+            <nav class="navbar">
+                <ul>
+                    <li><a class="active" href="#home">home</a></li>
+                    <li><a href="#arrival">arrival</a></li>
+                    <li><a href="#featured">featured</a></li>
+                    <li><a href="#gallery">gallery</a></li>
+                    <li><a href="#deal">deal</a></li>
+                </ul>
+            </nav>
+
+            <div class="icons">
+                <a href="#" class="fas fa-heart"></a>
+                <a href="#" class="fas fa-shopping-cart"></a>
+                <a href="#" class="fas fa-user"></a>
+            </div>
+
+        </div>
+
+    </header>
+
+    <div class="container py-5 my-5">
+        <div class="row">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            Name:
+                        </td>
+                        <td><input type="text" id="nameInput" name="nameInput" /></td>
+                    </tr>
+                    <tr>
+                        <td>Phone Number:</td>
+                        <td><input type="number" id="phoneInput" name="phoneInput" min="1000000000" max="9999999999" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td for="addressInput">Address:</td>
+                        <td><textarea id="addressInput" name="addressInput"></textarea></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row">
+            <button disabled>Pay Online</button>
+            <button onclick="addOrderClicked()">Pay on Delivery</button>
+        </div>
+    </div>
+
+    <section class="footer">
+
+        <div class="box-container">
+
+            <div class="box">
+                <a href="#" class="logo"> <i class="fas fa-shopping-bag"></i> shopping </a>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique expedita molestiae distinctio
+                    facere beatae velit, maiores ullam molestias necessitatibus sapiente.</p>
+            </div>
+
+            <div class="box">
+                <h3>links</h3>
+                <a href="#">home</a>
+                <a href="#">arrival</a>
+                <a href="#">featured</a>
+                <a href="#">gallery</a>
+                <a href="#">deal</a>
+            </div>
+
+            <div class="box">
+                <h3>contact us</h3>
+                <p> <i class="fas fa-home"></i>
+                    mumbai, maharashtra,
+                    india - 400104
+                </p>
+                <p> <i class="fas fa-phone"></i>
+                    +910000000
+                </p>
+                <p> <i class="fas fa-globe"></i>
+                    xyz@yoursite.com
+                </p>
+            </div>
+
+        </div>
+
+
+
+    </section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.8/firebase-storage.js"></script>
+    <script src="./scripts/models.js"></script>
+    <script src="./scripts/firebaseHandlers.js"></script>
+    <script src="./scripts/interface.js"></script>
+    <script src="scripts/Utilties.js"></script>
+    <script>
+        const nameInput = document.getElementById("nameInput");
+        const phoneInput = document.getElementById("phoneInput");
+        const addressInput = document.getElementById("addressInput");
+        let user;
+        window.onload = function () {
+            getUserDetails(true, (u) => {
+                user = u;
+                if (user.cart.length < 1) {
+                    window.location.replace("index.html")
+                }
+                nameInput.value = user.name;
+                phoneInput.value = user.phoneNo;
+                addressInput.value = user.address;
+            });
+        }
+
+        function addOrderClicked()
+        {
+            let name = nameInput.value;
+            let phone = phoneInput.value;
+            let address = addressInput.value;
+            let noProb = true;
+            if(name == "")
+            {
+                nameInput.style.border = "1px solid red";
+                noProb = false;
+            }
+            if(phone == "")
+            {
+                phoneInput.style.border = "1px solid red";
+                noProb = false;
+            }
+            if(address == "")
+            {
+                addressInput.style.border = "1px solid red";
+                noProb = false;
+            }
+            if(noProb)
+            {
+                let order = new Order([],name,phone,address);
+                user.cart.forEach((product) => {
+                    order.addProduct(product);
+                });
+                // console.log(order);
+                user.cart = [];
+                user.addOrder(order);
+                updateUser(true,user,result);
+            }
+        }
+        
+        function result(code)
+        {
+            console.log(code);
+        }
+    </script>
+</body>
+
+</html>

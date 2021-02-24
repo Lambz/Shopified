@@ -225,7 +225,7 @@
 			productPriceField.innerHTML = `$ ${product.price}`;
 			productDescriptionField.innerHTML = product.description;
 			productShippingTimeField.innerHTML = `Item will be shipped in ${product.estimatedTime} days`
-			productSoldByField.innerHTML = `Sold by: ${product.seller}`;
+			productSoldByField.innerHTML = `Sold by: <button onclick="sellerClicked('${product.seller}')">${product.seller}</button>`;
 			quantityField.max = product.quantity;
 			links.innerHTML += `<button onclick="categoryClicked('${product.category}')">${product.category}</button>&nbsp;>&nbsp;<button onclick="subCategoryClicked('${product.subcategory}')">${product.subcategory}</button>&nbsp;>&nbsp;${product.name}`;
 		}
@@ -264,6 +264,11 @@
 		function subCategoryClicked(id)
 		{
 			//TODO: subCategoryClicked
+		}
+
+		function sellerClicked(id)
+		{
+			//TODO: sellerClicked
 		}
 	</script>
 </body>
