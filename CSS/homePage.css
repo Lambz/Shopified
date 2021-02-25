@@ -19,15 +19,15 @@
     color:#fff;
 }
 
-html{
+/* html{
     font-size: 62.5%;
     overflow-x: hidden;
-}
+} */
 
 
 
 
-.btn{
+/* .btn{
     height: 4rem;
     width: 14rem;
     background:var(--blue);
@@ -41,7 +41,7 @@ html{
 .btn:hover{
     letter-spacing: .2rem;
     opacity: .8;
-}
+} */
 
 .heading{
     padding-top: 7rem;
@@ -150,6 +150,7 @@ header .header-2 .navbar ul li button{
   background-origin: border-box;
   background-clip: content-box,border-box;
 }
+
 header .header-2 .navbar ul li button span{
   display: block;
   padding: 8px 22px;
