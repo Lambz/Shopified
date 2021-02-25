@@ -459,9 +459,9 @@ function fetchAllProductsForSellerInDB(sellerID, uiCallback) {
     let query = reference.where("seller_id", "==", sellerID);
     query.withConverter(productConverter).get()
     .then((querySnapshot) => {
-        let productArray = [];
-        querySnapshot.forEach((product) => {
-            productsArray.push(product);
+        let productsArray = [];
+        querySnapshot.forEach((doc) => {
+            productsArray.push(doc.data());
         })
         uiCallback(productsArray);
     })
