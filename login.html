@@ -163,7 +163,7 @@
 				loginEmailInput.style.border = "1px solid red";
 				noProb = false;
 			}
-			if(password == "")
+			if(password == "" || password.length<6)
 			{
 				loginPasswordInput.style.border = "1px solid red";
 				noProb = false;
@@ -209,7 +209,7 @@
 				signUpEmailInput.style.border = "1px solid red";
 				noProb = false;
 			}
-			if(password == "")
+			if(password == "" || password.length<6)
 			{
 				signUpPasswordInput.style.border = "1px solid red";
 				noProb = false;

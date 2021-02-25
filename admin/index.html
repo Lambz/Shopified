@@ -203,7 +203,7 @@
                 document.getElementById("sign_up_email_input").style.border = "1px solid red";
                 no_prob = false;
             }
-            if (password == "") {
+            if (password == "" || password.length<6) {
                 document.getElementById("sign_up_password_input").style.border = "1px solid red";
                 no_prob = false;
             }
@@ -245,7 +245,7 @@
                 document.getElementById("email").style.border = "1px solid red";
                 no_prob = false;
             }
-            if (password == "") {
+            if (password == "" || password.length<6) {
                 document.getElementById("password").style.border = "1px solid red";
                 no_prob = false;
             }
