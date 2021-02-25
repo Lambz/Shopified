@@ -175,7 +175,7 @@
             o.forEach((order) => {
                 tbody.innerHTML += `<tr onclick="orderClicked(${i})"><td>${order.customerName}</td><td>${order.customerNo}</td><td>${order.customerAddress}</td><td>${order.orderDate}</td><td>${order.products.length}</td><td><div class="row">
                                         <div class="col-10">
-                                            <select id="selectStatus_${order.id}" class="custom-select custom-select-sm">
+                                            <select id="selectStatus_${order.id}" class="custom-select custom-select-sm" value="${order.status}">
                                                 <option value="0">Pending</option>
                                                 <option value="1">Processing</option>
                                                 <option value="2">On Way</option>

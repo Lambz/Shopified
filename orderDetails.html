@@ -78,64 +78,32 @@
                     <!-- Products -->
                     <div class="row">
                         <!-- <div class="col-md-10"> -->
-                        <h3 class="w-75 p-3">Cart</h3>
-                        <!-- </div>
-                        <div class="col-md-2 p-3 float-right">
+                        <h4 class="pt-1 px-2">Order</h4>
+                        <!-- </div> -->
+                        <!-- <div class="col-md-2 p-3 float-right">
                             <a href="addProduct.html" class="btn btn-primary">Add Product</a>
                         </div> -->
                     </div>
                 </div>
                 <div class="card-body">
-                    <h5 id="noProductsText" class="card-title">No Products in Cart</h5>
-                    <!-- <p class="card-text">You can add, edit and delete your products from here</p> -->
-                    <div id="table">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Seller</th>
-                                    <th scope="col">Price</th>
-                                    <th scope="col">Quantity</th>
-                                    <th scope="col">Total Price</th>
-                                    <th scope="col"></th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbody">
-                                <!-- <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td class="text-right">
-                                <button class="btn btn-primary">Edit</button>
-                                <button class="btn btn-danger">Delete</button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                          </tr>
-                          <tr>
-                            <th scope="row">3</th>
-                            <td colspan="2">Larry the Bird</td>
-                            <td>@twitter</td>
-                          </tr> -->
-                            </tbody>
-                        </table>
-                        <div class="text-right" id="totalField">
-                            Sub-Total: 0
-                        </div>
-                        <div class="text-right" id="hstField">
-                            HST (13%): 0
-                        </div>
-                        <div class="text-right" id="tField">
-                            Total: 0
-                        </div>
-                        <div class="text-right">
-                            <a href="contactForBuy.html" class="btn btn-primary btn-sm">Buy Now</a>
-                        </div>
-                    </div>
+                    <!-- <h5 class="card-title">Manage Orders</h5> -->
+                    <p id="totalAmountField" class="card-text">Total Amount: </p>
+                    <p id="statusField" class="card-text">Status: </p>
+                    <p id="orderDateField" class="card-text">Ordered Date: </p>
+                    <p id="eDateField" class="card-text">Estimated Shipping Date: </p>
+                    <h5>Products</h5>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Seller</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -191,72 +159,82 @@
     <script src="./scripts/models.js"></script>
     <script src="./scripts/firebaseHandlers.js"></script>
     <script src="./scripts/interface.js"></script>
+    <script src="scripts/Utilties.js"></script>
     <script>
         const tbody = document.getElementById("tbody");
-        const totalField = document.getElementById("totalField");
-        const hstField = document.getElementById("hstField");
-        const tField = document.getElementById("tField");
-        const table = document.getElementById("table");
-        const noProductsText = document.getElementById("noProductsText");
+        const totalAmountField = document.getElementById("totalAmountField");
+        const statusField = document.getElementById("statusField");
+        const orderDateField = document.getElementById("orderDateField");
+        const tbeDateFieldody = document.getElementById("eDateField");
+        const id = new URL(window.location.href).searchParams.get("id");
         let user;
+        let pClicked = false;
+
         window.onload = function () {
             getUserDetails(true, (u) => {
-                console.log(u);
-                // console.log(JSON.stringify(u));
                 user = u;
                 populateTable();
             });
         }
 
         function populateTable() {
-            if (user.cart.length > 0) {
-                table.style.display = "block";
-                noProductsText.style.display = "none";
+            let order = null;
+            user.orders.forEach((o) => {
+                if(o.id == id)
+                {
+                    order = o;
+                }
+            });
+            if(order == null)
+            {
+                window.location.replace("orders.html");
+            }
+            else
+            {
+                let status = getOrderStatus(order.status);
                 let total = 0;
-                tbody.innerHTML = "";
-                user.cart.forEach((product) => {
-                    tbody.innerHTML += `<tr><td>${product.name}</td><td>${product.seller}</td><td>${product.price}</td><td><input id="${product.id}" type="number" value="${product.quantity}" min="1"/></td><td>${product.price * product.quantity}</td><td><button onclick="updateQuantity('${product.id}')">Update Quanity</button><button onclick="deleteProduct('${product.id}')">Delete</button></td></tr>`
-                    total += product.quantity * product.price;
+                let max = -1;
+                order.products.forEach((product) => {
+                    total += Number(product.price) * Number(product.quantity);
+                    max = Math.max(max, product.estimatedTime);
+                    tbody.innerHTML += `<tr onclick="productClicked('${product.id}')"><td>${product.name}</td><td>${product.price}</td><td>${product.quantity}</td><td><button onclick="sellerClicked('${product.seller_id}')">${product.seller}</td></tr>`;
                 });
-                totalField.innerHTML = `Sub-Total: ${total}`;
-                let hst = total * 0.13;
-                hstField.innerHTML = `HST (13%): ${hst}`;
-                tField.innerHTML = `Total: ${total + hst}`;
+                total *= 1.13;
+                let date = new Date(order.orderDate);
+                date.setDate(date.getDate() + max);
+                totalAmountField.innerHTML = `Total Amount: ${Math.round(total)}`;
+                statusField.innerHTML = `Status: ${status}`;
+                orderDateField.innerHTML = `Ordered Date: ${formatDate(order.orderDate)}`;
+                tbeDateFieldody.innerHTML = `Estimated Shipping Date: ${formatDate(date)}`;
             }
-            else {
-                table.style.display = "none";
-                noProductsText.style.display = "block";
+        }
+
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
+
+            return [day, month, year].join('-');
+        }
+
+        function productClicked(id)
+        {
+            if(pClicked)
+            {
+                window.location.replace("product.html?id="+id);
             }
         }
 
-        function updateQuantity(id) {
-            console.log(id);
-            let quantity = document.getElementById(id);
-            user.cart.forEach((product) => {
-                if (product.id == id) {
-                    product.quantity = quantity.value;
-                }
-            });
-            updateUser(true, user, updateResult);
-        }
-
-        function updateResult(code) {
-            console.log(code);
-            populateTable();
-        }
-
-        function deleteProduct(id) {
-            let i = 0;
-            let index = -1;
-            user.cart.forEach((product) => {
-                if (product.id == id) {
-                    index = i;
-                }
-                i++;
-            });
-            user.cart.splice(index, 1);
-            console.log(user.cart);
-            updateUser(true, user, updateResult);
+        function sellerClicked(id)
+        {
+            pClicked = false;
+            window.location.replace("products.html?sellerID"+id);
         }
     </script>
 </body>

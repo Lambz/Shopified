@@ -318,7 +318,7 @@ function fetchProductsForSeller(sellerID, uiCallback) {
 
 // let user = new Seller("Name", "Company", "SomeEmail@NameCompanyMail.com", "Password");
 // // // let category = new Category("some other category", ["sub2"]);
-// initializeDB(); 
+initializeDB(); 
 // // // console.log(user);
 // // // signUp(user, false, () => {});
 

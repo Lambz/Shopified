@@ -18,10 +18,10 @@
     color:#fff;
 }
 
-html{
+/* html{
     font-size: 62.5%;
     overflow-x: hidden;
-}
+} */
 
 
 
@@ -35,12 +35,12 @@ html{
     cursor: pointer;
     border:none;
     outline: none;
-} */
+}
 
 .btn:hover{
     letter-spacing: .2rem;
     opacity: .8;
-}
+} */
 
 .heading{
     padding-top: 7rem;
