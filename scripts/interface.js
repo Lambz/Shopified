@@ -253,16 +253,12 @@ function updateOrderStatus(order, newStatus, uiCallback) {
 
 // Function to return all orders for a seller
 function fetchOrdersForSeller(sellerID, includeCancelled, uiCallback) {
-    fetchOrdersByDateFromDB(includeCancelled, (orders) => {
+    fetchOrdersFromDB(includeCancelled, (orders) => {
         let orderArray = [];
         for (let i = 0; i < orders.length; i++) {
             let val = orders[i].products;
             for(let j = 0; j < val.length; i++) {
-                console.log(val[j].seller_id);
-                if(val[j].seller_id == sellerID) {
-                    orderArray.push(orders[i]);
-                    break;
-                }     
+                console.log(val[j]);
             }
             
         }
@@ -287,10 +283,11 @@ function deleteUser(isUser, uiCallback) {
 
 
 // Function returns the products array in descending order of most sold products
-function fetchMostSoldProducts() {
+function fetchMostSoldProducts(uiCallback) {
     fetchOrdersFromDB(true, (orderArray) => {
         let products = [];
         let productsArray = orderArray.map(o => o.products);
+        
         for(let i = 0; i < productsArray.length; i++) {
             let val = productsArray[i];
             val.forEach((product) => {
@@ -305,9 +302,9 @@ function fetchMostSoldProducts() {
                 [o.id, Object.assign({}, o, { count: 0 })]
             ))), ([k, o]) => o
         ).sort( (a, b) => b.count - a.count )
-        .map( o => o.id );
+        .map( o => o );
 
-        console.log(result);
+        uiCallback(result);
     })
 }
 
@@ -319,26 +316,24 @@ function fetchProductsForSeller(sellerID, uiCallback) {
 
 
 
-let user = new Seller("Name", "Company", "SomeEmail@NameCompanyMail.com", "Password");
-// // let category = new Category("some other category", ["sub2"]);
-initializeDB(); 
-// // console.log(user);
-// // signUp(user, false, () => {});
+// let user = new Seller("Name", "Company", "SomeEmail@NameCompanyMail.com", "Password");
+// // // let category = new Category("some other category", ["sub2"]);
+// initializeDB(); 
+// // // console.log(user);
+// // // signUp(user, false, () => {});
 
-signIn(user.email, user.password, false, ()=> {});
-// let product = new Product("A", "someId", "new category", "some subcategory", "10", user.name, sessionStorage.getItem("uid"), "2", [], 100, "some");
+// signIn(user.email, user.password, false, ()=> {});
+// // let product = new Product("A", "someId", "new category", "some subcategory", "10", user.name, sessionStorage.getItem("uid"), "2", [], 100, "some");
 
-// // insertProduct(product, user, false, ()=> {
+// // // insertProduct(product, user, false, ()=> {
 
+// // // })
+// // // deleteProduct("someId", user, () => {});
+// // let order = new Order([], user.name, 797797978978, "some address");
+// // order.addProduct(product);
+// // placeOrder(order, () => {
+// //     console.log("added");
 // // })
-// // deleteProduct("someId", user, () => {});
-// let order = new Order([], user.name, 797797978978, "some address");
-// order.addProduct(product);
-// placeOrder(order, () => {
-//     console.log("added");
-// })
-let date = new Date();
-console.log(date.setDate(date.getDate() - 2));
 // fetchOrdersForSeller("jgXoVdBiZjgjxmNXcP59gAKcEHH3", true, (orders) => {
 //     console.log(orders);
 // })
