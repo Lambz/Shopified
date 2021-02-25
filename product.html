@@ -260,7 +260,6 @@
 
 		function addToCartClicked() {
 			let quantity = quantityField.value;
-			console.log(2,user);
 			if(Number(quantity) <= Number(p.quantity))
 			{
 				p.quantity = quantity;
@@ -268,7 +267,6 @@
 				{
 					user.addProduct(p);
 				}
-				console.log(3,user);
 				updateUser(true, user,updateResult);
 			}
 		}

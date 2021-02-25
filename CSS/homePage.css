@@ -232,9 +232,9 @@ header .header-2.header-active{
     font-size: 7rem;
 }
 
-.arrival{
+/* .arrival{
     min-height: 100vh;
-}
+} */
 
 .arrival .box-container{
     display: flex;

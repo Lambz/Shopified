@@ -16,6 +16,11 @@
         body {
             background-color: rgb(241, 244, 249);
         }
+
+        tr
+        {
+            cursor: pointer;
+        }
     </style>
     <title>Orders</title>
 </head>
@@ -69,7 +74,7 @@
             </div>
         </nav>
     </header>
-    <div class="container mt-5">
+    <div class="mx-5 my-5">
         <div class="jumbotron">
             <div class="card">
                 <div class="card-header container-fluid">
@@ -162,7 +167,7 @@
                 {
                     window.location.replace("index.html");
                 }
-                fetchOrdersForSeller(seller.id, new Date(null), new Date(), true, orderDetails)
+                fetchOrdersForSeller(seller.id, true, orderDetails)
             });
         }
 
@@ -173,9 +178,9 @@
             // console.log(orders);
             let i=0;
             o.forEach((order) => {
-                tbody.innerHTML += `<tr onclick="orderClicked(${i})"><td>${order.customerName}</td><td>${order.customerNo}</td><td>${order.customerAddress}</td><td>${order.orderDate}</td><td>${order.products.length}</td><td><div class="row">
-                                        <div class="col-10">
-                                            <select id="selectStatus_${order.id}" class="custom-select custom-select-sm" value="${order.status}">
+                tbody.innerHTML += `<tr><td onclick="orderClicked(${i})">${order.customerName}</td><td onclick="orderClicked(${i})">${order.customerNo}</td><td onclick="orderClicked(${i})">${order.customerAddress}</td><td onclick="orderClicked(${i})">${order.orderDate}</td><td onclick="orderClicked(${i})">${order.products.length}</td><td><div class="row">
+                                        <div class="col-8">
+                                            <select id="selectStatus_${order.id}" class="custom-select custom-select-sm">
                                                 <option value="0">Pending</option>
                                                 <option value="1">Processing</option>
                                                 <option value="2">On Way</option>
@@ -183,11 +188,12 @@
                                                 <option value="4">Cancelled</option>
                                             </select>
                                         </div>
-                                        <div class="col-2">
+                                        <div class="col-4">
                                             <button type="button" onclick="changeStatus(${i})" class="btn btn-primary btn-sm">Update Status</button>
                                         </div>
                                     </div></td></tr>`;
                 i++;
+                document.getElementById(`selectStatus_${order.id}`).value = order.status;
             });
         }
 

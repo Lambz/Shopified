@@ -86,6 +86,27 @@
                 <div class="card-body">
                     <!-- <h5 class="card-title">Manage Orders</h5> -->
                     <!-- <p class="card-text">You can add, edit and delete your products from here</p> -->
+                    <p id="nameField" class="card-text">Name: </p>
+                    <p id="phoneField" class="card-text">Phone: </p>
+                    <p id="addressField" class="card-text">Address: </p>
+                    <p id="totalField" class="card-text">Total: </p>
+                    <p>
+                        <div class="row">
+                            <div class="col-8">
+                                <select id="selectStatus" class="custom-select">
+                                    <option value="0">Pending</option>
+                                    <option value="1">Processing</option>
+                                    <option value="2">On Way</option>
+                                    <option value="3">Delivered</option>
+                                    <option value="4">Cancelled</option>
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <button onclick="updateStatus()" class="btn btn-primary">Update Status</button>
+                            </div>
+                        </div>
+                    </p>
+                    <h5>Products</h5>
                     <table class="table table-hover">
                         <thead>
                             <tr>
@@ -153,33 +174,54 @@
     <script>
         const tbody = document.getElementById("tbody");
         const id = new URL(window.location.href).searchParams.get("id");
-        window.onload = function()
-        {
-            getUserDetails(false,(seller) => {
-                if(seller == codes.NOT_FOUND)
-                {
+        const nameField = document.getElementById("nameField");
+        const phoneField = document.getElementById("phoneField");
+        const addressField = document.getElementById("addressField");
+        const totalField = document.getElementById("totalField");
+        const selectStatus = document.getElementById("selectStatus");
+        let or;
+        window.onload = function () {
+            getUserDetails(false, (seller) => {
+                if (seller == codes.NOT_FOUND) {
                     window.location.replace("index.html");
                 }
-                fetchOrdersForSeller(seller.id, new Date(null), new Date(), true, orderDetails)
+                fetchOrdersForSeller(seller.id, true, orderDetails)
             });
         }
 
-        function orderDetails(o)
-        {
+        function orderDetails(o) {
             let order = null;
             o.forEach((o1) => {
-                if(o1.id == id)
-                {
+                if (o1.id == id) {
                     order = o1;
                 }
             });
-            if(order == null)
-            {
+            let total = 0;
+            if (order == null) {
                 window.location.replace("orders.html");
             }
+            or = order;
+            nameField.innerHTML = `Name: ${order.customerName}`;
+            phoneField.innerHTML = `Phone: ${order.customerNo}`;
+            addressField.innerHTML = `Address: ${order.customerAddress}`;
+            selectStatus.value = order.status;
             order.products.forEach((product) => {
+                total += product.price * product.quantity;
                 tbody.innerHTML += `<tr><td>${product.name}</td><td>${product.price}</td><td>${product.description}</td><td>${product.quantity}</td></tr>`;
             });
+            total *= 1.13;
+            totalField.innerHTML = `Total: ${total.toFixed(2)}`;
+        }
+
+        function updateStatus()
+        {
+            let status = selectStatus.value;
+            updateOrderStatus(or,status,statusChanged);
+        }
+
+        function statusChanged()
+        {
+
         }
     </script>
 </body>

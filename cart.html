@@ -57,11 +57,7 @@
                     <li><a href="index.html">home</a></li>
                 </ul>
             </nav>
-
-
             <div class="icons">
-
-
                 <i style="cursor:pointer" onclick="window.location.replace('cart.html')" class="fas fa-shopping-cart"></i>
                 <i style="cursor:pointer" onclick="window.location.replace('orders.html')" class="fas fa-history"></i>
                 <i style="cursor:pointer" onclick="window.location.replace('settings.html')" class="fas fa-cog"></i>
@@ -247,7 +243,7 @@
                 });
                 totalField.innerHTML = `Sub-Total: ${total}`;
                 let hst = total * 0.13;
-                hstField.innerHTML = `HST (13%): ${hst}`;
+                hstField.innerHTML = `HST (13%): ${hst.toFixed(2)}`;
                 tField.innerHTML = `Total: ${total + hst}`;
             }
             else {
