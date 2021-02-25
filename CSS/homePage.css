@@ -64,25 +64,28 @@ header .header-1, header .header-2{
     justify-content: space-between;
     padding:1.5rem;
     width: 100%;
-    z-index: 1000;
+    z-index: 100;
 }
 
 header .header-1 .logo{
-    font-size: 2rem;
+    font-size: 4rem;
     color:#666;
 }
 
-header .header-1 .logo i{
+/* header .header-1 .logo i{
     color:var(--blue);
-}
+} */
 
 header .header-1 .form-container form{
     display: flex;
+    margin-right: 400px;
+    
 }
 
 header .header-1 .form-container form #search{
     height: 4rem;
     width: 50rem;
+    /* position: inherit; */
     outline: none;
     border:.2rem solid #666;
     font-size: 1.5rem;
@@ -91,6 +94,7 @@ header .header-1 .form-container form #search{
 
 header .header-1 .form-container form #search:focus{
     border-color: var(--blue);;
+
 }
 
 header .header-1 .form-container form label{
@@ -110,12 +114,13 @@ header .header-1 .form-container form label:hover{
 
 header .header-2{
     background:darkslategray ;
+    height: 50px;
 }
 
 header .header-2 .navbar ul{
     list-style: none;
     display: inline-flex;
-    margin: 10px;
+    margin: 5px;
      align-items: center;
     justify-content: space-between; 
 }
@@ -154,7 +159,7 @@ header .header-2 .navbar ul li button span{
   padding: 8px 22px;
 }
 
-header .header-2 .icons a{
+header .header-2 .icons i{
     color: #fff;
     font-size: 2rem;
     padding: 0 1rem;
