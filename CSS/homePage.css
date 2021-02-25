@@ -11,7 +11,6 @@
     text-transform: capitalize;
     text-decoration: none;
     transition: all .2s cubic-bezier(.37,1.14,.26,1.24);
-   
 }
 
 *::selection{
@@ -19,15 +18,15 @@
     color:#fff;
 }
 
-/* html{
+html{
     font-size: 62.5%;
     overflow-x: hidden;
-} */
+}
 
 
 
 
-/* .btn{
+.btn{
     height: 4rem;
     width: 14rem;
     background:var(--blue);
@@ -41,7 +40,7 @@
 .btn:hover{
     letter-spacing: .2rem;
     opacity: .8;
-} */
+}
 
 .heading{
     padding-top: 7rem;
@@ -150,7 +149,6 @@ header .header-2 .navbar ul li button{
   background-origin: border-box;
   background-clip: content-box,border-box;
 }
-
 header .header-2 .navbar ul li button span{
   display: block;
   padding: 8px 22px;
@@ -744,7 +742,7 @@ header .header-2.header-active{
         border:.2rem solid #fff;
         box-shadow: 0 .3rem .5rem #000;
         padding:4rem 0;
-        width: 27rem;
+        width: 20rem;
     }
 
     header .header-2 .navbar ul li{
