@@ -144,10 +144,6 @@ function fetchAllProducts(uiCallback) {
 }
 
 
-function fetchAllProductsForSeller(seller, uiCallback) {
-
-}
-
 // Insertion Functions
 
 // function to upload images
@@ -238,8 +234,9 @@ function deleteProduct(productID, seller, uiCallback) {
     deleteProductFromDB(productID,seller,uiCallback);
 }
 
+// 
 // Order Functions
-
+// 
 function placeOrder(order, uiCallback) {
     insertOrderInDB(order, uiCallback);
 }
@@ -252,15 +249,21 @@ function updateOrderStatus(order, newStatus, uiCallback) {
 }
 
 // Function to return all orders for a seller
+// 1. args:
+// - sellerID: sellerID of seller
+// - includeCancelled: boolean, specify weather to include cancelled orders
+
 function fetchOrdersForSeller(sellerID, includeCancelled, uiCallback) {
     fetchOrdersFromDB(includeCancelled, (orders) => {
         let orderArray = [];
         for (let i = 0; i < orders.length; i++) {
             let val = orders[i].products;
-            for(let j = 0; j < val.length; i++) {
-                console.log(val[j]);
+            for(let j = 0; j < val.length; j++) {
+                if(val[j].seller_id == sellerID) {
+                    orderArray.push(orders[i]);
+                    break;
+                }
             }
-            
         }
         uiCallback(orderArray);
     })
@@ -301,15 +304,14 @@ function fetchMostSoldProducts(uiCallback) {
             , new Map(products.map(o => 
                 [o.id, Object.assign({}, o, { count: 0 })]
             ))), ([k, o]) => o
-        ).sort( (a, b) => b.count - a.count )
-        .map( o => o );
+        ).sort( (a, b) => b.count - a.count );
 
         uiCallback(result);
     })
 }
 
 
-function fetchProductsForSeller(sellerID, uiCallback) {
+function fetchAllProductsForSeller(sellerID, uiCallback) {
     fetchAllProductsForSellerInDB(sellerID, uiCallback);
 }
 
@@ -317,26 +319,23 @@ function fetchProductsForSeller(sellerID, uiCallback) {
 
 
 // let user = new Seller("Name", "Company", "SomeEmail@NameCompanyMail.com", "Password");
-// // // let category = new Category("some other category", ["sub2"]);
+// // // // let category = new Category("some other category", ["sub2"]);
 initializeDB(); 
-// // // console.log(user);
-// // // signUp(user, false, () => {});
+// // // // console.log(user);
+// // // // signUp(user, false, () => {});
 
 // signIn(user.email, user.password, false, ()=> {});
-// // let product = new Product("A", "someId", "new category", "some subcategory", "10", user.name, sessionStorage.getItem("uid"), "2", [], 100, "some");
+// // // let product = new Product("A", "someId", "new category", "some subcategory", "10", user.name, sessionStorage.getItem("uid"), "2", [], 100, "some");
 
-// // // insertProduct(product, user, false, ()=> {
+// // // // insertProduct(product, user, false, ()=> {
 
+// // // // })
+// // // // deleteProduct("someId", user, () => {});
+// // // let order = new Order([], user.name, 797797978978, "some address");
+// // // order.addProduct(product);
+// // // placeOrder(order, () => {
+// // //     console.log("added");
 // // // })
-// // // deleteProduct("someId", user, () => {});
-// // let order = new Order([], user.name, 797797978978, "some address");
-// // order.addProduct(product);
-// // placeOrder(order, () => {
-// //     console.log("added");
-// // })
-// fetchOrdersForSeller("jgXoVdBiZjgjxmNXcP59gAKcEHH3", true, (orders) => {
+// fetchAllProductsForSeller("T3RIIkwY4QPiwbFzxP6mScw8N3H3", (orders) => {
 //     console.log(orders);
 // })
-
-
-
