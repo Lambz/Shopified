@@ -23,7 +23,8 @@ var codes = Object.freeze({
     LOGIN_SUCCESS: 400,
     LOGIN_FAILIURE: -400,
     LOGOUT_SUCCESS: 102,
-    LOGOUT_FAILIURE: -102
+    LOGOUT_FAILIURE: -102,
+    DELETION_FAILIURE: 100
 });
 
 // config token for firebase access
@@ -263,23 +264,6 @@ function insertProductInDB(product, seller, uiCallback) {
     // });
 }
 
-// Deletion functions
-
-function deleteProductFromDB(productID, seller, uiCallback) {
-    if (!productID) {
-        throw new Error(`Product deletion error! Error code: ${codes.NULL_OBJECT}`);
-    }
-    db.collection("products").doc(productID).delete()
-    .then(() => {
-        seller.removeProduct(productID);
-        createSellerObjectInDB(seller,uiCallback);
-    })
-    // .catch((error) => {
-        //     console.log(`Product deletion error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
-        //     return codes.INSERTION_FAILIURE;
-        // });
-}
-
 function insertCategoryOrSubcategoryInDB(category) {
     if (!category) {
         throw new Error(`Category Insertion Error! Error code: ${codes.NULL_OBJECT}`);
@@ -305,6 +289,46 @@ function insertOrderInDB(order, uiCallback) {
     //     console.log(`Order insertion error! Error code: ${error.code}\nError Message: ${error.message}`);
     // });
 }
+
+// Deletion functions
+
+function deleteProductFromDB(productID, seller, uiCallback) {
+    if (!productID) {
+        throw new Error(`Product deletion error! Error code: ${codes.NULL_OBJECT}`);
+    }
+    db.collection("products").doc(productID).delete()
+    .then(() => {
+        seller.removeProduct(productID);
+        createSellerObjectInDB(seller,uiCallback);
+    })
+    // .catch((error) => {
+        //     console.log(`Product deletion error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
+        //     return codes.INSERTION_FAILIURE;
+        // });
+}
+
+function deleteUserFromDB(uiCallback) {
+    db.collection("users").doc(sessionStorage.getItem("uid")).delete()
+    .then(() => {
+        signOutUserFromFirebase(uiCallback);
+    })
+    .catch((error) => {
+        console.log(`Error while deleting account!Error code: ${error.code}\nError Message: ${error.message}`);
+        uiCallback(codes.DELETION_FAILIURE);
+    })
+}
+
+function deleteSellerFromDB() {
+    db.collection("sellers").doc(sessionStorage.getItem("uid")).delete()
+    .then(() => {
+        signOutUserFromFirebase(uiCallback);
+    })
+    .catch((error) => {
+        console.log(`Error while deleting account!Error code: ${error.code}\nError Message: ${error.message}`);
+        uiCallback(codes.DELETION_FAILIURE);
+    })
+}
+
 
 // Fetch functions
 
@@ -414,11 +438,8 @@ function fetchCategoryDataFromDB(category, callback) {
 
 // fetch sold products for seller
 
-function fetchOrdersByDateFromDB(startDate, endDate, includeCancelled, callback) {
-    
-    let reference = db.collection('orders');
-    let query = reference.where("orderDate", ">=", startDate)
-                .where("orderDate", "<=", endDate);
+function fetchOrdersFromDB(includeCancelled, callback) {
+    let query = db.collection('orders').orderBy('orderDate', 'desc');
                 
     if (!includeCancelled) {
         query.where("status", "!=", 4);
@@ -433,7 +454,18 @@ function fetchOrdersByDateFromDB(startDate, endDate, includeCancelled, callback)
     })
 }
 
-
+function fetchAllProductsForSellerInDB(sellerID, uiCallback) {
+    let reference = db.collection("products");
+    let query = reference.where("seller_id", "==", sellerID);
+    query.withConverter(productConverter).get()
+    .then((querySnapshot) => {
+        let productArray = [];
+        querySnapshot.forEach((product) => {
+            productsArray.push(product);
+        })
+        uiCallback(productsArray);
+    })
+}
 
 // Storage functions
 
