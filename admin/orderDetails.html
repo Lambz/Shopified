@@ -185,7 +185,7 @@
                 if (seller == codes.NOT_FOUND) {
                     window.location.replace("index.html");
                 }
-                fetchOrdersForSeller(seller.id, true, orderDetails)
+                fetchOrdersForSeller(sessionStorage.getItem('uid'), true, orderDetails)
             });
         }
 
@@ -205,6 +205,7 @@
             phoneField.innerHTML = `Phone: ${order.customerNo}`;
             addressField.innerHTML = `Address: ${order.customerAddress}`;
             selectStatus.value = order.status;
+            console.log(order);
             order.products.forEach((product) => {
                 total += product.price * product.quantity;
                 tbody.innerHTML += `<tr><td>${product.name}</td><td>${product.price}</td><td>${product.description}</td><td>${product.quantity}</td></tr>`;

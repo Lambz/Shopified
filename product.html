@@ -49,7 +49,7 @@
             <a href="index.html" class="logo">Shopified </a>
 
             <div class="form-container">
-                <form action="">
+                <form onsubmit="window.location.replace('products.html?searchText='+document.getElementById('search').value);return false;">
                     <input type="search" placeholder="search products" id="search" />
                     <label for="search" onclick="window.location.replace('products.html?searchText='+document.getElementById('search').value)" class="fas fa-search"></label>
                 </form>

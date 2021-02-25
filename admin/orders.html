@@ -167,7 +167,8 @@
                 {
                     window.location.replace("index.html");
                 }
-                fetchOrdersForSeller(seller.id, true, orderDetails)
+                console.log(sessionStorage.getItem('uid'));
+                fetchOrdersForSeller(sessionStorage.getItem('uid'), true, orderDetails)
             });
         }
 
