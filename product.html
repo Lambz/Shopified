@@ -44,42 +44,42 @@
 
 	<header>
 
-		<div class="header-1">
+        <div class="header-1">
 
-			<a href="#" class="logo"> <i class="fas fa-shopping-bag"></i> shopping </a>
+            <a href="#" class="logo">Shopified </a>
 
-			<div class="form-container">
-				<form action="">
-					<input type="search" placeholder="search products" id="search" />
-					<label for="search" class="fas fa-search"></label>
-				</form>
-			</div>
+            <div class="form-container">
+                <form action="">
+                    <input type="search" placeholder="search products" id="search" />
+                    <label for="search" onclick="window.location.replace('products.html?searchText='+document.getElementById('search').value)" class="fas fa-search"></label>
+                </form>
+            </div>
+            <a id="loginSignUpLink" href="login.html"><button><span id="loginSignUpSpan">Login/SignUp</span></button></a>
 
-		</div>
+        </div>
 
-		<div class="header-2">
+        <div class="header-2">
 
-			<div id="menu" class="fas fa-bars"></div>
+            <div id="menu" class="fas fa-bars"></div>
 
-			<nav class="navbar">
-				<ul>
-					<li><a class="active" href="#home">home</a></li>
-					<li><a href="#arrival">arrival</a></li>
-					<li><a href="#featured">featured</a></li>
-					<li><a href="#gallery">gallery</a></li>
-					<li><a href="#deal">deal</a></li>
-				</ul>
-			</nav>
+            <nav class="navbar">
+                <ul id="categoryBar">
+                    <li><a href="index.html">home</a></li>
+                </ul>
+            </nav>
 
-			<div class="icons">
-				<a href="#" class="fas fa-heart"></a>
-				<a href="#" class="fas fa-shopping-cart"></a>
-				<a href="#" class="fas fa-user"></a>
-			</div>
 
-		</div>
+            <div class="icons">
 
-	</header>
+
+                <i style="cursor:pointer" onclick="window.location.replace('cart.html')" class="fas fa-shopping-cart"></i>
+                <i style="cursor:pointer" onclick="window.location.replace('orders.html')" class="fas fa-history"></i>
+                <i style="cursor:pointer" onclick="window.location.replace('settings.html')" class="fas fa-cog"></i>
+            </div>
+
+        </div>
+
+    </header>
 
 	<div class="container py-5 my-5">
 		<div class="row mb-3" id="links"><a href="index.html">Home</a>&nbsp;>&nbsp;</div>
@@ -197,7 +197,26 @@
 		const quantityField = document.getElementById("quantityField");
 		const links = document.getElementById("links");
 		let p;
-		let user;
+		let user;const categoryBar = document.getElementById("categoryBar");
+        const loginSignUpSpan = document.getElementById("loginSignUpSpan");
+        const loginSignUpLink = document.getElementById("loginSignUpLink");
+
+        function categoryResult(categories)
+        {
+            let inner = "";
+            categories.forEach((category) => {
+                inner += `<li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="products.html?category=${category.name}" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                ${category.name}
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">`;
+                category.subcategories.forEach((subCategory) => {
+                    inner += `<a class="dropdown-item" style="color:black" href="products.html?subCategory=${subCategory}">${subCategory}</a>`;
+                });
+                inner += `</div></li>`
+            });
+            categoryBar.innerHTML += inner;
+        }
 
 		const id = new URL(window.location.href).searchParams.get("id");
 		window.onload = function () {
@@ -205,10 +224,15 @@
 				window.location.replace("index.html");
 			}
 			getUserDetails(true, (u) => {
-				console.log(1,u);
+				if(u != null)
+                {
+                    loginSignUpSpan.innerHTML = "Sign Out";
+                    loginSignUpLink.href = "signOut.html";
+                }
 				user = u;
 			})
 			fetchProductById(id, productResult);
+			fetchAllCategoriesAndSubcategories(categoryResult);
 		}
 
 		function productResult(product) {

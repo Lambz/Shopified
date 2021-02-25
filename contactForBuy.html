@@ -41,10 +41,10 @@
             <div class="form-container">
                 <form action="">
                     <input type="search" placeholder="search products" id="search" />
-                    <label for="search" class="fas fa-search"></label>
+                    <label for="search" onclick="window.location.replace('products.html?searchText='+document.getElementById('search').value)" class="fas fa-search"></label>
                 </form>
             </div>
-            <a href="login.html"><button><span>Login/SignUp</span></button></a>
+            <a id="loginSignUpLink" href="login.html"><button><span id="loginSignUpSpan">Login/SignUp</span></button></a>
 
         </div>
 
@@ -53,13 +53,8 @@
             <div id="menu" class="fas fa-bars"></div>
 
             <nav class="navbar">
-                <ul>
-                    <li><a class="active" href="index.html">home</a></li>
-                    <li><a href="#arrival">arrival</a></li>
-                    <li><a href="#featured">featured</a></li>
-                    <li><a href="#gallery">gallery</a></li>
-                    <li><a href="#deal">deal</a></li>
-                    <li></li>
+                <ul id="categoryBar">
+                    <li><a href="index.html">home</a></li>
                 </ul>
             </nav>
 
@@ -67,9 +62,9 @@
             <div class="icons">
 
 
-                <i class="fas fa-shopping-cart"></i>
-                <i class="fas fa-history"></i>
-                <i class="fas fa-cog"></i>
+                <i style="cursor:pointer" onclick="window.location.replace('cart.html')" class="fas fa-shopping-cart"></i>
+                <i style="cursor:pointer" onclick="window.location.replace('orders.html')" class="fas fa-history"></i>
+                <i style="cursor:pointer" onclick="window.location.replace('settings.html')" class="fas fa-cog"></i>
             </div>
 
         </div>
@@ -160,8 +155,17 @@
         const phoneInput = document.getElementById("phoneInput");
         const addressInput = document.getElementById("addressInput");
         let user;
+        const categoryBar = document.getElementById("categoryBar");
+        const loginSignUpSpan = document.getElementById("loginSignUpSpan");
+        const loginSignUpLink = document.getElementById("loginSignUpLink");
+
         window.onload = function () {
             getUserDetails(true, (u) => {
+                if(u != null)
+                {
+                    loginSignUpSpan.innerHTML = "Sign Out";
+                    loginSignUpLink.href = "signOut.html";
+                }
                 user = u;
                 if (user.cart.length < 1) {
                     window.location.replace("index.html")
@@ -170,6 +174,24 @@
                 phoneInput.value = user.phoneNo;
                 addressInput.value = user.address;
             });
+            fetchAllCategoriesAndSubcategories(categoryResult);
+        }
+
+        function categoryResult(categories)
+        {
+            let inner = "";
+            categories.forEach((category) => {
+                inner += `<li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="products.html?category=${category.name}" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                ${category.name}
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">`;
+                category.subcategories.forEach((subCategory) => {
+                    inner += `<a class="dropdown-item" style="color:black" href="products.html?subCategory=${subCategory}">${subCategory}</a>`;
+                });
+                inner += `</div></li>`
+            });
+            categoryBar.innerHTML += inner;
         }
 
         function addOrderClicked()

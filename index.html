@@ -34,7 +34,7 @@
             <div class="form-container">
                 <form action="">
                     <input type="search" placeholder="search products" id="search" />
-                    <label for="search" class="fas fa-search"></label>
+                    <label for="search" onclick="window.location.replace('products.html?searchText='+document.getElementById('search').value)" class="fas fa-search"></label>
                 </form>
             </div>
             <a id="loginSignUpLink" href="login.html"><button><span id="loginSignUpSpan">Login/SignUp</span></button></a>
@@ -47,7 +47,7 @@
 
             <nav class="navbar">
                 <ul id="categoryBar">
-                    <li><a class="active" href="index.html">home</a></li>
+                    <li><a href="index.html">home</a></li>
                 </ul>
             </nav>
 
@@ -657,7 +657,7 @@
 
         window.onload = function ()
         {
-            getUserDetails(false,(u) => {
+            getUserDetails(true,(u) => {
                 if(u != null)
                 {
                     loginSignUpSpan.innerHTML = "Sign Out";
