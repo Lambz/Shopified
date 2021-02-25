@@ -33,6 +33,97 @@
         img {
             max-height: 250px;
         }
+
+        .cancelbtn,
+        .deletebtn {
+            float: left;
+            width: 50%;
+        }
+
+        /* Add a color to the cancel button */
+        .cancelbtn {
+            background-color: #ccc;
+            color: black;
+        }
+
+        /* Add a color to the delete button */
+        .deletebtn {
+            background-color: #f44336;
+        }
+
+        /* Add padding and center-align text to the container */
+        /* .container {
+            padding: 16px;
+            text-align: center;
+        } */
+
+        /* The Modal (background) */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: #474e5d;
+            padding-top: 50px;
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto 15% auto;
+            /* 5% from the top, 15% from the bottom and centered */
+            border: 1px solid #888;
+            width: 80%;
+            /* Could be more or less, depending on screen size */
+        }
+
+        /* Style the horizontal ruler */
+        hr {
+            border: 1px solid #f1f1f1;
+            margin-bottom: 25px;
+        }
+
+        /* The Modal Close Button (x) */
+        .close {
+            position: absolute;
+            right: 35px;
+            top: 15px;
+            font-size: 40px;
+            font-weight: bold;
+            color: #f1f1f1;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #f44336;
+            cursor: pointer;
+        }
+
+        /* Clear floats */
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        /* Change styles for cancel button and delete button on extra small screens */
+        @media screen and (max-width: 300px) {
+
+            .cancelbtn,
+            .deletebtn {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 
@@ -50,10 +141,13 @@
             <div class="form-container">
                 <form action="">
                     <input type="search" placeholder="search products" id="search" />
-                    <label for="search" onclick="window.location.replace('products.html?searchText='+document.getElementById('search').value)" class="fas fa-search"></label>
+                    <label for="search"
+                        onclick="window.location.replace('products.html?searchText='+document.getElementById('search').value)"
+                        class="fas fa-search"></label>
                 </form>
             </div>
-            <a id="loginSignUpLink" href="login.html"><button><span id="loginSignUpSpan">Login/SignUp</span></button></a>
+            <a id="loginSignUpLink" href="login.html"><button><span
+                        id="loginSignUpSpan">Login/SignUp</span></button></a>
 
         </div>
 
@@ -71,7 +165,8 @@
             <div class="icons">
 
 
-                <i style="cursor:pointer" onclick="window.location.replace('cart.html')" class="fas fa-shopping-cart"></i>
+                <i style="cursor:pointer" onclick="window.location.replace('cart.html')"
+                    class="fas fa-shopping-cart"></i>
                 <i style="cursor:pointer" onclick="window.location.replace('orders.html')" class="fas fa-history"></i>
                 <i style="cursor:pointer" onclick="window.location.replace('settings.html')" class="fas fa-cog"></i>
             </div>
@@ -100,8 +195,8 @@
                     <label for="nameInput">Name:</label>
                     <input type="text" name="nameInput" id="nameInput" class="form-control mb-3" placeholder="Name" />
                     <label for="phoneInput">Phone Number:</label>
-                    <input type="number" name="phoneInput" id="phoneInput" min="1000000000" max="9999999999" class="form-control mb-3"
-                        placeholder="Phone Number" />
+                    <input type="number" name="phoneInput" id="phoneInput" min="1000000000" max="9999999999"
+                        class="form-control mb-3" placeholder="Phone Number" />
                     <label for="addressInput">Address: </label>
                     <textarea id="addressInput" name="addressInput" class="form-control mb-3"
                         aria-label="With textarea"></textarea>
@@ -111,7 +206,8 @@
                             <a href="resetPassword.html" class="btn btn-primary btn-lg btn-block">Change Password</a>
                         </div>
                         <div class="col">
-                            <button type="button" class="btn btn-danger btn-lg btn-block">Delete Account</button>
+                            <button type="button" onclick="document.getElementById('id01').style.display='block'"
+                                class="btn btn-danger btn-lg btn-block">Delete Account</button>
                         </div>
                     </div>
                 </div>
@@ -158,6 +254,22 @@
 
 
     </section>
+
+    <div id="id01" class="modal" style="box-sizing: border-box">
+        <span onclick="document.getElementById('id01').style.display='none'" class="close"
+            title="Close Modal">&times;</span>
+        <form class="modal-content">
+            <div style="padding: 16px; text-align: center;">
+                <h1>Delete Account</h1>
+                <p>Are you sure you want to delete your account?</p>
+
+                <div class="row">
+                    <div class="col"><button onclick="document.getElementById('id01').style.display='none'" type="button" style="width: 100%;" class="btn btn-primary">Cancel</button></div>
+                    <div class="col"><button onclick="deleteUser(true,() => {window.location.replace('index.html')});" type="button" style="width: 100%;" class="btn btn-danger">Delete</button></div>
+                </div>
+            </div>
+        </form>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"></script>
@@ -179,8 +291,7 @@
         const loginSignUpSpan = document.getElementById("loginSignUpSpan");
         const loginSignUpLink = document.getElementById("loginSignUpLink");
 
-        function categoryResult(categories)
-        {
+        function categoryResult(categories) {
             let inner = "";
             categories.forEach((category) => {
                 inner += `<li class="nav-item dropdown">
@@ -195,26 +306,23 @@
             });
             categoryBar.innerHTML += inner;
         }
-        window.onload = function(){
-            getUserDetails(true,userResult);
+        window.onload = function () {
+            getUserDetails(true, userResult);
             fetchAllCategoriesAndSubcategories(categoryResult);
         }
 
-        function userResult(u)
-        {
-            if(u != null)
-                {
-                    loginSignUpSpan.innerHTML = "Sign Out";
-                    loginSignUpLink.href = "signOut.html";
-                }
+        function userResult(u) {
+            if (u != null) {
+                loginSignUpSpan.innerHTML = "Sign Out";
+                loginSignUpLink.href = "signOut.html";
+            }
             user = u;
             nameInput.value = user.name;
             phoneInput.value = Number(user.phoneNo);
             addressInput.value = user.address;
         }
 
-        function save()
-        {
+        function save() {
             let name = nameInput.value;
             let phone = phoneInput.value;
             let address = addressInput.value;
@@ -231,18 +339,15 @@
                 addressInput.style.border = "1px solid red";
                 no_prob = false;
             }
-            if(no_prob)
-            {
+            if (no_prob) {
                 user.name = name;
                 user.phoneNo = phone;
                 user.address = address;
-                updateUser(true,user,(code) => {
-                    if(code == codes.INSERTION_SUCCESS)
-                    {
+                updateUser(true, user, (code) => {
+                    if (code == codes.INSERTION_SUCCESS) {
                         window.location.replace("index.html");
                     }
-                    else
-                    {
+                    else {
                         //TODO: Update failure
                     }
                 });
