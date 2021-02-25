@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <!-- bootstrap CDN-->
-    
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" />
 
     <!-- Font Awesome CDN-->
     <script src="https://kit.fontawesome.com/99eb92985b.js" crossorigin="anonymous"></script>
@@ -34,10 +34,13 @@
             <div class="form-container">
                 <form action="">
                     <input type="search" placeholder="search products" id="search" />
-                    <label for="search" onclick="window.location.replace('products.html?searchText='+document.getElementById('search').value)" class="fas fa-search"></label>
+                    <label for="search"
+                        onclick="window.location.replace('products.html?searchText='+document.getElementById('search').value)"
+                        class="fas fa-search"></label>
                 </form>
             </div>
-            <a id="loginSignUpLink" href="login.html"><button><span id="loginSignUpSpan">Login/SignUp</span></button></a>
+            <a id="loginSignUpLink" href="login.html"><button><span
+                        id="loginSignUpSpan">Login/SignUp</span></button></a>
 
         </div>
 
@@ -55,7 +58,8 @@
             <div class="icons">
 
 
-                <i style="cursor:pointer" onclick="window.location.replace('cart.html')" class="fas fa-shopping-cart"></i>
+                <i style="cursor:pointer" onclick="window.location.replace('cart.html')"
+                    class="fas fa-shopping-cart"></i>
                 <i style="cursor:pointer" onclick="window.location.replace('orders.html')" class="fas fa-history"></i>
                 <i style="cursor:pointer" onclick="window.location.replace('settings.html')" class="fas fa-cog"></i>
             </div>
@@ -98,16 +102,6 @@
                     <!-- <a href="#"><button class="btn">discover</button></a> -->
                 </div>
             </div>
-
-            <!-- <div class="item">
-            <img src="imgs/home_img4.jpg" alt="">
-            <div class="content">
-                <h3>fresh groceries</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, neque.</p>
-                <a href="#"><button class="btn">discover</button></a>
-            </div>
-        </div>
-     -->
         </div>
 
     </section>
@@ -120,9 +114,9 @@
 
         <h1 class="heading"> <span>new arrivals</span> </h1>
 
-        <div class="box-container">
+        <div id="boxContainer" class="box-container">
 
-            <div class="box">
+            <!-- <div class="box">
                 <div class="image">
                     <img src="imgs/arr_img1.jpg" alt="">
                 </div>
@@ -142,11 +136,10 @@
                 <div class="overlay">
                     <a href="#" style="--i:1;" class="fas fa-heart"></a>
                     <a href="#" style="--i:2;" class="fas fa-shopping-cart"></a>
-                    <!-- <a href="#" style="--i:3;" class="fas fa-search"></a> -->
                 </div>
-            </div>
+            </div> -->
 
-            <div class="box">
+            <!-- <div class="box">
                 <div class="image">
                     <img src="imgs/arr_img2.jpg" alt="">
                 </div>
@@ -166,11 +159,10 @@
                 <div class="overlay">
                     <a href="#" style="--i:1;" class="fas fa-heart"></a>
                     <a href="#" style="--i:2;" class="fas fa-shopping-cart"></a>
-                    <!-- <a href="#" style="--i:3;" class="fas fa-search"></a> -->
                 </div>
-            </div>
+            </div> -->
 
-            <div class="box">
+            <!-- <div class="box">
                 <div class="image">
                     <img src="imgs/arr_img3.jpg" alt="">
                 </div>
@@ -190,11 +182,10 @@
                 <div class="overlay">
                     <a href="#" style="--i:1;" class="fas fa-heart"></a>
                     <a href="#" style="--i:2;" class="fas fa-shopping-cart"></a>
-                    <!-- <a href="#" style="--i:3;" class="fas fa-search"></a> -->
                 </div>
-            </div>
+            </div> -->
 
-            <div class="box">
+            <!-- <div class="box">
                 <div class="image">
                     <img src="imgs/arr_img4.jpg" alt="">
                 </div>
@@ -214,11 +205,10 @@
                 <div class="overlay">
                     <a href="#" style="--i:1;" class="fas fa-heart"></a>
                     <a href="#" style="--i:2;" class="fas fa-shopping-cart"></a>
-                    <!-- <a href="#" style="--i:3;" class="fas fa-search"></a> -->
                 </div>
-            </div>
+            </div> -->
 
-            <div class="box">
+            <!-- <div class="box">
                 <div class="image">
                     <img src="imgs/arr_img5.jpg" alt="">
                 </div>
@@ -238,11 +228,10 @@
                 <div class="overlay">
                     <a href="#" style="--i:1;" class="fas fa-heart"></a>
                     <a href="#" style="--i:2;" class="fas fa-shopping-cart"></a>
-                    <!-- <a href="#" style="--i:3;" class="fas fa-search"></a> -->
                 </div>
-            </div>
+            </div> -->
 
-            <div class="box">
+            <!-- <div class="box">
                 <div class="image">
                     <img src="imgs/arr_img6.jpg" alt="">
                 </div>
@@ -262,9 +251,8 @@
                 <div class="overlay">
                     <a href="#" style="--i:1;" class="fas fa-heart"></a>
                     <a href="#" style="--i:2;" class="fas fa-shopping-cart"></a>
-                    <!-- <a href="#" style="--i:3;" class="fas fa-search"></a> -->
                 </div>
-            </div>
+            </div> -->
 
         </div>
 
@@ -637,38 +625,38 @@
 
     <!-- owl carousel js file cdn link  -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"></script>
 
     <!-- custom js file link  -->
     <script src="./scripts/homePage.js"></script>
-	<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
-	<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
-	<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
-	<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
-	<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-firestore.js"></script>
-	<script src="https://www.gstatic.com/firebasejs/8.2.8/firebase-storage.js"></script>
-	<script src="./scripts/models.js"></script>
-	<script src="./scripts/firebaseHandlers.js"></script>
-	<script src="./scripts/interface.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.8/firebase-storage.js"></script>
+    <script src="./scripts/models.js"></script>
+    <script src="./scripts/firebaseHandlers.js"></script>
+    <script src="./scripts/interface.js"></script>
     <script>
         const categoryBar = document.getElementById("categoryBar");
         const loginSignUpSpan = document.getElementById("loginSignUpSpan");
         const loginSignUpLink = document.getElementById("loginSignUpLink");
+        const boxContainer = document.getElementById("boxContainer");
+        let newestProducts = [];
 
-        window.onload = function ()
-        {
-            getUserDetails(true,(u) => {
-                if(u != null)
-                {
+        window.onload = function () {
+            getUserDetails(true, (u) => {
+                if (u != null) {
                     loginSignUpSpan.innerHTML = "Sign Out";
                     loginSignUpLink.href = "signOut.html";
                 }
             });
             fetchAllCategoriesAndSubcategories(categoryResult);
+            fetchAllProducts(newestProductsResult);
         }
 
-        function categoryResult(categories)
-        {
+        function categoryResult(categories) {
             let inner = "";
             categories.forEach((category) => {
                 inner += `<li class="nav-item dropdown">
@@ -684,17 +672,58 @@
             categoryBar.innerHTML += inner;
         }
 
-        // <li class="nav-item dropdown">
-        //                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-        //                     aria-haspopup="true" aria-expanded="false">
-        //                     Dropdown link
-        //                 </a>
-        //                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-        //                     <a class="dropdown-item" style="color:black" href="#">Action</a>
-        //                     <a class="dropdown-item" href="#">Another action</a>
-        //                     <a class="dropdown-item" href="#">Something else here</a>
+        function newestProductsResult(productsArray) {
+            products = productsArray;
+            products.splice(6);
+            let i = 0;
+            products.forEach((product) => {
+                let image;
+                if (product.images.length > 0) {
+                    image = product.images[0];
+                }
+                else {
+                    image = "imgs/product_placeholder.gif";
+                }
+                boxContainer.innerHTML += `<div class="box">
+                <div class="image">
+                    <img src="${image}" alt="">
+                </div>
+                <div class="info">
+                    <h3>${product.name}</h3>
+                    <div class="subInfo">
+                        <strong class="price"> $${product.price} </strong>
+                        <div class="stars">
+                            <button onclick="addToCart(${i})" class="btn btn-primary btn-sm">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+                i++;
+            });
+        }
+
+        // <div class="box">
+        //         <div class="image">
+        //             <img src="imgs/arr_img1.jpg" alt="">
+        //         </div>
+        //         <div class="info">
+        //             <h3>smart tv</h3>
+        //             <div class="subInfo">
+        //                 <strong class="price"> $100 <span>$150</span> </strong>
+        //                 <div class="stars">
+        //                     <i class="fas fa-star"></i>
+        //                     <i class="fas fa-star"></i>
+        //                     <i class="fas fa-star"></i>
+        //                     <i class="fas fa-star"></i>
+        //                     <i class="fas fa-star-half"></i>
         //                 </div>
-        //             </li>
+        //             </div>
+        //         </div>
+        //         <div class="overlay">
+        //             <a href="#" style="--i:1;" class="fas fa-heart"></a>
+        //             <a href="#" style="--i:2;" class="fas fa-shopping-cart"></a>
+        //         </div>
+        //     </div>
     </script>
 </body>
 <!-- <p id="text">Some text</p>
