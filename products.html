@@ -168,11 +168,12 @@
 		let sellerClickedBool = false;
 
 		window.onload = function () {
+			fetchOrdersForSeller(sellerID, true,null);
 			if (category == null && subCategory == null && searchText == null && sellerID == null) {
 				window.location.replace("index.html");
 			}
 			if (sellerID != null) {
-				getUserDetails(false, sellerResult);
+				fetchProductsForSeller(sellerID, sellerResult);
 			}
 			else if (searchText != null) {
 				fetchAllProducts(searchResult);
@@ -197,45 +198,46 @@
 			}
 		}
 
-		function sellerResult(seller) {
-			searchDiv.innerHTML += `Getting products by Seller ${seller.company}`;
-			prouducts = seller.prouducts;
-			if(searchText != null)
-			{
-				searchDiv.innerHTML += ` containing '${searchText}' in name or description`;
-				let p = [];
-				prouducts.forEach((product) => {
-					if(product.name.toLowerCase().includes(searchText) || product.description.toLowerCase().includes(searchText))
-					{
-						p.push(product);
-					}
-				});
-				products = p;
-			}
-			if(category != null)
-			{
-				searchDiv.innerHTML += ` in Category ${category}`;
-				let p = [];
-				prouducts.forEach((product) => {
-					if(product.category.toLowerCase() == category.toLowerCase())
-					{
-						p.push(product);
-					}
-				});
-				products = p;
-			}
-			if(subCategory != null)
-			{
-				searchDiv.innerHTML += ` in Sub-Category ${subCategory}`;
-				let p = [];
-				prouducts.forEach((product) => {
-					if(product.subcategory.toLowerCase() == subCategory.toLowerCase())
-					{
-						p.push(product);
-					}
-				});
-				products = p;
-			}
+		function sellerResult(productArray) {
+			searchDiv.innerHTML += `Getting products by Seller`;
+			console.log(productArray);
+			// prouducts = seller.prouducts;
+			// if(searchText != null)
+			// {
+			// 	searchDiv.innerHTML += ` containing '${searchText}' in name or description`;
+			// 	let p = [];
+			// 	prouducts.forEach((product) => {
+			// 		if(product.name.toLowerCase().includes(searchText) || product.description.toLowerCase().includes(searchText))
+			// 		{
+			// 			p.push(product);
+			// 		}
+			// 	});
+			// 	products = p;
+			// }
+			// if(category != null)
+			// {
+			// 	searchDiv.innerHTML += ` in Category ${category}`;
+			// 	let p = [];
+			// 	prouducts.forEach((product) => {
+			// 		if(product.category.toLowerCase() == category.toLowerCase())
+			// 		{
+			// 			p.push(product);
+			// 		}
+			// 	});
+			// 	products = p;
+			// }
+			// if(subCategory != null)
+			// {
+			// 	searchDiv.innerHTML += ` in Sub-Category ${subCategory}`;
+			// 	let p = [];
+			// 	prouducts.forEach((product) => {
+			// 		if(product.subcategory.toLowerCase() == subCategory.toLowerCase())
+			// 		{
+			// 			p.push(product);
+			// 		}
+			// 	});
+			// 	products = p;
+			// }
 			displayProducts();
 		}
 
