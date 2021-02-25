@@ -341,9 +341,28 @@ class Order {
         productsJSON.forEach((product) => {
             products.push(Object.assign({}, product));
         });
-        return new Order(products, json.customerName, json.customerNo, json.customerAddress, json.id, json.status, json.status);
+        return new Order(products, json.customerName, json.customerNo, json.customerAddress, json.id, json.status, json.orderDate);
     }
 }
+
+// var orderConverter = {
+//     toFirestore: function(order) {
+//         return {
+//             id: order.id,
+//         customerName: order.customerName, 
+//         customerNo: order.customerNo,
+//         customerAddress: order.customerAddress,
+//         products: order.products,
+//         status: order.status,
+//         orderDate: firebase.
+//             };
+//     },
+//     fromFirestore: function(snapshot, options){
+//         const data = snapshot.data(options);
+//         return new Category(data.name, data.subcategories);
+//     }
+// };
+
 
 
 

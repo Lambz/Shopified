@@ -255,6 +255,7 @@ function updateOrderStatus(order, newStatus, uiCallback) {
 
 function fetchOrdersForSeller(sellerID, includeCancelled, uiCallback) {
     fetchOrdersFromDB(includeCancelled, (orders) => {
+        console.log(orders);
         let orderArray = [];
         for (let i = 0; i < orders.length; i++) {
             let val = orders[i].products;
@@ -316,21 +317,27 @@ function fetchAllProductsForSeller(sellerID, uiCallback) {
 }
 
 
+function getRandomProductFromDB(uiCallback) {
+    fetchAllProductsInDB((orders) => {
+        uiCallback(orders[Math.floor(Math.random() * orders.length)]);
+    })
+}
 
 
 // let user = new Seller("Name", "Company", "SomeEmail@NameCompanyMail.com", "Password");
-// // // // let category = new Category("some other category", ["sub2"]);
+// // // // // let category = new Category("some other category", ["sub2"]);
 initializeDB(); 
-// // // // console.log(user);
-// // // // signUp(user, false, () => {});
+// // // // // console.log(user);
+// // // // // signUp(user, false, () => {});
 
 // signIn(user.email, user.password, false, ()=> {});
-// // // let product = new Product("A", "someId", "new category", "some subcategory", "10", user.name, sessionStorage.getItem("uid"), "2", [], 100, "some");
+// console.log(sessionStorage.getItem("uid"));
+// let product = new Product("A", "someotherId", "category One", "some another subcategory", "10", user.name, sessionStorage.getItem("uid"), "2", [], 100, "some");
 
-// // // // insertProduct(product, user, false, ()=> {
+// insertProduct(product, user, true, ()=> {
 
-// // // // })
-// // // // deleteProduct("someId", user, () => {});
+// })
+// // // // // deleteProduct("someId", user, () => {});
 // // // let order = new Order([], user.name, 797797978978, "some address");
 // // // order.addProduct(product);
 // // // placeOrder(order, () => {
@@ -339,3 +346,7 @@ initializeDB();
 // fetchAllProductsForSeller("T3RIIkwY4QPiwbFzxP6mScw8N3H3", (orders) => {
 //     console.log(orders);
 // })
+
+// getRandomProductFromDB((order) => {
+//     console.log(order);
+// });
