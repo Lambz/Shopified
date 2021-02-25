@@ -37,42 +37,46 @@
 
 	<header>
 
-        <div class="header-1">
+		<div class="header-1">
 
-            <a href="#" class="logo">Shopified </a>
+			<a href="#" class="logo">Shopified </a>
 
-            <div class="form-container">
-                <form action="">
-                    <input type="search" placeholder="search products" id="search" />
-                    <label for="search" onclick="window.location.replace('products.html?searchText='+document.getElementById('search').value)" class="fas fa-search"></label>
-                </form>
-            </div>
-            <a id="loginSignUpLink" href="login.html"><button><span id="loginSignUpSpan">Login/SignUp</span></button></a>
+			<div class="form-container">
+				<form action="">
+					<input type="search" placeholder="search products" id="search" />
+					<label for="search"
+						onclick="window.location.replace('products.html?searchText='+document.getElementById('search').value)"
+						class="fas fa-search"></label>
+				</form>
+			</div>
+			<a id="loginSignUpLink" href="login.html"><button><span
+						id="loginSignUpSpan">Login/SignUp</span></button></a>
 
-        </div>
+		</div>
 
-        <div class="header-2">
+		<div class="header-2">
 
-            <div id="menu" class="fas fa-bars"></div>
+			<div id="menu" class="fas fa-bars"></div>
 
-            <nav class="navbar">
-                <ul id="categoryBar">
-                    <li><a href="index.html">home</a></li>
-                </ul>
-            </nav>
-
-
-            <div class="icons">
+			<nav class="navbar">
+				<ul id="categoryBar">
+					<li><a href="index.html">home</a></li>
+				</ul>
+			</nav>
 
 
-                <i style="cursor:pointer" onclick="window.location.replace('cart.html')" class="fas fa-shopping-cart"></i>
-                <i style="cursor:pointer" onclick="window.location.replace('orders.html')" class="fas fa-history"></i>
-                <i style="cursor:pointer" onclick="window.location.replace('settings.html')" class="fas fa-cog"></i>
-            </div>
+			<div class="icons">
 
-        </div>
 
-    </header>
+				<i style="cursor:pointer" onclick="window.location.replace('cart.html')"
+					class="fas fa-shopping-cart"></i>
+				<i style="cursor:pointer" onclick="window.location.replace('orders.html')" class="fas fa-history"></i>
+				<i style="cursor:pointer" onclick="window.location.replace('settings.html')" class="fas fa-cog"></i>
+			</div>
+
+		</div>
+
+	</header>
 
 	<div class="container py-5 my-5 px-5">
 		<div id="searchDiv" class="row mb-5">
@@ -165,41 +169,39 @@
 		let products;
 		let sellerClickedBool = false;
 		const categoryBar = document.getElementById("categoryBar");
-        const loginSignUpSpan = document.getElementById("loginSignUpSpan");
-        const loginSignUpLink = document.getElementById("loginSignUpLink");
+		const loginSignUpSpan = document.getElementById("loginSignUpSpan");
+		const loginSignUpLink = document.getElementById("loginSignUpLink");
 
-        function categoryResult(categories)
-        {
+		function categoriesResult(categories) {
 			console.log(categories);
-            let inner = "";
-            categories.forEach((category) => {
-                inner += `<li class="nav-item dropdown">
+			let inner = "";
+			categories.forEach((category) => {
+				inner += `<li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="products.html?category=${category.name}" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 ${category.name}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">`;
-                category.subcategories.forEach((subCategory) => {
-                    inner += `<a class="dropdown-item" style="color:black" href="products.html?subCategory=${subCategory}">${subCategory}</a>`;
-                });
-                inner += `</div></li>`
-            });
-            categoryBar.innerHTML += inner;
-        }
+				category.subcategories.forEach((subCategory) => {
+					inner += `<a class="dropdown-item" style="color:black" href="products.html?subCategory=${subCategory}">${subCategory}</a>`;
+				});
+				inner += `</div></li>`
+			});
+			categoryBar.innerHTML += inner;
+		}
 
 		window.onload = function () {
-			getUserDetails(true,(u) => {
-                if(u != null)
-                {
-                    loginSignUpSpan.innerHTML = "Sign Out";
-                    loginSignUpLink.href = "signOut.html";
-                }
-            });
-            fetchAllCategoriesAndSubcategories(categoryResult);
+			getUserDetails(true, (u) => {
+				if (u != null) {
+					loginSignUpSpan.innerHTML = "Sign Out";
+					loginSignUpLink.href = "signOut.html";
+				}
+			});
+			fetchAllCategoriesAndSubcategories(categoriesResult);
 			if (category == null && subCategory == null && searchText == null && sellerID == null) {
 				window.location.replace("index.html");
 			}
 			if (sellerID != null) {
-				// fetchProductsForSeller(sellerID, sellerResult);
+				fetchAllProductsForSeller(sellerID, sellerResult);
 			}
 			else if (searchText != null) {
 				fetchAllProducts(searchResult);
@@ -227,43 +229,43 @@
 		function sellerResult(productArray) {
 			searchDiv.innerHTML += `Getting products by Seller`;
 			console.log(productArray);
-			// prouducts = seller.prouducts;
-			// if(searchText != null)
-			// {
-			// 	searchDiv.innerHTML += ` containing '${searchText}' in name or description`;
-			// 	let p = [];
-			// 	prouducts.forEach((product) => {
-			// 		if(product.name.toLowerCase().includes(searchText) || product.description.toLowerCase().includes(searchText))
-			// 		{
-			// 			p.push(product);
-			// 		}
-			// 	});
-			// 	products = p;
-			// }
-			// if(category != null)
-			// {
-			// 	searchDiv.innerHTML += ` in Category ${category}`;
-			// 	let p = [];
-			// 	prouducts.forEach((product) => {
-			// 		if(product.category.toLowerCase() == category.toLowerCase())
-			// 		{
-			// 			p.push(product);
-			// 		}
-			// 	});
-			// 	products = p;
-			// }
-			// if(subCategory != null)
-			// {
-			// 	searchDiv.innerHTML += ` in Sub-Category ${subCategory}`;
-			// 	let p = [];
-			// 	prouducts.forEach((product) => {
-			// 		if(product.subcategory.toLowerCase() == subCategory.toLowerCase())
-			// 		{
-			// 			p.push(product);
-			// 		}
-			// 	});
-			// 	products = p;
-			// }
+			products = productArray;
+			if(searchText != null)
+			{
+				searchDiv.innerHTML += ` containing '${searchText}' in name or description`;
+				let p = [];
+				prouducts.forEach((product) => {
+					if(product.name.toLowerCase().includes(searchText) || product.description.toLowerCase().includes(searchText))
+					{
+						p.push(product);
+					}
+				});
+				products = p;
+			}
+			if(category != null)
+			{
+				searchDiv.innerHTML += ` in Category ${category}`;
+				let p = [];
+				prouducts.forEach((product) => {
+					if(product.category.toLowerCase() == category.toLowerCase())
+					{
+						p.push(product);
+					}
+				});
+				products = p;
+			}
+			if(subCategory != null)
+			{
+				searchDiv.innerHTML += ` in Sub-Category ${subCategory}`;
+				let p = [];
+				prouducts.forEach((product) => {
+					if(product.subcategory.toLowerCase() == subCategory.toLowerCase())
+					{
+						p.push(product);
+					}
+				});
+				products = p;
+			}
 			displayProducts();
 		}
 
@@ -326,16 +328,23 @@
 
 
 		function displayProducts() {
-			products.forEach((product) => {
-				let image;
-				if (product.images.length > 0) {
-					image = product.images[0];
-				}
-				else {
-					image = "imgs/product_placeholder.gif";
-				}
-				productsDiv.innerHTML += `<div style="width: 100%;" onclick="productClicked('${product.id}')" class="row mb-5 productDiv"><div style="text-align: center;" class="col-4"><img src="${image}" /></div><div class="col" style="vertical-align:middle;"><div class="row"><h2>${product.name}</h2></div><div class="row"><h3>${product.price}</h3></div><div class="row">${product.description}</div><div class="row mt-2">Sold By: <button onclick="sellerClicked('${product.seller_id}')">${product.seller}</button></div></div></div>`;
-			});
+			// console.log(prouducts);
+			if (products != null) {
+				console.log(1);
+				products.forEach((product) => {
+					console.log(product);
+					let image;
+					if (product.images.length > 0) {
+						image = product.images[0];
+					}
+					else {
+						image = "imgs/product_placeholder.gif";
+					}
+					console.log(product);
+					productsDiv.innerHTML += `<div style="width: 100%;" onclick="productClicked('${product.id}')" class="row mb-5 productDiv"><div style="text-align: center;" class="col-4"><img src="${image}" /></div><div class="col" style="vertical-align:middle;"><div class="row"><h2>${product.name}</h2></div><div class="row"><h3>${product.price}</h3></div><div class="row">${product.description}</div><div class="row mt-2">Sold By: <button onclick="sellerClicked('${product.seller_id}')">${product.seller}</button></div></div></div>`;
+				});
+			}
+
 		}
 
 		function productClicked(id) {
