@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<!-- bootstrap CDN-->
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" />
+
+	<!-- Font Awesome CDN-->
+	<script src="https://kit.fontawesome.com/99eb92985b.js" crossorigin="anonymous"></script>
+
+	<!-- owl carousel css file cdn link  -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+
+	<!-- CSS Stylesheet-->
+	<link rel="stylesheet" href="./CSS/homePage.css" />
+
+	<style>
+		img {
+			max-height: 200px;
+		}
+
+		.productDiv {
+			cursor: pointer;
+		}
+	</style>
+</head>
+
+<body>
+
+
+	<!-- header section starts  -->
+
+	<header>
+
+		<div class="header-1">
+
+			<a href="#" class="logo"> <i class="fas fa-shopping-bag"></i> Shopified </a>
+
+			<div class="form-container">
+				<form action="">
+					<input type="search" placeholder="search products" id="search" />
+					<label for="search" class="fas fa-search"></label>
+				</form>
+			</div>
+
+		</div>
+
+		<div class="header-2">
+
+			<div id="menu" class="fas fa-bars"></div>
+
+			<nav class="navbar">
+				<ul>
+					<li><a class="active" href="#home">home</a></li>
+					<li><a href="#arrival">arrival</a></li>
+					<li><a href="#featured">featured</a></li>
+					<li><a href="#gallery">gallery</a></li>
+					<li><a href="#deal">deal</a></li>
+					<li><a><button><span>Login/SignUp</span></button></a></li>
+				</ul>
+			</nav>
+
+			<div class="icons">
+				<a href="#" class="fas fa-heart"></a>
+				<a href="#" class="fas fa-shopping-cart"></a>
+				<a href="#" class="fas fa-user"></a>
+			</div>
+
+		</div>
+
+	</header>
+
+	<div class="container py-5 my-5 px-5">
+		<div id="searchDiv" class="row mb-5">
+
+		</div>
+		<div id="productsDiv" class="row">
+			<!-- <div style="width: 100%;" class="row">
+				<div class="col-4">
+					<img src="imgs/product_placeholder.gif" />
+				</div>
+				<div class="col">
+					<div class="row">Name</div>
+					<div class="row">Price</div>
+					<div class="row">description</div>
+					<div class="row">Sold By</div>
+				</div>
+			</div> -->
+		</div>
+	</div>
+
+	<section class="footer">
+
+		<div class="box-container">
+
+			<div class="box">
+				<a href="#" class="logo"> <i class="fas fa-shopping-bag"></i> Shopified </a>
+				<p>This is a website for every discount hunter.
+					Find the intersting, fashionable, smart, hi-tech products at one platform.Explore every product to
+					find best deals.</p>
+			</div>
+
+			<div class="box">
+				<h3>links</h3>
+				<a href="#">home</a>
+				<a href="#">arrival</a>
+				<a href="#">featured</a>
+				<a href="#">gallery</a>
+				<a href="#">deal</a>
+			</div>
+
+			<div class="box">
+				<h3>contact us</h3>
+				<p> <i class="fas fa-home"></i>
+					Markham and Ellesmare
+					Scarborough, Toronto, ON
+				</p>
+				<p> <i class="fas fa-phone"></i>
+					+1437*******
+				</p>
+				<p> <i class="fas fa-globe"></i>
+					shopified@shopified.com
+				</p>
+			</div>
+
+		</div>
+
+
+
+	</section>
+
+	<!-- footer section ends -->
+
+
+
+	<!-- jquery cdn link  -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	<!-- owl carousel js file cdn link  -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"></script>
+
+	<!-- custom js file link  -->
+	<script src="./scripts/homePage.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-firestore.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.2.8/firebase-storage.js"></script>
+	<script src="./scripts/models.js"></script>
+	<script src="./scripts/firebaseHandlers.js"></script>
+	<script src="./scripts/interface.js"></script>
+	<script>
+		const category = new URL(window.location.href).searchParams.get("category");
+		const subCategory = new URL(window.location.href).searchParams.get("subCategory");
+		const searchText = new URL(window.location.href).searchParams.get("searchText");
+		const sellerID = new URL(window.location.href).searchParams.get("sellerID");
+		const productsDiv = document.getElementById("productsDiv");
+		const searchDiv = document.getElementById("searchDiv");
+
+		let products;
+		let sellerClickedBool = false;
+
+		window.onload = function () {
+			if (category == null && subCategory == null && searchText == null && sellerID == null) {
+				window.location.replace("index.html");
+			}
+			if (sellerID != null) {
+				getUserDetails(false, sellerResult);
+			}
+			else if (searchText != null) {
+				fetchAllProducts(searchResult);
+				searchDiv.innerHTML += `Searching products having '${searchText}' in name or description`;
+				if (category != null) {
+					searchDiv.innerHTML += ` in Category ${category}`;
+				}
+				if (subCategory != null) {
+					searchDiv.innerHTML += ` in Sub-Category ${subCategory}`;
+				}
+			}
+			else if (category != null) {
+				fetchAllProductsForCategory(category, categoryResult);
+				searchDiv.innerHTML += `Getting Products for category ${category}`;
+				if (subCategory != null) {
+					searchDiv.innerHTML += ` in Sub-Category ${subCategory}`;
+				}
+			}
+			else if (subCategory != null) {
+				fetchAllProductsForSubcategory(subCategory, subCategoryResult);
+				searchDiv.innerHTML += `Getting Products for Sub-Category ${subCategory}`;
+			}
+		}
+
+		function sellerResult(seller) {
+			searchDiv.innerHTML += `Getting products by Seller ${seller.company}`;
+			prouducts = seller.prouducts;
+			if(searchText != null)
+			{
+				searchDiv.innerHTML += ` containing '${searchText}' in name or description`;
+				let p = [];
+				prouducts.forEach((product) => {
+					if(product.name.toLowerCase().includes(searchText) || product.description.toLowerCase().includes(searchText))
+					{
+						p.push(product);
+					}
+				});
+				products = p;
+			}
+			if(category != null)
+			{
+				searchDiv.innerHTML += ` in Category ${category}`;
+				let p = [];
+				prouducts.forEach((product) => {
+					if(product.category.toLowerCase() == category.toLowerCase())
+					{
+						p.push(product);
+					}
+				});
+				products = p;
+			}
+			if(subCategory != null)
+			{
+				searchDiv.innerHTML += ` in Sub-Category ${subCategory}`;
+				let p = [];
+				prouducts.forEach((product) => {
+					if(product.subcategory.toLowerCase() == subCategory.toLowerCase())
+					{
+						p.push(product);
+					}
+				});
+				products = p;
+			}
+			displayProducts();
+		}
+
+		function searchResult(productArray) {
+			products = [];
+			if (category != null) {
+				if (subCategory != null) {
+					productArray.forEach((product) => {
+						if ((product.name.toLowerCase().includes(searchText) || product.description.toLowerCase().includes(searchText)) && product.category.toLowerCase() == category.toLowerCase() && product.subcategory.toLowerCase() == subCategory.toLowerCase()) {
+							products.push(product);
+						}
+					});
+				}
+				else {
+					productArray.forEach((product) => {
+						if ((product.name.toLowerCase().includes(searchText) || product.description.toLowerCase().includes(searchText)) && product.category.toLowerCase() == category.toLowerCase()) {
+							products.push(product);
+						}
+					});
+				}
+			}
+			else if (subCategory != null) {
+				productArray.forEach((product) => {
+					if ((product.name.toLowerCase().includes(searchText) || product.description.toLowerCase().includes(searchText)) && product.subcategory.toLowerCase() == subCategory.toLowerCase()) {
+						products.push(product);
+					}
+				});
+			}
+			else {
+				productArray.forEach((product) => {
+					if (product.name.toLowerCase().includes(searchText) || product.description.toLowerCase().includes(searchText)) {
+						products.push(product);
+					}
+				});
+			}
+			displayProducts();
+		}
+
+		function categoryResult(productArray) {
+			// console.log("categoryResult", productArray);
+			if (subCategory != null) {
+				products = [];
+				productArray.forEach((product) => {
+					if (product.subcategory.toLowerCase() == subCategory.toLowerCase()) {
+						products = productArray;
+					}
+				});
+			}
+			else {
+				products = productArray;
+			}
+			displayProducts();
+		}
+
+		function subCategoryResult(productArray) {
+			// console.log("subCategoryResult", productArray);
+			products = productArray;
+			displayProducts();
+		}
+
+
+		function displayProducts() {
+			products.forEach((product) => {
+				let image;
+				if (product.images.length > 0) {
+					image = product.images[0];
+				}
+				else {
+					image = "imgs/product_placeholder.gif";
+				}
+				productsDiv.innerHTML += `<div style="width: 100%;" onclick="productClicked('${product.id}')" class="row mb-5 productDiv"><div style="text-align: center;" class="col-4"><img src="${image}" /></div><div class="col" style="vertical-align:middle;"><div class="row"><h2>${product.name}</h2></div><div class="row"><h3>${product.price}</h3></div><div class="row">${product.description}</div><div class="row mt-2">Sold By: <button onclick="sellerClicked('${product.seller_id}')">${product.seller}</button></div></div></div>`;
+			});
+		}
+
+		function productClicked(id) {
+			if (!sellerClickedBool) {
+				window.location.replace("product.html?id=" + id);
+			}
+		}
+
+		function sellerClicked(id) {
+			sellerClickedBool = true;
+			//TODO: Seller Clicked
+		}
+	</script>
+</body>
+<!-- <p id="text">Some text</p>
+</body> -->
+
+
+</html>
