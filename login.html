@@ -30,10 +30,7 @@
 				</form>
 				<form class="sign-up-form" onsubmit="sUp();return false">
 					<h2 class="title">Sign up</h2>
-					<!-- <div class="input-field">
-                <i class="fas fa-user"></i>
-                <input type="text" placeholder="Username" />
-              </div> -->
+					
 					<div class="input-field">
 						<i class="fas fa-user"></i>
 						<input id="signUpNameInput" type="text" placeholder="Name" />
@@ -60,21 +57,7 @@
 					</div>
 					<!-- <button onclick="sUp()" class="btn">Sign up</button> -->
 					<input value="Sign Up" type="submit" class="btn"/>
-					<!-- <p class="social-text">Or Sign up with social platforms</p>
-              <div class="social-media">
-                <a href="#" class="social-icon">
-                  <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="#" class="social-icon">
-                  <i class="fab fa-twitter"></i>
-                </a>
-                <a href="#" class="social-icon">
-                  <i class="fab fa-google"></i>
-                </a>
-                <a href="#" class="social-icon">
-                  <i class="fab fa-linkedin-in"></i>
-                </a>
-              </div> -->
+					
 				</form>
 			</div>
 		</div>
@@ -189,38 +172,38 @@
 			if(name == "")
 			{
 				signUpNameInput.style.border = "1px solid red";
-				noProb = false;
+				no_prob = false;
 			}
 			if(email == "")
 			{
 				signUpEmailInput.style.border = "1px solid red";
-				noProb = false;
+				no_prob = false;
 			}
 			if(password == "" || password.length<6)
 			{
 				signUpPasswordInput.style.border = "1px solid red";
-				noProb = false;
+				no_prob = false;
 			}
 			if(retypePassword == "")
 			{
 				signUpRetypePasswordInput.style.border = "1px solid red";
-				noProb = false;
+				no_prob = false;
 			}
 			if(address == "")
 			{
 				signUpAddressInput.style.border = "1px solid red";
-				noProb = false;
+				no_prob = false;
 			}
 			if(phone == "")
 			{
 				signUpPhoneInput.style.border = "1px solid red";
-				noProb = false;
+				no_prob = false;
 			}
 			if(password != retypePassword)
 			{
 				signUpPasswordInput.style.border = "1px solid red";
 				signUpRetypePasswordInput.style.border = "1px solid red";
-				noProb = false;
+				no_prob = false;
 			}
 			if(no_prob)
 			{

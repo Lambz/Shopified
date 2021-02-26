@@ -72,30 +72,32 @@
     </header>
 
     <div class="container py-5 my-5">
-        <div class="row">
-            <table>
-                <tbody>
-                    <tr>
-                        <td>
-                            Name:
-                        </td>
-                        <td><input type="text" id="nameInput" name="nameInput" /></td>
-                    </tr>
-                    <tr>
-                        <td>Phone Number:</td>
-                        <td><input type="number" id="phoneInput" name="phoneInput" min="1000000000" max="9999999999" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td for="addressInput">Address:</td>
-                        <td><textarea id="addressInput" name="addressInput"></textarea></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="row">
-            <button disabled>Pay Online</button>
-            <button onclick="addOrderClicked()">Pay on Delivery</button>
+        <div class="jumbotron">
+            <div class="card">
+                <div class="card-header container-fluid">
+                    <!-- Products -->
+                    <div class="row text-center">
+                        <div class="col">
+                            <h4 class=" p-1">Confirm Details</h4>
+                        </div>
+                       
+                    </div>
+                </div>
+                <div class="card-body">
+                    <label for="nameInput">Name:</label>
+                    <input type="text" name="nameInput" id="nameInput" class="form-control mb-3" placeholder="Name" />
+                    <label for="phoneInput">Phone Number:</label>
+                    <input type="number" name="phoneInput" id="phoneInput" min="1000000000" max="9999999999"
+                        class="form-control mb-3" placeholder="Phone Number" />
+                    <label for="addressInput">Address: </label>
+                    <textarea id="addressInput" name="addressInput" class="form-control mb-3"
+                        aria-label="With textarea"></textarea>
+                    <div class="row">
+                        <button class="btn btn-primary btn-lg btn-block" disabled>Pay Online</button>
+                        <button class="btn btn-primary btn-lg btn-block" onclick="addOrderClicked()">Pay on Delivery</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -110,15 +112,7 @@
                     find best deals.</p>
             </div>
 
-            <!-- <div class="box">
-                <h3>links</h3>
-                <a href="#">home</a>
-                <a href="#">arrival</a>
-                <a href="#">featured</a>
-                <a href="#">gallery</a>
-                <a href="#">deal</a>
-            </div>
-     -->
+        
             <div class="box">
                 <h3>contact us</h3>
                 <p> <i class="fas fa-home"></i>

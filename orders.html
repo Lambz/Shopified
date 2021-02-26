@@ -242,7 +242,7 @@
                 let date = new Date(order.orderDate);
                 date.setDate(date.getDate() + max);
                 // console.log(formatDate(date));
-                tbody.innerHTML += `<tr onclick=orderClicked('${order.id}')><td>${order.products.length}</td><td>${formatDate(order.orderDate)}</td><td>${status}</td><td>${formatDate(date)}</td><td>${total}</td></tr>`;
+                tbody.innerHTML += `<tr onclick=orderClicked('${order.id}')><td>${order.products.length}</td><td>${formatDate(order.orderDate)}</td><td>${status}</td><td>${formatDate(date)}</td><td>${total}</td><td></tr>`;
             });
         }
 
