@@ -152,6 +152,7 @@
         let user;
         let product;
         let xpressOrder = false;
+        let q;
         const categoryBar = document.getElementById("categoryBar");
         const loginSignUpSpan = document.getElementById("loginSignUpSpan");
         const loginSignUpLink = document.getElementById("loginSignUpLink");
@@ -168,6 +169,7 @@
                     if(searchParams.has('productId')) {
                         xpressOrder = true;
                         let productID = searchParams.get('productId');
+                        q = searchParams.get('quantity');
                         fetchProductById(productID, (p) => {
                             product = p;
                         })
@@ -230,6 +232,7 @@
             {
                 let order = new Order([],name,phone,address);
                 if (xpressOrder) {
+                    product.quantity = q;
                     order.addProduct(product);
                     user.addOrder(order);
                     updateUser(true,user,result);

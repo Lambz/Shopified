@@ -81,7 +81,7 @@
 
     </header>
 
-	<div class="container py-5 my-5">
+	<div class="py-5 my-5 mx-5 my-5">
 		<div class="row mb-3" id="links"><a href="index.html">Home</a>&nbsp;>&nbsp;</div>
 		<div class="row ">
 			<div class="col-md-6">
@@ -107,7 +107,7 @@
 					</a>
 				</div>
 			</div>
-			<div class="col-md-6">
+			<div id="dataDiv" class="col-md-6">
 				<div class="row">
 					<h2 id="productNameField">Product Name</h2>
 				</div>
@@ -117,15 +117,17 @@
 				<div id="productDescriptionField" class="div">
 					Product Description
 				</div>
-				<div id="productShippingTimeField" class="row">
+				<div id="productShippingTimeField" class="row mt-1">
 					Estimated Shipping Time
 				</div>
-				<div id="productSoldByField" class="row">Sold By:</div>
-				<div class="row">
-					<label for="quantityField">Quantity:</label>
-					<input id="quantityField" name="quantityField" min="1" type="number" value="1"/>
+				<div id="productSoldByField" class="row mt-1">Sold By:</div>
+				<div class="row mt-2">
+					<div class="col-2">
+						<label for="quantityField">Quantity:</label>&nbsp;
+					</div>
+					<div class="col-8"><input id="quantityField" class="form-control" name="quantityField" min="1" type="number" value="1"/></div>
 				</div>
-				<div class="row">
+				<div class="row mt-2">
 					<div class="col">
 						<button class="btn btn-primary" onclick="addToCartClicked()">Add to Cart</button>
 					</div>
@@ -197,6 +199,7 @@
 		const productSoldByField = document.getElementById("productSoldByField");
 		const quantityField = document.getElementById("quantityField");
 		const links = document.getElementById("links");
+		const dataDiv = document.getElementById("dataDiv");
 		let p;
 		let user;
 		const categoryBar = document.getElementById("categoryBar");
@@ -254,9 +257,23 @@
 			productPriceField.innerHTML = `$ ${product.price}`;
 			productDescriptionField.innerHTML = product.description;
 			productShippingTimeField.innerHTML = `Item will be shipped in ${product.estimatedTime} days`
-			productSoldByField.innerHTML = `Sold by: <button onclick="sellerClicked('${product.seller_id}')">${product.seller}</button>`;
+			productSoldByField.innerHTML = `Sold by:&nbsp;<a href="products.html?sellerID=${product.seller_id}">${product.seller}</a>`;
 			quantityField.max = product.quantity;
-			links.innerHTML += `<button onclick="categoryClicked('${product.category}')">${product.category}</button>&nbsp;>&nbsp;<button onclick="subCategoryClicked('${product.subcategory}')">${product.subcategory}</button>&nbsp;>&nbsp;${product.name}`;
+			links.innerHTML += `<a href="products.html?category=${product.category}">${product.category}</a>&nbsp;>&nbsp;<a href="products.html?subCategory=${product.subcategory}">${product.subcategory}</a>&nbsp;>&nbsp;${product.name}`;
+			// let height = dataDiv.clientHeight;
+			// if(height > 300)
+			// {
+			// 	let imgs = document.getElementsByTagName("img");
+			// 	// console.log(imgs.length);
+			// 	// imgs.forEach((img) => {
+			// 	// 	img.style.maxHeight = height-50;
+			// 	// });
+			// 	for(let i=0;i<imgs.length;i++)
+			// 	{
+			// 		imgs[i].style.height = height-50;
+			// 	}
+			// 	console.log(imgs);
+			// }
 		}
 
 		function addToCartClicked() {
@@ -274,33 +291,14 @@
 
 		function updateResult(code)
 		{
-			//TODO: Added to cart
 			window.location.replace("cart.html");
 		}
 
 		function buyClicked()
 		{
-			//TODO: buyClicked
 			if(user) {
-				p.quantity = quantityField.value;
-				window.location.replace(`contactForBuy.html?productId=${p.id}`);
+				window.location.replace(`contactForBuy.html?productId=${p.id}&quantity=${quantityField.value}`);
 			}
-		}
-			
-
-		function categoryClicked(id)
-		{
-			//TODO: Category Clicked
-		}
-
-		function subCategoryClicked(id)
-		{
-			//TODO: subCategoryClicked
-		}
-
-		function sellerClicked(id)
-		{
-			//TODO: sellerClicked
 		}
 	</script>
 </body>

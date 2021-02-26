@@ -365,10 +365,10 @@ function fetchProductByIdInDB(productID, uiCallback) {
         })
         uiCallback(productsArray[0]);
     })
-    .catch((error) => {
-        console.log(`Product fetch error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
-        return codes.FETCH_FAILURE;
-    })
+    // .catch((error) => {
+    //     console.log(`Product fetch error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
+    //     return codes.FETCH_FAILURE;
+    // })
 }
 
 // fetches all products
