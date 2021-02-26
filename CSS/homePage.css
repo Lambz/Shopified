@@ -310,7 +310,7 @@ header .header-2.header-active{
 }
 
 .feature{
-    min-height: 100vh;
+    /* min-height: 100vh; */
     background:linear-gradient(165deg, #fff 50%, var(--blue) 50.1%);
     padding-bottom: 2rem;
 }
