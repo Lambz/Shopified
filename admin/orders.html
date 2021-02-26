@@ -179,7 +179,7 @@
             // console.log(orders);
             let i=0;
             o.forEach((order) => {
-                tbody.innerHTML += `<tr><td onclick="orderClicked(${i})">${order.customerName}</td><td onclick="orderClicked(${i})">${order.customerNo}</td><td onclick="orderClicked(${i})">${order.customerAddress}</td><td onclick="orderClicked(${i})">${order.orderDate}</td><td onclick="orderClicked(${i})">${order.products.length}</td><td><div class="row">
+                tbody.innerHTML += `<tr><td onclick="orderClicked(${i})">${order.customerName}</td><td onclick="orderClicked(${i})">${order.customerNo}</td><td onclick="orderClicked(${i})">${order.customerAddress}</td><td onclick="orderClicked(${i})">${formatDate(order.orderDate)}</td><td onclick="orderClicked(${i})">${order.products.length}</td><td><div class="row">
                                         <div class="col-8">
                                             <select id="selectStatus_${order.id}" class="custom-select custom-select-sm">
                                                 <option value="0">Pending</option>
@@ -204,6 +204,20 @@
             let select = document.getElementById(`selectStatus_${order.id}`);
             let status = select.value;
             updateOrderStatus(order,status,statusChanged);
+        }
+
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
+
+            return [day, month, year].join('-');
         }
 
         function statusChanged()
