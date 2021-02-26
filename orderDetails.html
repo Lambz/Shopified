@@ -231,7 +231,7 @@
                 order.products.forEach((product) => {
                     total += Number(product.price) * Number(product.quantity);
                     max = Math.max(max, product.estimatedTime);
-                    tbody.innerHTML += `<tr onclick="productClicked('${product.id}')"><td>${product.name}</td><td>${product.price}</td><td>${product.quantity}</td><td><button onclick="sellerClicked('${product.seller_id}')">${product.seller}</td></tr>`;
+                    tbody.innerHTML += `<tr onclick="productClicked('${product.id}')"><td>${product.name}</td><td>${product.price}</td><td>${product.quantity}</td><td><a href='products.html?sellerID=${product.seller_id}')>${product.seller}</a></td></tr>`;
                 });
                 total *= 1.13;
                 let date = new Date(order.orderDate);
