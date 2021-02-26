@@ -341,7 +341,7 @@
 						image = "imgs/product_placeholder.gif";
 					}
 					console.log(product);
-					productsDiv.innerHTML += `<div style="width: 100%;" onclick="productClicked('${product.id}')" class="row mb-5 productDiv"><div style="text-align: center;" class="col-4"><img src="${image}" /></div><div class="col" style="vertical-align:middle;"><div class="row"><h2>${product.name}</h2></div><div class="row"><h3>${product.price}</h3></div><div class="row">${product.description}</div><div class="row mt-2">Sold By: <button onclick="sellerClicked('${product.seller_id}')">${product.seller}</button></div></div></div>`;
+					productsDiv.innerHTML += `<div style="width: 100%;" onclick="productClicked('${product.id}')" class="row mb-5 productDiv"><div style="text-align: center;" class="col-4"><img src="${image}" /></div><div class="col" style="vertical-align:middle;"><div class="row"><h2>${product.name}</h2></div><div class="row"><h3>${product.price}</h3></div><div class="row">${product.description}</div><div class="row mt-2">Sold By: <a href='products.html?sellerID=${product.seller_id}'>${product.seller}</a></div></div></div>`;
 				});
 			}
 
@@ -351,11 +351,6 @@
 			if (!sellerClickedBool) {
 				window.location.replace("product.html?id=" + id);
 			}
-		}
-
-		function sellerClicked(id) {
-			sellerClickedBool = true;
-			//TODO: Seller Clicked
 		}
 	</script>
 </body>

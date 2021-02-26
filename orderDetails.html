@@ -39,12 +39,16 @@
             <a href="index.html" class="logo">shopified </a>
 
             <div class="form-container">
-                <form onsubmit="window.location.replace('products.html?searchText='+document.getElementById('search').value);return false;">
+                <form
+                    onsubmit="window.location.replace('products.html?searchText='+document.getElementById('search').value);return false;">
                     <input type="search" placeholder="search products" id="search" />
-                    <label for="search" onclick="window.location.replace('products.html?searchText='+document.getElementById('search').value)" class="fas fa-search"></label>
+                    <label for="search"
+                        onclick="window.location.replace('products.html?searchText='+document.getElementById('search').value)"
+                        class="fas fa-search"></label>
                 </form>
             </div>
-            <a id="loginSignUpLink" href="login.html"><button><span id="loginSignUpSpan">Login/SignUp</span></button></a>
+            <a id="loginSignUpLink" href="login.html"><button><span
+                        id="loginSignUpSpan">Login/SignUp</span></button></a>
 
         </div>
 
@@ -62,7 +66,8 @@
             <div class="icons">
 
 
-                <i style="cursor:pointer" onclick="window.location.replace('cart.html')" class="fas fa-shopping-cart"></i>
+                <i style="cursor:pointer" onclick="window.location.replace('cart.html')"
+                    class="fas fa-shopping-cart"></i>
                 <i style="cursor:pointer" onclick="window.location.replace('orders.html')" class="fas fa-history"></i>
                 <i style="cursor:pointer" onclick="window.location.replace('settings.html')" class="fas fa-cog"></i>
             </div>
@@ -72,42 +77,43 @@
     </header>
 
     <div class="container py-5 my-5">
-        <div class="jumbotron">
-            <div class="card">
-                <div class="card-header container-fluid">
-                    <!-- Products -->
-                    <div class="row">
-                        <!-- <div class="col-md-10"> -->
-                        <h4 class="pt-1 px-2">Order</h4>
-                        <!-- </div> -->
-                        <!-- <div class="col-md-2 p-3 float-right">
+        <!-- <div class="jumbotron"> -->
+        <div class="card">
+            <div class="card-header container-fluid">
+                <!-- Products -->
+                <div class="row">
+                    <!-- <div class="col-md-10"> -->
+                    <h4 class="pt-1 px-2">Order</h4>
+                    <!-- </div> -->
+                    <!-- <div class="col-md-2 p-3 float-right">
                             <a href="addProduct.html" class="btn btn-primary">Add Product</a>
                         </div> -->
-                    </div>
-                </div>
-                <div class="card-body">
-                    <!-- <h5 class="card-title">Manage Orders</h5> -->
-                    <p id="totalAmountField" class="card-text">Total Amount: </p>
-                    <p id="statusField" class="card-text">Status: </p>
-                    <p id="orderDateField" class="card-text">Ordered Date: </p>
-                    <p id="eDateField" class="card-text">Estimated Shipping Date: </p>
-                    <h5>Products</h5>
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Seller</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody">
-                        </tbody>
-                    </table>
-                    <button id="cancelbutton" class="btn btn-primary btn-lg btn-block" onclick=cancelOrder()>Cancel Order</button>
                 </div>
             </div>
+            <div class="card-body">
+                <!-- <h5 class="card-title">Manage Orders</h5> -->
+                <p id="totalAmountField" class="card-text">Total Amount: </p>
+                <p id="statusField" class="card-text">Status: </p>
+                <p id="orderDateField" class="card-text">Ordered Date: </p>
+                <p id="eDateField" class="card-text">Estimated Shipping Date: </p>
+                <h5>Products</h5>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Seller</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                    </tbody>
+                </table>
+                <button id="cancelbutton" class="btn btn-primary btn-lg btn-block" onclick=cancelOrder()>Cancel
+                    Order</button>
+            </div>
         </div>
+        <!-- </div> -->
     </div>
 
     <section class="footer">
@@ -177,8 +183,7 @@
         const cancel = document.getElementById("cancelbutton");
         let order = null;
 
-        function categoryResult(categories)
-        {
+        function categoryResult(categories) {
             let inner = "";
             categories.forEach((category) => {
                 inner += `<li class="nav-item dropdown">
@@ -196,8 +201,7 @@
 
         window.onload = function () {
             getUserDetails(true, (u) => {
-                if(u)
-                {
+                if (u) {
                     loginSignUpSpan.innerHTML = "Sign Out";
                     loginSignUpLink.href = "signOut.html";
                 }
@@ -208,20 +212,17 @@
         }
 
         function populateTable() {
-            
+
             user.orders.forEach((o) => {
-                if(o.id == id)
-                {
+                if (o.id == id) {
                     order = o;
                     console.log(order);
                 }
             });
-            if(order == null)
-            {
+            if (order == null) {
                 window.location.replace("orders.html");
             }
-            else
-            {
+            else {
                 if (order.status == 2 || order.status == 3 || order.status == 4) {
                     cancel.disabled = true;
                 }
@@ -231,7 +232,8 @@
                 order.products.forEach((product) => {
                     total += Number(product.price) * Number(product.quantity);
                     max = Math.max(max, product.estimatedTime);
-                    tbody.innerHTML += `<tr onclick="productClicked('${product.id}')"><td>${product.name}</td><td>${product.price}</td><td>${product.quantity}</td><td><a href='products.html?sellerID=${product.seller_id}')>${product.seller}</a></td></tr>`;
+                    console.log()
+                    tbody.innerHTML += `<tr onclick="productClicked('${product.id}')"><td><a href="product.html?id=${product.id}">${product.name}</a></td><td>${product.price}</td><td>${product.quantity}</td><td><a href='products.html?sellerID=${product.seller_id}')>${product.seller}</a></td></tr>`;
                 });
                 total *= 1.13;
                 let date = new Date(order.orderDate);
@@ -257,25 +259,22 @@
             return [day, month, year].join('-');
         }
 
-        function productClicked(id)
-        {
-            if(pClicked)
-            {
-                window.location.replace("product.html?id="+id);
+        function productClicked(id) {
+            if (pClicked) {
+                window.location.replace("product.html?id=" + id);
             }
         }
 
-        function sellerClicked(id)
-        {
+        function sellerClicked(id) {
             pClicked = false;
-            window.location.replace("products.html?sellerID="+id);
+            window.location.replace("products.html?sellerID=" + id);
         }
 
         function cancelOrder() {
             if (order.status == 0 || order.status == 1) {
                 updateOrderStatus(order, OrderStatus.CANCELLED, () => {
                     user.orders.forEach((o) => {
-                        if(o.id == order.id) {
+                        if (o.id == order.id) {
                             o.id = 4;
                         }
                     })
