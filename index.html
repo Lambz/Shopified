@@ -519,7 +519,7 @@
 
         window.onload = function () {
             getUserDetails(true, (u) => {
-                if (u != null) {
+                if (u != null && u!=404) {
                     loginSignUpSpan.innerHTML = "Sign Out";
                     loginSignUpLink.href = "signout.html";
                 }

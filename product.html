@@ -130,7 +130,7 @@
 						<button class="btn btn-primary" onclick="addToCartClicked()">Add to Cart</button>
 					</div>
 					<div class="col">
-						<button class="btn btn-primary" onclick="buyClicked()">Buy just this Item</button>
+						<button class="btn btn-primary" onclick="buyClicked()">Xpress Order</button>
 					</div>
 				</div>
 			</div>
@@ -198,7 +198,8 @@
 		const quantityField = document.getElementById("quantityField");
 		const links = document.getElementById("links");
 		let p;
-		let user;const categoryBar = document.getElementById("categoryBar");
+		let user;
+		const categoryBar = document.getElementById("categoryBar");
         const loginSignUpSpan = document.getElementById("loginSignUpSpan");
         const loginSignUpLink = document.getElementById("loginSignUpLink");
 
@@ -225,7 +226,7 @@
 				window.location.replace("index.html");
 			}
 			getUserDetails(true, (u) => {
-				if(u != null)
+				if(u != null && u!=404)
                 {
                     loginSignUpSpan.innerHTML = "Sign Out";
                     loginSignUpLink.href = "signOut.html";
@@ -280,7 +281,12 @@
 		function buyClicked()
 		{
 			//TODO: buyClicked
+			if(user) {
+				p.quantity = quantityField.value;
+				window.location.replace(`contactForBuy.html?productId=${p.id}`);
+			}
 		}
+			
 
 		function categoryClicked(id)
 		{
