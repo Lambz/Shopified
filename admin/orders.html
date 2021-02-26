@@ -80,8 +80,8 @@
             </div>
         </nav>
     </header>
-    <div class="mx-5 my-5">
-        <div class="jumbotron">
+    <div id="container" class="mx-5 my-5">
+        <!-- <div class="jumbotron"> -->
             <div class="card">
                 <div class="card-header container-fluid">
                     <!-- Products -->
@@ -97,7 +97,7 @@
                 <div class="card-body">
                     <!-- <h5 class="card-title">Manage Orders</h5> -->
                     <!-- <p class="card-text">You can add, edit and delete your products from here</p> -->
-                    <table class="table table-hover">
+                    <table class="table table-responsive table-hover">
                         <thead>
                             <tr>
                                 <th scope="col">Name</th>
@@ -145,7 +145,7 @@
                     </table>
                 </div>
             </div>
-        </div>
+        <!-- </div> -->
     </div>
 
 
@@ -176,6 +176,17 @@
                 console.log(sessionStorage.getItem('uid'));
                 fetchOrdersForSeller(sessionStorage.getItem('uid'), true, orderDetails)
             });
+            window.matchMedia('(orientation: portrait)').addListener(function (m) {
+                let container = document.getElementById("container");
+                if (m.matches) {
+                    container.classList = [];
+                } else {
+                    container.classList = "mx-5 my-5";
+                }
+            });
+            if(window.innerHeight > window.innerWidth){
+                document.getElementById("container").classList = [];
+            }
         }
 
         function orderDetails(o)

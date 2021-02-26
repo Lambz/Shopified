@@ -78,7 +78,7 @@
             </div>
         </nav>
     </header>
-    <div id="container" class="mx-5 my-5 px-5 py-5">
+    <div id="container" class="mx-5 my-5">
         <!-- <div class="jumbotron"> -->
         <div class="card">
             <div class="card-header container-fluid">
@@ -159,9 +159,12 @@
                 if (m.matches) {
                     container.classList = [];
                 } else {
-                    container.classList = "px-5 py-5 mx-5 my-5";
+                    container.classList = "mx-5 my-5";
                 }
             });
+            if(window.innerHeight > window.innerWidth){
+                document.getElementById("container").classList = [];
+            }
         }
 
         function sellerDetailsCallback(s) {
