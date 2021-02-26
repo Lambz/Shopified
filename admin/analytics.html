@@ -9,9 +9,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" />
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Sarala:wght@700&display=swap');
+
         .navbar-brand {
             font-family: 'Sarala', sans-serif;
-            color:rgb(63, 60, 60);
+            color: rgb(63, 60, 60);
             font-style: italic;
         }
 
@@ -27,7 +28,6 @@
         tr {
             cursor: pointer;
         }
-
     </style>
     <title>Analytics</title>
 </head>
@@ -95,6 +95,9 @@
         <div class="row">
             <div class="col">
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-secondary" onclick="selectedTime=3;plotGraph();">
+                        <input type="radio" name="options" id="option3" autocomplete="off"> All Time
+                    </label>
                     <label class="btn btn-secondary" onclick="selectedTime=0;plotGraph();">
                         <input type="radio" name="options" id="option1" autocomplete="off"> Yearly
                     </label>
@@ -102,7 +105,7 @@
                         <input type="radio" name="options" id="option2" autocomplete="off"> Monthly
                     </label>
                     <label class="btn btn-secondary active" onclick="selectedTime=2;plotGraph();">
-                        <input type="radio" name="options" id="option3" autocomplete="off" checked> Daily
+                        <input type="radio" name="options" id="option3" autocomplete="off" checked> This Week
                     </label>
                 </div>
             </div>
@@ -170,8 +173,7 @@
             plotGraph();
         }
 
-        function plotGraph()
-        {
+        function plotGraph() {
             let map = new Map();
             let data = [];
             let time = {};
@@ -246,7 +248,7 @@
                     }
                 };
             }
-            else {
+            else if (selectedTime = 2) {
                 let date = new Date();
                 date.setHours(0, 0, 0, 0);
                 map.set(date.toString(), 0);
@@ -268,6 +270,18 @@
                         'day': 'DD MMM'
                     }
                 };
+            }
+            else {
+                orders.forEach((order) => {
+                    let d = new Date(order.orderDate);
+                    d.setHours(0, 0, 0, 0);
+                    if (map.has(d.toString()) && (orderStatus == null || order.status == orderStatus)) {
+                        map.set(d.toString(), map.get(d.toString()) + 1);
+                    }
+                    else {
+                        map.set(d.toString(), 1);
+                    }
+                });
             }
             for (let key of map.keys()) {
                 data.push({ t: key, y: map.get(key) });
