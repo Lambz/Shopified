@@ -84,16 +84,42 @@
                 </div>
             </div>
         </div> -->
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-            <label class="btn btn-secondary">
-                <input type="radio" name="options" id="option1" autocomplete="off"> Yearly
-            </label>
-            <label class="btn btn-secondary">
-                <input type="radio" name="options" id="option2" autocomplete="off"> Monthly
-            </label>
-            <label class="btn btn-secondary active">
-                <input type="radio" name="options" id="option3" autocomplete="off" checked> Daily
-            </label>
+        <div class="row">
+            <div class="col">
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-secondary" onclick="selectedTime=0;plotGraph();">
+                        <input type="radio" name="options" id="option1" autocomplete="off"> Yearly
+                    </label>
+                    <label class="btn btn-secondary" onclick="selectedTime=1;plotGraph();">
+                        <input type="radio" name="options" id="option2" autocomplete="off"> Monthly
+                    </label>
+                    <label class="btn btn-secondary active" onclick="selectedTime=2;plotGraph();">
+                        <input type="radio" name="options" id="option3" autocomplete="off" checked> Daily
+                    </label>
+                </div>
+            </div>
+            <div class="col text-right">
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-secondary active" onclick="orderStatus=null;plotGraph();">
+                        <input type="radio" name="options" id="option2" autocomplete="off"> All Orders
+                    </label>
+                    <label class="btn btn-secondary" onclick="orderStatus=0;plotGraph();">
+                        <input type="radio" name="options" id="option3" autocomplete="off"> Pending
+                    </label>
+                    <label class="btn btn-secondary" onclick="orderStatus=1;plotGraph();">
+                        <input type="radio" name="options" id="option3" autocomplete="off"> Processing
+                    </label>
+                    <label class="btn btn-secondary" onclick="orderStatus=2;plotGraph();">
+                        <input type="radio" name="options" id="option3" autocomplete="off"> On Way
+                    </label>
+                    <label class="btn btn-secondary" onclick="orderStatus=3;plotGraph();">
+                        <input type="radio" name="options" id="option3" autocomplete="off"> Delivered
+                    </label>
+                    <label class="btn btn-secondary" onclick="orderStatus=4;plotGraph();">
+                        <input type="radio" name="options" id="option3" autocomplete="off"> Cancelled
+                    </label>
+                </div>
+            </div>
         </div>
         <canvas id="myChart"></canvas>
     </div>
@@ -120,66 +146,130 @@
         const tbody = document.getElementById("tbody");
         let ctx = document.getElementById('myChart').getContext('2d');
         let selectedTime = 2;
+        let orderStatus = null;
 
         window.onload = function () {
             getUserDetails(false, (seller) => {
                 if (seller == codes.NOT_FOUND) {
                     window.location.replace("index.html");
                 }
-                console.log(sessionStorage.getItem('uid'));
                 fetchOrdersForSeller(sessionStorage.getItem('uid'), true, orderDetails)
             });
         }
 
         function orderDetails(o) {
-            console.log(o);
             orders = o;
-            let map = new Map();
-            if (selectedTime == 0) {
+            plotGraph();
+        }
 
+        function plotGraph()
+        {
+            let map = new Map();
+            let data = [];
+            let time = {};
+            if (selectedTime == 0) {
+                let currentYear = new Date();
+                currentYear.setMonth(11);
+                currentYear.setDate(1);
+                currentYear.setHours(0, 0, 0, 0);
+                let lastYear = new Date();
+                lastYear.setHours(0, 0, 0, 0);
+                lastYear.setMonth(0);
+                lastYear.setYear(lastYear.getYear() + 1900 - 10);
+                lastYear.setDate(1);
+                let d = new Date();
+                d.setHours(0, 0, 0, 0);
+                d.setMonth(0);
+                d.setDate(1);
+                map.set(d.toString(), 0);
+                for (let i = 0; i < 10; i++) {
+                    d.setYear(d.getYear() - 1 + 1900);
+                    d.setMonth(0);
+                    d.setDate(1);
+                    map.set(d.toString(), 0);
+                }
+                orders.forEach((order) => {
+                    let date = new Date(order.orderDate);
+                    date.setMonth(0);
+                    date.setHours(0, 0, 0, 0);
+                    date.setDate(1);
+                    if (date <= currentYear && date >= lastYear && (orderStatus == null || order.status == orderStatus)) {
+                        map.set(date.toString(), map.get(date.toString()) + 1);
+                    }
+                });
+                time = {
+                    unit: 'year',
+                    unitStepSize: 1,
+                    displayFormats: {
+                        'year': 'YYYY'
+                    }
+                };
             }
             else if (selectedTime == 1) {
-
+                let currentMonth = new Date();
+                currentMonth.setDate(1);
+                currentMonth.setHours(0, 0, 0, 0);
+                let lastYearMonth = new Date();
+                lastYearMonth.setHours(0, 0, 0, 0);
+                lastYearMonth.setYear(lastYearMonth.getYear() + 1900 - 1);
+                lastYearMonth.setDate(1);
+                let d = new Date();
+                d.setHours(0, 0, 0, 0);
+                d.setDate(1);
+                map.set(d.toString(), 0);
+                for (let i = 0; i < 12; i++) {
+                    d.setMonth(d.getMonth() - 1);
+                    d.setDate(1);
+                    map.set(d.toString(), 0);
+                }
+                orders.forEach((order) => {
+                    let date = new Date(order.orderDate);
+                    date.setHours(0, 0, 0, 0);
+                    date.setDate(1);
+                    if (date <= currentMonth && date >= lastYearMonth && (orderStatus == null || order.status == orderStatus)) {
+                        map.set(date.toString(), map.get(date.toString()) + 1);
+                    }
+                });
+                time = {
+                    unit: 'month',
+                    unitStepSize: 1,
+                    displayFormats: {
+                        'month': 'MMM YY'
+                    }
+                };
             }
             else {
                 let date = new Date();
-                date.setHours(0,0,0,0);
-                map.set(date.toString(),0);
-                for(let i=1;i<=6;i++)
-                {
-                    date.setDate(date.getDate()-1);
-                    let x = map.set(date.toString(),0);
+                date.setHours(0, 0, 0, 0);
+                map.set(date.toString(), 0);
+                for (let i = 1; i < 6; i++) {
+                    date.setDate(date.getDate() - 1);
+                    let x = map.set(date.toString(), 0);
                 }
-                o.forEach((order) => {
+                orders.forEach((order) => {
                     let d = new Date(order.orderDate);
-                    d.setHours(0,0,0,0);
-                    if(map.has(d.toString()))
-                    {
-                        map.set(d.toString(),map.get(d.toString())+1);
+                    d.setHours(0, 0, 0, 0);
+                    if (map.has(d.toString()) && (orderStatus == null || order.status == orderStatus)) {
+                        map.set(d.toString(), map.get(d.toString()) + 1);
                     }
                 });
-                console.log(map);
+                time = {
+                    unit: 'day',
+                    unitStepSize: 1,
+                    displayFormats: {
+                        'day': 'DD MMM'
+                    }
+                };
             }
-
-
+            for (let key of map.keys()) {
+                data.push({ t: key, y: map.get(key) });
+            }
             var myChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     datasets: [{
-                        label: 'Demo',
-                        data: [{
-                            t: "2015-03-15T13:03:00Z",
-                            y: 12
-                        },
-                        {
-                            t: "2015-03-25T13:02:00Z",
-                            y: 21
-                        },
-                        {
-                            t: "2015-04-25T14:12:00Z",
-                            y: 32
-                        }
-                        ],
+                        label: 'Sales',
+                        data: data,
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
                             'rgba(54, 162, 235, 0.2)',
@@ -202,7 +292,7 @@
                 options: {
                     scales: {
                         xAxes: [{
-                            type: 'time',
+                            type: 'time', time: time,
                             distribution: 'linear'
                         }]
                     }
