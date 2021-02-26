@@ -9,11 +9,13 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" />
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Sarala:wght@700&display=swap');
+
         .navbar-brand {
             font-family: 'Sarala', sans-serif;
-            color:rgb(63, 60, 60);
+            color: rgb(63, 60, 60);
             font-style: italic;
         }
+
         * {
             margin: 0;
             padding: 0;
@@ -76,36 +78,36 @@
             </div>
         </nav>
     </header>
-    <div class="container mt-5">
-        <div class="jumbotron">
-            <div class="card">
-                <div class="card-header container-fluid">
-                    <!-- Products -->
-                    <div class="row">
-                        <div class="col-md-10">
-                            <h3 class="w-75 p-3">Products</h3>
-                        </div>
-                        <div class="col-md-2 p-3 float-right">
-                            <a href="addProduct.html" class="btn btn-primary">Add Product</a>
-                        </div>
+    <div id="container" class="mx-5 my-5 px-5 py-5">
+        <!-- <div class="jumbotron"> -->
+        <div class="card">
+            <div class="card-header container-fluid">
+                <!-- Products -->
+                <div class="row">
+                    <div class="col-md-10">
+                        <h3 class="w-75 p-3">Products</h3>
+                    </div>
+                    <div class="col-md-2 p-3 float-right">
+                        <a href="addProduct.html" class="btn btn-primary">Add Product</a>
                     </div>
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title">Manage Products</h5>
-                    <p class="card-text">You can add, edit and delete your products from here</p>
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Category</th>
-                                <th scope="col">Sub Category</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Quantity Left</th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody">
-                            <!-- <tr>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Manage Products</h5>
+                <p class="card-text">You can add, edit and delete your products from here</p>
+                <table class="table table-responsive table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Sub Category</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Quantity Left</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                        <!-- <tr>
                             <th scope="row">1</th>
                             <td>Mark</td>
                             <td>Otto</td>
@@ -125,11 +127,11 @@
                             <td colspan="2">Larry the Bird</td>
                             <td>@twitter</td>
                           </tr> -->
-                        </tbody>
-                    </table>
-                </div>
+                    </tbody>
+                </table>
             </div>
         </div>
+        <!-- </div> -->
     </div>
 
 
@@ -151,7 +153,15 @@
 
         let seller;
         window.onload = function () {
-            getUserDetails(false, sellerDetailsCallback)
+            getUserDetails(false, sellerDetailsCallback);
+            window.matchMedia('(orientation: portrait)').addListener(function (m) {
+                let container = document.getElementById("container");
+                if (m.matches) {
+                    container.classList = [];
+                } else {
+                    container.classList = "px-5 py-5 mx-5 my-5";
+                }
+            });
         }
 
         function sellerDetailsCallback(s) {
@@ -163,7 +173,7 @@
             let products = s.products;
             let i = 0;
             products.forEach((product) => {
-                tbody.innerHTML += `<tr><td>${product.name}</td><td>${product.category}</td><td>${product.subcategory}</td><td>${product.price}</td><td>${product.quantity}</td><td><button class="btn btn-primary mx-1" onclick="editProduct('${product.id}')">Edit</button><button class="btn btn-danger mx-1" onclick="deleteP('${product.id}')">Delete</button></td></tr>`
+                tbody.innerHTML += `<tr><td style="width:40%;">${product.name}</td><td>${product.category}</td><td>${product.subcategory}</td><td>${product.price}</td><td>${product.quantity}</td><td><button class="btn btn-primary mx-1" onclick="editProduct('${product.id}')">Edit</button><button class="btn btn-danger mx-1" onclick="deleteP('${product.id}')">Delete</button></td></tr>`
                 i++;
             });
         }

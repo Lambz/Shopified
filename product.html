@@ -216,7 +216,7 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">`;
                 category.subcategories.forEach((subCategory) => {
-                    inner += `<a class="dropdown-item" style="color:black" href="products.html?subCategory=${subCategory}">${subCategory}</a>`;
+                    inner += `<a class="dropdown-item" style="color:black" href="products.html?subCategory=${subCategory.replace(" & "," and ")}">${subCategory}</a>`;
                 });
                 inner += `</div></li>`
             });

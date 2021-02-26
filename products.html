@@ -161,7 +161,7 @@
 	<script src="./scripts/interface.js"></script>
 	<script>
 		const category = new URL(window.location.href).searchParams.get("category");
-		const subCategory = new URL(window.location.href).searchParams.get("subCategory");
+		const subCategory = new URL(window.location.href).searchParams.get("subCategory").replace(" and "," & ");
 		const searchText = new URL(window.location.href).searchParams.get("searchText");
 		const sellerID = new URL(window.location.href).searchParams.get("sellerID");
 		const productsDiv = document.getElementById("productsDiv");
@@ -182,7 +182,7 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">`;
 				category.subcategories.forEach((subCategory) => {
-					inner += `<a class="dropdown-item" style="color:black" href="products.html?subCategory=${subCategory}">${subCategory}</a>`;
+					inner += `<a class="dropdown-item" style="color:black" href="products.html?subCategory=${subCategory.replace(" & "," and ")}">${subCategory}</a>`;
 				});
 				inner += `</div></li>`
 			});
