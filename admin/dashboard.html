@@ -8,14 +8,12 @@
     <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" />
     <style>
-        *
-        {
+        * {
             margin: 0;
             padding: 0;
         }
 
-        body
-        {
+        body {
             background-color: rgb(241, 244, 249);
         }
     </style>
@@ -71,18 +69,42 @@
             </div>
         </nav>
     </header>
-    <section id="dashboard">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 mt-4">
-                    <div class="card text-center">
-                        <!-- <img src="media/online_seller.jpg" class="card-img-top"/> -->
-                        <div class="card-body">
-                            <p class="card-text">Graph</p>
-                            <!-- <a href="#"></a> -->
-                        </div>
-                    </div>
+    <section id="dashboard" class="mx-5 my-3">
+        <div class="row">
+            <div class="col">
+                <div class="card mt-4">
+                    <canvas id="myChart"></canvas>
                 </div>
+            </div>
+            <div class="col">
+                    <div class="card p-2 mt-4">
+                        <div class="card-title">Products</div>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Quantity Left</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card p-2 mt-4">
+                        <div class="card-title">Orders</div>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col"># of Products</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody1">
+                            </tbody>
+                        </table>
+                    </div>
             </div>
         </div>
     </section>
@@ -97,29 +119,108 @@
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-firestore.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0-rc.1/Chart.bundle.js"></script>
     <!-- <script src="scripts/main.js"></script> -->
     <script src="../scripts/models.js"></script>
     <script src="../scripts/firebaseHandlers.js"></script>
     <script src="../scripts/interface.js"></script>
     <script>
-
-        window.onload = function()
-        {
-            getUserDetails(false,(seller) => {
-                if(seller == codes.NOT_FOUND)
-                {
+        let ctx = document.getElementById('myChart').getContext('2d');
+        let tbody = document.getElementById("tbody");
+        let tbody1 = document.getElementById("tbody1");
+        let orders = [];
+        window.onload = function () {
+            getUserDetails(false, (seller) => {
+                if (seller == codes.NOT_FOUND) {
                     window.location.replace("index.html");
+                }
+                fetchOrdersForSeller(sessionStorage.getItem('uid'), true, orderDetails)
+                showProducts(seller.products);
+            });
+        }
+
+        function showProducts(products)
+        {
+            products.forEach((product) => {
+                tbody.innerHTML += `<tr><td>${product.name}</td><td>${product.price}</td><td>${product.quantity}</td></tr>`;
+            });
+        }
+
+        function orderDetails(o) {
+            orders = o;
+            plotGraph();
+        }
+
+        function plotGraph() {
+            let map = new Map();
+            let data = [];
+            let time = {};
+            let date = new Date();
+            date.setHours(0, 0, 0, 0);
+            map.set(date.toString(), 0);
+            for (let i = 1; i < 6; i++) {
+                date.setDate(date.getDate() - 1);
+                let x = map.set(date.toString(), 0);
+            }
+            orders.forEach((order) => {
+                let d = new Date(order.orderDate);
+                d.setHours(0, 0, 0, 0);
+                if (map.has(d.toString())) {
+                    map.set(d.toString(), map.get(d.toString()) + 1);
+                }
+                tbody1.innerHTML += `<tr><td>${order.products.length}</td><td>${order.customerName}</td><td>${getOrderStatus(order.status)}</td></tr>`;
+            });
+            time = {
+                unit: 'day',
+                unitStepSize: 1,
+                displayFormats: {
+                    'day': 'DD MMM'
+                }
+            };
+            for (let key of map.keys()) {
+                data.push({ t: key, y: map.get(key) });
+            }
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'Sales',
+                        data: data,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        xAxes: [{
+                            type: 'time', time: time,
+                            distribution: 'linear'
+                        }]
+                    }
                 }
             });
         }
 
-        function signOut()
-        {
+        function signOut() {
             signOut(signOutSucceful);
         }
 
-        function signOutSucceful()
-        {
+        function signOutSucceful() {
             window.location.replace("index.html");
         }
     </script>
