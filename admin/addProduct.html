@@ -251,10 +251,10 @@
         const addProductBtn = document.getElementById("addProductBtn");
         const deleteProductBtn = document.getElementById("deleteProductBtn");
         let product = null;
+        let newCategories = false;
         window.onload = function () {
-            getUserDetails(false,(seller) => {
-                if(seller == codes.NOT_FOUND)
-                {
+            getUserDetails(false, (seller) => {
+                if (seller == codes.NOT_FOUND) {
                     window.location.replace("index.html");
                 }
             });
@@ -301,6 +301,7 @@
                             opt.value = "New Sub-Category";
                             opt.text = "New Sub-Category";
                             subCategories.add(opt);
+                            newCategories = true;
                         }
                     }
                     else {
@@ -310,6 +311,24 @@
                 }
 
             });
+
+            subCategories.addEventListener("change", function () {
+                if (subCategories.value == "New Sub-Category") {
+                    let subCategoryVal = prompt("Please enter new Sub-Category name", "");
+                    if (subCategoryVal != null && subCategoryVal != "") {
+                        let opt = document.createElement("option");
+                        opt.value = subCategoryVal;
+                        opt.text = subCategoryVal;
+                        subCategories.add(opt);
+                        newCategories = true;
+                    }
+                    else
+                    {
+                        subCategoryVal.selectedIndex = 0;
+                    }
+                }
+            });
+
             if (result != null && result.length > 0) {
                 result.forEach((category) => {
                     // categories.innerHTML += `<option value="${category.name}">${category.name}</option>`;
@@ -325,6 +344,10 @@
                 opt.value = "New Category";
                 opt.text = "New Category";
                 categories.add(opt);
+                opt = document.createElement("option");
+                opt.value = "New Sub-Category";
+                opt.text = "New Sub-Category";
+                subCategories.add(opt);
                 if (id != null) {
                     getUserDetails(false, getProduct);
                 }
@@ -465,16 +488,16 @@
                             insertImage(p.id, newImages, function (urls) {
                                 p.images = oldImages.concat(urls);
                                 // console.log(p);
-                                insertProduct(p, seller, false, productResult);
+                                insertProduct(p, seller, newCategories, productResult);
                             });
                         }
                         else {
                             p.images = oldImages;
-                            insertProduct(p, seller, false, productResult);
+                            insertProduct(p, seller, newCategories, productResult);
                         }
                     }
                     else {
-                        insertProduct(p, seller, false, productResult);
+                        insertProduct(p, seller, newCategories, productResult);
                     }
                 });
             }
