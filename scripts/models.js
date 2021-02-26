@@ -7,7 +7,7 @@ const OrderStatus = Object.freeze({
     "PENDING": 0,
     "PROCESSING": 1,
     "ON_WAY": 2,
-    "DELEIVERED": 3,
+    "DELIVERED": 3,
     "CANCELLED": 4
 });
 

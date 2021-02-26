@@ -245,6 +245,7 @@ function placeOrder(order, uiCallback) {
 // 
 function updateOrderStatus(order, newStatus, uiCallback) {
     order.status = newStatus;
+    console.log("updated order", order);
     insertOrderInDB(order, uiCallback);
 }
 

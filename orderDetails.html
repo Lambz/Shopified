@@ -104,7 +104,7 @@
                         <tbody id="tbody">
                         </tbody>
                     </table>
-                    <button class="btn btn-primary btn-lg btn-block" onclick=cancelOrder()>Cancel Order</button>
+                    <button id="cancelbutton" class="btn btn-primary btn-lg btn-block" onclick=cancelOrder()>Cancel Order</button>
                 </div>
             </div>
         </div>
@@ -174,6 +174,8 @@
         const categoryBar = document.getElementById("categoryBar");
         const loginSignUpSpan = document.getElementById("loginSignUpSpan");
         const loginSignUpLink = document.getElementById("loginSignUpLink");
+        const cancel = document.getElementById("cancelbutton");
+        let order = null;
 
         function categoryResult(categories)
         {
@@ -206,11 +208,12 @@
         }
 
         function populateTable() {
-            let order = null;
+            
             user.orders.forEach((o) => {
                 if(o.id == id)
                 {
                     order = o;
+                    console.log(order);
                 }
             });
             if(order == null)
@@ -219,7 +222,10 @@
             }
             else
             {
-                let status = getOrderStatus(order.status);
+                if (order.status == 2 || order.status == 3 || order.status == 4) {
+                    cancel.disabled = true;
+                }
+                let orderStatus = getOrderStatus(order.status);
                 let total = 0;
                 let max = -1;
                 order.products.forEach((product) => {
@@ -231,7 +237,7 @@
                 let date = new Date(order.orderDate);
                 date.setDate(date.getDate() + max);
                 totalAmountField.innerHTML = `Total Amount: ${Math.round(total)}`;
-                statusField.innerHTML = `Status: ${status}`;
+                statusField.innerHTML = `Status: ${orderStatus}`;
                 orderDateField.innerHTML = `Ordered Date: ${formatDate(order.orderDate)}`;
                 tbeDateFieldody.innerHTML = `Estimated Shipping Date: ${formatDate(date)}`;
             }
@@ -266,7 +272,18 @@
         }
 
         function cancelOrder() {
-
+            if (order.status == 0 || order.status == 1) {
+                updateOrderStatus(order, OrderStatus.CANCELLED, () => {
+                    user.orders.forEach((o) => {
+                        if(o.id == order.id) {
+                            o.id = 4;
+                        }
+                    })
+                    updateUser(true, user, () => {
+                        location.reload();
+                    })
+                })
+            }
         }
     </script>
 </body>
