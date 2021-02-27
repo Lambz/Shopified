@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sarala:wght@700&display=swap');
+
+        .navbar-brand {
+            font-family: 'Sarala', sans-serif;
+            color: rgb(63, 60, 60);
+            font-style: italic;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: rgb(241, 244, 249);
+        }
+
+        .cancelbtn,
+        .deletebtn {
+            float: left;
+            width: 50%;
+        }
+
+        /* Add a color to the cancel button */
+        .cancelbtn {
+            background-color: #ccc;
+            color: black;
+        }
+
+        /* Add a color to the delete button */
+        .deletebtn {
+            background-color: #f44336;
+        }
+
+        /* Add padding and center-align text to the container */
+        /* .container {
+            padding: 16px;
+            text-align: center;
+        } */
+
+        /* The Modal (background) */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 2;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: #474e5d;
+            padding-top: 50px;
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto 15% auto;
+            /* 5% from the top, 15% from the bottom and centered */
+            border: 1px solid #888;
+            width: 80%;
+            /* Could be more or less, depending on screen size */
+        }
+
+        /* Style the horizontal ruler */
+        hr {
+            border: 1px solid #f1f1f1;
+            margin-bottom: 25px;
+        }
+
+        /* The Modal Close Button (x) */
+        .close {
+            position: absolute;
+            right: 35px;
+            top: 15px;
+            font-size: 40px;
+            font-weight: bold;
+            color: #f1f1f1;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #f44336;
+            cursor: pointer;
+        }
+
+        /* Clear floats */
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        /* Change styles for cancel button and delete button on extra small screens */
+        @media screen and (max-width: 300px) {
+
+            .cancelbtn,
+            .deletebtn {
+                width: 100%;
+            }
+        }
+    </style>
+    <title>Orders</title>
+</head>
+
+<body>
+    <header class="header">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="dashboard.html">Shopified</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="analytics.html">Analytics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.html">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="orders.html">Orders<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="settings.html">Settings</a>
+                    </li>
+                    <!-- <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Dropdown
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                    </li> -->
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                    <!-- <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"> -->
+                    <button class="btn btn-outline-success my-2 my-sm-0" onclick="signOut()">Sign Out</button>
+                </form>
+            </div>
+        </nav>
+    </header>
+    <div id="container" class="my-5 mx-5">
+        <div class="card">
+            <div class="card-header container-fluid">
+                <h4 class="pt-1 px-2">Edit Categories</h4>
+            </div>
+            <div id="cardBody" class="card-body">
+                <div class="input-group">
+                    <select id="categorySelect" class="custom-select" id="inputGroupSelect04">
+                    </select>
+                    <div class="input-group-append">
+                        <button onclick="addCategory()" class="btn btn-primary" type="button">Add</button>
+                        <button id="categoryButton" class="btn btn-danger" type="button">Delete</button>
+                    </div>
+                </div>
+                <div class="row mt-3 mx-3">
+                    <input type="text" placeholder="Category Name" id="categoryInput" class="form-control" />
+                </div>
+                <div class="row mt-3">
+                    <div class="col text-right">
+                        <button onclick="addSubCatClicked()" class="btn btn-primary btn-sm">Add Sub-Category</button>
+                    </div>
+                </div>
+                <div id="subCategoryDiv" class="row mx-2 mt-3">
+                    <!-- <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-secondary btn-danger" type="button">Delete</button>
+                        </div>
+                      </div> -->
+                </div>
+                <button onclick="saveClicked()" class="btn btn-primary btn-block mt-2">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="id01" class="modal" style="box-sizing: border-box">
+        <span onclick="document.getElementById('id01').style.display='none'" class="close"
+            title="Close Modal">&times;</span>
+        <form class="modal-content">
+            <div style="padding: 16px;">
+                <h1 style="text-align: center;">Add Category</h1>
+                <p>Enter Category name:</p>
+                <input type="text" id="categoryNameInput" class="form-control" placeholder="Category Name" />
+                <p class="mt-2">Enter Sub-Category name:</p>
+                <input type="text" id="subCategoryNameInput" class="form-control" placeholder="Sub-Category Name" />
+                <div class="row mt-3">
+                    <div class="col"><button onclick="document.getElementById('id01').style.display='none'"
+                            type="button" style="width: 100%;" class="btn btn-outline-secondary">Cancel</button></div>
+                    <div class="col"><button onclick="addCategoryClicked()" type="button" style="width: 100%;"
+                            class="btn btn-primary">Add Category</button></div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="../scripts/Utilties.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.8/firebase-storage.js"></script>
+    <script src="../scripts/models.js"></script>
+    <script src="../scripts/firebaseHandlers.js"></script>
+    <script src="../scripts/interface.js"></script>
+    <script>
+        let categorySelect = document.getElementById("categorySelect");
+        let subCategoryDiv = document.getElementById("subCategoryDiv");
+        let categoryButton = document.getElementById("categoryButton");
+        let categoryNameInput = document.getElementById("categoryNameInput");
+        let subCategoryNameInput = document.getElementById("subCategoryNameInput");
+        let categoryInput = document.getElementById("categoryInput");
+        let cs = [];
+        let inputFields = 0;
+
+        window.onload = function () {
+            getUserDetails(false, (seller) => {
+                if (seller == codes.NOT_FOUND) {
+                    window.location.replace("index.html");
+                }
+            });
+            window.matchMedia('(orientation: portrait)').addListener(function (m) {
+                let container = document.getElementById("container");
+                if (m.matches) {
+                    container.classList = [];
+                } else {
+                    container.classList = "mx-5 my-5";
+                }
+            });
+            if (window.innerHeight > window.innerWidth) {
+                document.getElementById("container").classList = [];
+            }
+            fetchAllCategoriesAndSubcategories(categoriesResult);
+            categorySelect.addEventListener('change', categoryChanged);
+        }
+
+        function categoryChanged() {
+            inputFields = 0;
+            subCategoryDiv.innerHTML = "";
+            let category = null;
+            cs.forEach((c) => {
+                if (c.name == categorySelect.value) {
+                    category = c;
+                }
+            });
+            categoryInput.value = category.name;
+            categoryButton.setAttribute('onclick', `removeCategory('${categorySelect.value}')`);
+            if (category != null) {
+                category.subcategories.forEach((subCategory) => {
+                    subCategoryDiv.innerHTML += `<div class="input-group mb-3">
+                        <input type="text" id="${category.name}${inputFields}" class="form-control" placeholder="Sub-Category" aria-label="Sub-Category" value="${subCategory}" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                          <button class="btn btn-danger" onclick="removeSubCategory('${subCategory}',${inputFields})" type="button">Delete</button>
+                        </div>
+                      </div>`;
+                    inputFields++;
+                });
+            }
+        }
+
+        function categoriesResult(categories) {
+            console.log(JSON.stringify(categories));
+            cs = categories;
+            // console.log(categories);
+            categoryButton.setAttribute('onclick', `removeCategory('${categories[0].name}')`);
+            // console.log(categoryButton);
+            categories.forEach((category) => {
+                categorySelect.innerHTML += `<option value="${category.name}">${category.name}</option>`;
+            });
+            subCategoryDiv.innerHTML = "";
+            inputFields = 0;
+            categoryInput.value = categories[0].name;
+            categories[0].subcategories.forEach((subCategory) => {
+                subCategoryDiv.innerHTML += `<div class="input-group mb-3">
+                        <input type="text" id="${categories[0].name}${inputFields}" class="form-control" placeholder="Sub-Category" aria-label="Sub-Category" value="${subCategory}" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                          <button class="btn btn-danger" onclick="removeSubCategory('${subCategory}',${inputFields})" type="button">Delete</button>
+                        </div>
+                      </div>`;
+                inputFields++;
+            });
+        }
+
+        function removeCategory(category) {
+            let i = 0;
+            let index = -1;
+            cs.forEach((c) => {
+                if (c.name == category) {
+                    index = i;
+                }
+                i++;
+            });
+            cs.splice(index, 1);
+            categorySelect.selectedIndex = 0;
+            categoryChanged();
+        }
+
+        function removeSubCategory(subCategory, index) {
+            let category = null;
+            cs.forEach((c) => {
+                if (c.name == categorySelect.value) {
+                    category = c;
+                }
+            });
+            category.subcategories.splice(index, 1);
+
+            categoryChanged();
+        }
+
+        function addCategory() {
+            document.getElementById('id01').style.display = 'block';
+        }
+
+        function addCategoryClicked() {
+            inputFields = 0;
+            let category = categoryNameInput.value;
+            let subCategory = subCategoryNameInput.value;
+            let noProb = true;
+            if (category == "") {
+                categoryNameInput.style.border = "1px solid red";
+                noProb = false;
+            }
+            if (subCategory == "") {
+                subCategoryNameInput.style.border = "1px solid red";
+                noProb = false;
+            }
+            if (noProb) {
+                document.getElementById('id01').style.display = 'none';
+                categorySelect.innerHTML += `<option value="${category}">${category}</option>`;
+                categorySelect.selectedIndex = categorySelect.length - 1;
+                subCategoryDiv.innerHTML = `<div class="input-group mb-3">
+                        <input type="text" id="${categorySelect.value}${inputFields}" class="form-control" placeholder="Sub-Category" aria-label="Sub-Category" value="${subCategory}" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                          <button class="btn btn-danger" onclick="removeSubCategory('${subCategory}')" type="button">Delete</button>
+                        </div>
+                      </div>`;
+                categoryInput.value = category;
+                cs.push(new Category(category, [subCategory]));
+                // console.log(categorySelect, subCategoryDiv);
+                inputFields = 1;
+            }
+        }
+
+        function addSubCatClicked() {
+            subCategoryDiv.innerHTML += `<div class="input-group mb-3">
+                        <input type="text" id="${categorySelect.value}${inputFields}" class="form-control" placeholder="Sub-Category" aria-label="Sub-Category" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                          <button class="btn btn-danger" onclick="categoryChanged()" type="button">Delete</button>
+                        </div>
+                      </div>`;
+            inputFields++;
+        }
+
+        function saveClicked() {
+            // console.log(document.getElementsByTagName("input"));
+            let noProb = true;
+            let cName = categoryInput.value;
+            let subC = [];
+            if (cName == "") {
+                categoryInput.style.border = "1px solid red";
+                noProb = false;
+            }
+            for (let i = 0; i < inputFields; i++) {
+                let sc = document.getElementById(categorySelect.value + i).value;
+                if (sc == "") {
+                    let d = document.getElementById(categorySelect.value + i);
+                    console.log(categorySelect.value + i,d);
+                    d.style.border = "1px solid red";
+                    noProb = false;
+                }
+                else {
+                    subC.push(sc);
+                }
+            }
+            if (noProb) {
+
+                let i = 0;
+                let index = 0;
+                cs.forEach((c) => {
+                    if (c.name == categorySelect.value) {
+                        index = i;
+                    }
+                    i++;
+                });
+                let category = new Category(cName, subC);
+                cs.splice(index, 1, category);
+                categorySelect.innerHTML = "";
+                cs.forEach((category) => {
+                    categorySelect.innerHTML += `<option value="${category.name}">${category.name}</option>`;
+                });
+                categoryChanged();
+                console.log(cs);
+                updateCategories(cs, () => {
+                    console.log("done");
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>
