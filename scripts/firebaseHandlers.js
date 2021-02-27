@@ -171,7 +171,9 @@ function createSellerObjectInDB(user, uiCallback) {
 
 function getUserDetailsFromDB(uiCallback) {
     if (!sessionStorage.getItem("uid")) {
-        throw new Error(`User Credentials Null! Error code: ${codes.NULL_VALUE}`);
+        // throw new Error(`User Credentials Null! Error code: ${codes.NULL_VALUE}`);
+        uiCallback(codes.NOT_FOUND);
+        return;
     }
     
     let userDocument = db.collection('users').doc(sessionStorage.getItem("uid"));
