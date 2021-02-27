@@ -234,12 +234,14 @@
         function updateStatus()
         {
             let status = selectStatus.value;
-            updateOrderStatus(or,status,statusChanged);
+            updateOrderStatus(or,status, () => {
+                fetchUserByName(order.id, status, order.customerName, statusChanged);
+            });
         }
 
         function statusChanged()
         {
-
+            location.reload();
         }
     </script>
 </body>

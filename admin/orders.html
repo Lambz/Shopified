@@ -57,21 +57,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="settings.html">Settings</a>
                     </li>
-                    <!-- <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Dropdown
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="#">Disabled</a>
-                    </li> -->
+                    
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
                     <!-- <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"> -->
@@ -109,38 +95,7 @@
                             </tr>
                         </thead>
                         <tbody id="tbody">
-                            <!-- <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>
-                                    <div class="row">
-                                        <div class="col-10">
-                                            <select class="custom-select custom-select-sm">
-                                                <option>Processing</option>
-                                                <option>Awaiting Shipment</option>
-                                                <option>Shipped</option>
-                                                <option>Complete</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-2">
-                                            <button type="button" class="btn btn-primary btn-sm">Primary</button>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>Larry</td>
-                                <td>the Bird</td>
-                                <td>@twitter</td>
-                            </tr> -->
+                           
                         </tbody>
                     </table>
                 </div>
@@ -220,7 +175,9 @@
             let order = orders[index];
             let select = document.getElementById(`selectStatus_${order.id}`);
             let status = select.value;
-            updateOrderStatus(order,status,statusChanged);
+            updateOrderStatus(order,status,() => {
+                fetchUserByName(order.id, status, order.customerName, statusChanged);
+            });
         }
 
         function formatDate(date) {
@@ -239,7 +196,7 @@
 
         function statusChanged()
         {
-
+            location.reload();
         }
 
         function orderClicked(index)

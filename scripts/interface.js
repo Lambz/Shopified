@@ -324,12 +324,35 @@ function getRandomProductFromDB(uiCallback) {
     })
 }
 
+function fetchUserByName(orderID, orderStatus, userName, uiCallback) {
+    fetchUserByNameFromDB(userName, (user) => {
+        user.orders.forEach((order) => {
+            if (order.id == orderID) {
+                order.status = orderStatus;
+            }
+        });
+        updateUserInDB(user, uiCallback);
+    })
+}
+
+
+function updateCategories(categories, uiCallback) {
+    deleteAllCategoriesFromDB(() => {
+        console.log("categories deleted");
+        let promises = [];
+        categories.forEach((category) => {
+            promises.push(insertCategoryOrSubcategoryInDB(category));
+        });
+        Promise.all(promises).then(uiCallback);
+    })
+}
+
 
 // let user = new Seller("Name", "Company", "SomeEmail@NameCompanyMail.com", "Password");
 // // // // // let category = new Category("some other category", ["sub2"]);
 initializeDB(); 
 // // // // // console.log(user);
-// // // // // signUp(user, false, () => {});
+// // // // signUp(user, false, () => {});
 
 // signIn(user.email, user.password, false, ()=> {});
 // console.log(sessionStorage.getItem("uid"));

@@ -105,6 +105,8 @@
                         <!-- forgot password maybe -->
                         <p>Don't have an account? <button type="button" onclick="registerHereClicked()"
                                 class="btn2">Register Here</button></p>
+                        <button type="button" onclick=navigateToHomepage()
+                                class="btn2">Are you a user? Login here</button></p>
                     </form>
                 </div>
                 <div id="sign_up_div" class="col-lg-7 px-5 pt-5">
@@ -189,6 +191,10 @@
         function signInHereClicked() {
             document.getElementById("sign_in_div").style.display = "block";
             document.getElementById("sign_up_div").style.display = "none";
+        }
+
+        function navigateToHomepage() {
+            location.replace("../index.html");
         }
 
         function signUpClicked() {

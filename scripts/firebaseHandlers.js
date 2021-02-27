@@ -290,6 +290,27 @@ function insertOrderInDB(order, uiCallback) {
     // });
 }
 
+
+// Update functions
+
+function updateUserInDB(user, uiCallback) {
+    if (!user) {
+        throw new Error(`User Updation Error! Error code: ${codes.NULL_OBJECT}`);
+    }
+    db.collection('users').doc(user.id).withConverter(userConverter).set(user)
+    .then(() => {
+        console.log("User Added!");
+        uiCallback();
+        return codes.INSERTION_SUCCESS;
+    })
+    .catch((error) => {
+        console.log(`User insertion error! Error code: ${error.errorCode}\nError Messsage: ${error.errorMessage}`);
+        uiCallback();
+        return codes.INSERTION_FAILIURE;
+    });
+}
+
+
 // Deletion functions
 
 function deleteProductFromDB(productID, seller, uiCallback) {
@@ -329,6 +350,13 @@ function deleteSellerFromDB() {
     })
 }
 
+function deleteAllCategoriesFromDB(callback) {
+    let reference = db.collection("categories");
+    reference.get().then((result) => {
+        result.forEach(element => element.ref.delete());
+        callback();
+    })
+}
 
 // Fetch functions
 
@@ -464,6 +492,18 @@ function fetchAllProductsForSellerInDB(sellerID, uiCallback) {
             productsArray.push(doc.data());
         })
         uiCallback(productsArray);
+    })
+}
+
+function fetchUserByNameFromDB(name, callback) {
+    let reference = db.collection("users");
+    let query = reference.where("name", "==", name);
+    query.get().then((querySnapshot) => {
+
+        querySnapshot.forEach((doc) => {
+            callback(User.convertToUser(doc.data()));
+        })
+        
     })
 }
 
