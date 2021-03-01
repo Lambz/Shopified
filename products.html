@@ -161,7 +161,7 @@
 	<script src="./scripts/interface.js"></script>
 	<script>
 		const category = new URL(window.location.href).searchParams.get("category");
-		const subCategory = new URL(window.location.href).searchParams.get("subCategory");
+		let subCategory = new URL(window.location.href).searchParams.get("subCategory");
 		if(subCategory != null)
 		{
 			subCategory = subCategory.replace(" and "," & ");
