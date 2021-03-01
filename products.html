@@ -161,7 +161,11 @@
 	<script src="./scripts/interface.js"></script>
 	<script>
 		const category = new URL(window.location.href).searchParams.get("category");
-		const subCategory = new URL(window.location.href).searchParams.get("subCategory").replace(" and "," & ");
+		const subCategory = new URL(window.location.href).searchParams.get("subCategory");
+		if(subCategory != null)
+		{
+			subCategory = subCategory.replace(" and "," & ");
+		}
 		const searchText = new URL(window.location.href).searchParams.get("searchText");
 		const sellerID = new URL(window.location.href).searchParams.get("sellerID");
 		const productsDiv = document.getElementById("productsDiv");
@@ -173,7 +177,7 @@
 		const loginSignUpLink = document.getElementById("loginSignUpLink");
 
 		function categoriesResult(categories) {
-			console.log(categories);
+			// console.log(categories);
 			let inner = "";
 			categories.forEach((category) => {
 				inner += `<li class="nav-item dropdown">
@@ -201,9 +205,11 @@
 				window.location.replace("index.html");
 			}
 			if (sellerID != null) {
+				document.title = "Products by Seller";
 				fetchAllProductsForSeller(sellerID, sellerResult);
 			}
 			else if (searchText != null) {
+				document.title = "Products with "+searchText;
 				fetchAllProducts(searchResult);
 				searchDiv.innerHTML += `Searching products having '${searchText}' in name or description`;
 				if (category != null) {
@@ -214,6 +220,7 @@
 				}
 			}
 			else if (category != null) {
+				document.title = category;
 				fetchAllProductsForCategory(category, categoryResult);
 				searchDiv.innerHTML += `Getting Products for category ${category}`;
 				if (subCategory != null) {
@@ -221,6 +228,7 @@
 				}
 			}
 			else if (subCategory != null) {
+				document.title = subCategory;
 				fetchAllProductsForSubcategory(subCategory, subCategoryResult);
 				searchDiv.innerHTML += `Getting Products for Sub-Category ${subCategory}`;
 			}
@@ -228,7 +236,7 @@
 
 		function sellerResult(productArray) {
 			searchDiv.innerHTML += `Getting products by Seller`;
-			console.log(productArray);
+			// console.log(productArray);
 			products = productArray;
 			if(searchText != null)
 			{
@@ -330,9 +338,9 @@
 		function displayProducts() {
 			// console.log(prouducts);
 			if (products != null) {
-				console.log(1);
+				// console.log(1);
 				products.forEach((product) => {
-					console.log(product);
+					// console.log(product);
 					let image;
 					if (product.images.length > 0) {
 						image = product.images[0];
@@ -340,7 +348,7 @@
 					else {
 						image = "imgs/product_placeholder.gif";
 					}
-					console.log(product);
+					// console.log(product);
 					productsDiv.innerHTML += `<div style="width: 100%;" onclick="productClicked('${product.id}')" class="row mb-5 productDiv"><div style="text-align: center;" class="col-4"><img src="${image}" /></div><div class="col" style="vertical-align:middle;"><div class="row"><h2>${product.name}</h2></div><div class="row"><h3>${product.price}</h3></div><div class="row">${product.description}</div><div class="row mt-2">Sold By: <a href='products.html?sellerID=${product.seller_id}'>${product.seller}</a></div></div></div>`;
 				});
 			}
