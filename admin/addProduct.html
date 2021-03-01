@@ -85,6 +85,98 @@
             }
 
         }
+
+        .cancelbtn,
+        .deletebtn {
+            float: left;
+            width: 50%;
+        }
+
+        /* Add a color to the cancel button */
+        .cancelbtn {
+            background-color: #ccc;
+            color: black;
+        }
+
+        /* Add a color to the delete button */
+        .deletebtn {
+            background-color: #f44336;
+        }
+
+        /* Add padding and center-align text to the container */
+        /* .container {
+            padding: 16px;
+            text-align: center;
+        } */
+
+        /* The Modal (background) */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 2;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: #474e5d;
+            padding-top: 50px;
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto 15% auto;
+            /* 5% from the top, 15% from the bottom and centered */
+            border: 1px solid #888;
+            width: 80%;
+            padding: 25px;
+            /* Could be more or less, depending on screen size */
+        }
+
+        /* Style the horizontal ruler */
+        hr {
+            border: 1px solid #f1f1f1;
+            margin-bottom: 25px;
+        }
+
+        /* The Modal Close Button (x) */
+        .close {
+            position: absolute;
+            right: 35px;
+            top: 15px;
+            font-size: 40px;
+            font-weight: bold;
+            color: #f1f1f1;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #f44336;
+            cursor: pointer;
+        }
+
+        /* Clear floats */
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        /* Change styles for cancel button and delete button on extra small screens */
+        @media screen and (max-width: 300px) {
+
+            .cancelbtn,
+            .deletebtn {
+                width: 100%;
+            }
+        }
     </style>
     <title>Products</title>
 </head>
@@ -229,6 +321,30 @@
         </div>
     </div>
 
+    <div id="id01" class="modal" style="box-sizing: border-box">
+        <span onclick="document.getElementById('categories').selectedIndex = 0;document.getElementById('id01').style.display='none';" class="close"
+            title="Close Modal">&times;</span>
+        <form class="modal-content">
+            <div style="padding: 16px;">
+                <h1 style="text-align: center;">Add Category</h1>
+                <div id="categoryDiv" class="row">
+                    <p>Enter Category name:</p>
+                    <input type="text" id="categoryNameInput" class="form-control" placeholder="Category Name" />
+                </div>
+                <div class="row">
+                    <p class="mt-2">Enter Sub-Category name:</p>
+                    <input type="text" id="subCategoryNameInput" class="form-control" placeholder="Sub-Category Name" />
+                </div>
+                <div class="row mt-3">
+                    <div class="col"><button onclick="document.getElementById('categories').selectedIndex = 0;document.getElementById('id01').style.display='none';"
+                            type="button" style="width: 100%;" class="btn btn-outline-secondary">Cancel</button></div>
+                    <div class="col"><button onclick="addCategoryClicked()" type="button" style="width: 100%;"
+                            class="btn btn-primary">Add Category</button></div>
+                </div>
+            </div>
+        </form>
+    </div>
+
     <!-- <script src="scripts/main.js"></script> -->
     <!-- <script src="../scripts/Utilties.js"></script> -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
@@ -288,53 +404,55 @@
                     subCategories.add(opt);
                 }
                 else {
-                    let categoryVal = prompt("Please enter new category name", "");
-                    if (categoryVal != null && categoryVal != "") {
-                        let opt = document.createElement("option");
-                        opt.value = categoryVal;
-                        opt.text = categoryVal;
-                        categories.add(opt);
-                        let subCategoryVal = prompt("Please enter new sub category name", "");
-                        if (subCategoryVal == null || subCategoryVal == "") {
-                            categories.remove(categories.length - 1);
-                            categories.selectedIndex = 0;
-                        }
-                        else {
-                            subCategories.innerHTML = "";
-                            let opt = document.createElement("option");
-                            opt.value = subCategoryVal;
-                            opt.text = subCategoryVal;
-                            subCategories.add(opt);
-                            categories.value = categoryVal;
-                            opt = document.createElement("option");
-                            opt.value = "New Sub-Category";
-                            opt.text = "New Sub-Category";
-                            subCategories.add(opt);
-                            newCategories = true;
-                        }
-                    }
-                    else {
-                        categories.selectedIndex = 0;
-                    }
-
+                    // let categoryVal = prompt("Please enter new category name", "");
+                    // if (categoryVal != null && categoryVal != "") {
+                    //     let opt = document.createElement("option");
+                    //     opt.value = categoryVal;
+                    //     opt.text = categoryVal;
+                    //     categories.add(opt);
+                    //     let subCategoryVal = prompt("Please enter new sub category name", "");
+                    //     if (subCategoryVal == null || subCategoryVal == "") {
+                    //         categories.remove(categories.length - 1);
+                    //         categories.selectedIndex = 0;
+                    //     }
+                    //     else {
+                    //         subCategories.innerHTML = "";
+                    //         let opt = document.createElement("option");
+                    //         opt.value = subCategoryVal;
+                    //         opt.text = subCategoryVal;
+                    //         subCategories.add(opt);
+                    //         categories.value = categoryVal;
+                    //         opt = document.createElement("option");
+                    //         opt.value = "New Sub-Category";
+                    //         opt.text = "New Sub-Category";
+                    //         subCategories.add(opt);
+                    //         newCategories = true;
+                    //     }
+                    // }
+                    // else {
+                    //     categories.selectedIndex = 0;
+                    // }
+                    document.getElementById('id01').style.display = 'block';
+                    document.getElementById("categoryDiv").style.display = "block";
                 }
-
             });
 
             subCategories.addEventListener("change", function () {
                 if (subCategories.value == "New Sub-Category") {
-                    let subCategoryVal = prompt("Please enter new Sub-Category name", "");
-                    if (subCategoryVal != null && subCategoryVal != "") {
-                        let opt = document.createElement("option");
-                        opt.value = subCategoryVal;
-                        opt.text = subCategoryVal;
-                        subCategories.add(opt);
-                        newCategories = true;
-                    }
-                    else
-                    {
-                        subCategoryVal.selectedIndex = 0;
-                    }
+                    // let subCategoryVal = prompt("Please enter new Sub-Category name", "");
+                    // if (subCategoryVal != null && subCategoryVal != "") {
+                    //     let opt = document.createElement("option");
+                    //     opt.value = subCategoryVal;
+                    //     opt.text = subCategoryVal;
+                    //     subCategories.add(opt);
+                    //     newCategories = true;
+                    // }
+                    // else
+                    // {
+                    //     subCategoryVal.selectedIndex = 0;
+                    // }
+                    document.getElementById('id01').style.display = 'block';
+                    document.getElementById("categoryDiv").style.display = "none";
                 }
             });
 
@@ -360,6 +478,41 @@
                 if (id != null) {
                     getUserDetails(false, getProduct);
                 }
+            }
+        }
+
+        function addCategoryClicked() {
+            inputFields = 0;
+            let category = categoryNameInput.value;
+            let subCategory = subCategoryNameInput.value;
+            let noProb = true;
+            if (category == "" && document.getElementById("categoryDiv").style.display != "none") {
+                categoryNameInput.style.border = "1px solid red";
+                noProb = false;
+            }
+            if (subCategory == "") {
+                subCategoryNameInput.style.border = "1px solid red";
+                noProb = false;
+            }
+            if (noProb) {
+                document.getElementById('id01').style.display = 'none';
+                if(document.getElementById("categoryDiv").style.display != "none")
+                {
+                    categoriesInput.innerHTML += `<option value="${category}">${category}</option>`;
+                    categoriesInput.selectedIndex = categoriesInput.length - 1;
+                }
+                if(document.getElementById("categoryDiv").style.display != "none")
+                {
+                    subCategoriesInput.innerHTML = `<option value="${subCategory}">${subCategory}</option>`;
+                    subCategoriesInput.innerHTML += `<option value="New Sub-Category">New Sub-Category</option>`;
+                    subCategoriesInput.selectedIndex = subCategoriesInput.length - 2;
+                }
+                else
+                {
+                    subCategoriesInput.innerHTML += `<option value="${subCategory}">${subCategory}</option>`;
+                    subCategoriesInput.selectedIndex = subCategoriesInput.length - 1;
+                }
+                newCategories = true;
             }
         }
 
